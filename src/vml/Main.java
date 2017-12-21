@@ -320,6 +320,10 @@ public class Main extends Application
         p.setTask(c, data);
         //Update panel
         p.update();
+        
+        acc = c.evaluate(data);
+        //Update data
+        c.setData(data);
     }
     
     /**
