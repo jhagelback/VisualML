@@ -13,6 +13,15 @@ import java.util.Random;
 public class DataGenerator 
 {
     /**
+     * Runs the dataset generator.
+     */
+    public static void run()
+    {
+        circle();
+        //fix();
+    } 
+    
+    /**
      * Generates a dataset with an outer non-filled circle of one class, and a smaller
      * inner filled circle of the other class. Useful for showing the shortcomings of
      * linear classifiers.

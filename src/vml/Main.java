@@ -1,17 +1,363 @@
 
 package vml;
 
-import java.io.File;
+import java.text.DecimalFormat;
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.geometry.*;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
+import javafx.animation.AnimationTimer;
 
 /**
  * Main class for the Visual ML application.
  * 
  * @author Johan Hagelbäck (johan.hagelback@gmail.com)
  */
-public class Main 
+public class Main extends Application
 {
-    //Used to see if the specified experiment was found or not
-    private static boolean found;
+    //Panel to render stuff on
+    private VizCanvas p;
+    //The classifier
+    private Classifier c;
+    //Training dataset
+    private Dataset data;
+    //Number of iterations per step for the classifier
+    private int it_steps;
+    //Current iteration
+    private int iteration = 0;
+    //Current loss
+    private double loss = 0;
+    //Current accuracy
+    private double acc = 0;
+    //Iterations label
+    private Label label_it;
+    //Loss label
+    private Label label_loss;
+    //Accuracy label
+    private Label label_acc;
+    //Thread run status
+    private boolean running = false;
+    
+    //Output formatting
+    private DecimalFormat df3 = new DecimalFormat("0.000");
+    private DecimalFormat df1 = new DecimalFormat("0.0");
+    
+    /**
+     * Start class for the JavaFX application.
+     * 
+     * @param primaryStage JavaFX stage
+     */
+    @Override
+    public void start(Stage primaryStage) 
+    {
+        //Init labels
+        label_it = new Label("Iteration: ");
+        label_loss = new Label("Loss: ");
+        label_acc = new Label("Accuracy: ");
+        
+        //Init buttons
+        Button bt1 = new Button();
+        bt1.setOnAction((ActionEvent e) -> {
+            //Error check
+            if (c == null) return;
+            iterate();
+        });
+        bt1.setText("Iterate");
+        bt1.setPrefWidth(90);
+        Button bt2 = new Button();
+        bt2.setOnAction((ActionEvent e) -> {
+            //Error check
+            if (c == null) return;
+            //Don't run for KNN classifier
+            if (c instanceof KNN) return;
+            
+            if (!running) 
+            {
+                running = true;
+                bt2.setText("Stop");
+                
+                //Thread run
+                Runnable runnable = () -> { 
+                    while (running)
+                    {
+                        iterate();
+                        sleep(100);
+                    }
+                };
+                //Start thread
+                Thread t = new Thread(runnable);
+                t.start();
+            }
+            else
+            {
+                running = false;
+                bt2.setText("Start");
+            }
+        });
+        bt2.setText("Run");
+        bt2.setPrefWidth(90);
+        
+        //Right panel (buttons and labels)
+        VBox rp = new VBox();
+        rp.setPrefSize(220, 100 * VizCanvas.cell_w);
+        rp.setPadding(new Insets(10));
+        rp.setSpacing(8);
+        rp.getChildren().addAll(bt1, bt2, label_it, label_loss, label_acc);
+        rp.setPadding(new Insets(10));
+        
+        //Main layout panel
+        GridPane pane = new GridPane(); 
+        GridPane.setHalignment(rp, HPos.LEFT);
+        GridPane.setValignment(rp, VPos.TOP);
+        pane.setHgap(0);
+        pane.setVgap(0);
+        pane.setPadding(new Insets(10));
+        
+        //Add menu
+        pane.add(buildMenu(), 0, 0);
+        
+        //Add right panel
+        pane.add(rp, 1, 1);
+        
+        //Visualization canvas
+        p = new VizCanvas();
+        p.update();
+        pane.add(p, 0, 1);
+        
+        //Create scene
+        Scene scene = new Scene(pane, 100 * VizCanvas.cell_w + 180, 100 * VizCanvas.cell_w + 70);
+        
+        //Start JavaFX stage
+        primaryStage.setTitle("Visual ML");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+        
+        //Timer for updating the visualization canvas
+        new AnimationTimer() {
+            private long lastUpdate = 0 ;
+            @Override
+            public void handle(long now) {
+                if (now - lastUpdate >= 400_000_000) {
+                    p.update();
+                    lastUpdate = now;
+                    label_it.setText("Iteration: " + iteration);
+                    label_loss.setText("Loss: " + df3.format(loss));
+                    label_acc.setText("Accuracy: " + df1.format(acc) + "%");
+                }
+            }
+        }.start();
+    }
+    
+    /**
+     * Adds the lmenu to the frame.
+     */
+    private MenuBar buildMenu()
+    {
+        //Init lmenu
+        MenuBar menubar = new MenuBar();   
+        Menu lmenu = new Menu("Linear");
+        Menu nmenu = new Menu("NN");
+        Menu dmenu = new Menu("DeepNN");
+        Menu kmenu = new Menu("kNN");
+        
+        //Linear tasks
+        MenuItem mitem = new MenuItem("Demo");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(new Linear(2, 3, 20, 0.05), "datademo", Dataset.Norm_NONE, 1);
+        }); 
+        lmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Demo fixed");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(new Linear(), "datademo", Dataset.Norm_NONE, 1);
+        }); 
+        lmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Spiral");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(new Linear(2, 3, 200, 0.1), "spiral", Dataset.Norm_NONE, 1);
+        }); 
+        lmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Iris.2D");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(new Linear(2, 3, 20, 0.4), "iris.2D", Dataset.Norm_NEGPOS, 5);
+        }); 
+        lmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Circle");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(new Linear(2, 2, 20, 0.1), "circle", Dataset.Norm_NONE, 1);
+        }); 
+        lmenu.getItems().add(mitem);
+        
+        //NN tasks
+        mitem = new MenuItem("Spiral");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(new NN(2, 3, 72, 8000, 0.2), "spiral", Dataset.Norm_NONE, 100);
+        }); 
+        nmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Circle");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(new NN(2, 2, 72, 20, 0.4), "circle", Dataset.Norm_NONE, 20);
+        }); 
+        nmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Gaussian");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(new NN(2, 2, 72, 20, 0.4), "gaussian", Dataset.Norm_NEGPOS, 20);
+        }); 
+        nmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Flame");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(new NN(2, 2, 72, 20, 0.4), "flame", Dataset.Norm_NONE, 100);
+        }); 
+        nmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Jain's toy problem");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(new NN(2, 2, 12, 20, 0.2), "jain", Dataset.Norm_NONE, 100);
+        }); 
+        nmenu.getItems().add(mitem);
+        
+        //Deep NN tasks
+        mitem = new MenuItem("Spiral");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(new DeepNN(2, 3, 42, 24, 8000, 0.05), "spiral", Dataset.Norm_NONE, 100);
+        }); 
+        dmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Circle");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(new DeepNN(2, 2, 12, 8, 20, 0.1), "circle", Dataset.Norm_NONE, 50);
+        }); 
+        dmenu.getItems().add(mitem);
+        
+        //kNN tasks
+        mitem = new MenuItem("Demo");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(new KNN(3, 3), "datademo", Dataset.Norm_NONE, 1);
+        }); 
+        kmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Spiral");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(new KNN(3, 3), "spiral", Dataset.Norm_NONE, 1);
+        }); 
+        kmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Iris.2D");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(new KNN(3, 3), "iris.2D", Dataset.Norm_NONE, 1);
+        }); 
+        kmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Circle");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(new KNN(2, 3), "circle", Dataset.Norm_NONE, 1);
+        }); 
+        kmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Gaussian");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(new KNN(2, 3), "gaussian", Dataset.Norm_NEGPOS, 1);
+        }); 
+        kmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Flame");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(new KNN(2, 3), "flame", Dataset.Norm_NONE, 1);
+        }); 
+        kmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Jain's toy problem");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(new KNN(2, 3), "jain", Dataset.Norm_NONE, 1);
+        }); 
+        kmenu.getItems().add(mitem);
+        
+        //Add menus to frame
+        menubar.getMenus().addAll(lmenu, nmenu, dmenu, kmenu);
+        return menubar;
+    }
+    
+    /**
+     * Inits a new task to visualize.
+     * 
+     * @param c The classifier
+     * @param dataset_name Name of dataset
+     * @param norm_type Normalization type (None, Pos, NegPos)
+     * @param it_steps Iterations to take each step
+     */
+    private void initClassifier(Classifier c, String dataset_name, int norm_type, int it_steps)
+    {
+        //Read data
+        DataSource reader = new DataSource("data/" + dataset_name + ".csv");
+        data = reader.read();
+        //Normalize
+        data.normalizeAttributes(norm_type);
+        //Set data to classifier
+        c.setData(data);
+        //Init stuff
+        this.c = c;
+        this.it_steps = it_steps;
+        this.iteration = 0;
+        this.loss = 0;
+        this.acc = 0;
+        p.setTask(c, data);
+        //Update panel
+        p.update();
+    }
+    
+    /**
+     * Iterates the currenct classifier one step.
+     */
+    private void iterate()
+    {
+        try
+        {
+            //Iterate classifier
+            for (int i = 0; i < it_steps; i++)
+            {
+                iteration++;
+                loss = c.iterate();
+            }
+            //Current classifier accuracy
+            c.setData(data);
+            acc = c.evaluate(data);
+            //Update data
+            c.setData(data);
+            
+            //No errors occured, generate frame
+            p.build_frame();
+        }
+        catch (Exception ex)
+        {
+            
+        }
+    }
+    
+    /**
+     * Sets the current thread to sleep for some time.
+     * 
+     * @param ms Milliseconds to sleep
+     */
+    private void sleep(int ms)
+    {
+        try
+        {
+            Thread.sleep(ms);
+        }
+        catch (Exception ex)
+        {
+            System.err.println("  Thread sleep interrupted");
+        }
+    }
     
     /**
      * @param args the command line arguments
@@ -27,17 +373,17 @@ public class Main
         
         if (args[0].equalsIgnoreCase("-gui"))
         {
-            runGUI();
+            launch(args);
         }
         else if (args[0].equalsIgnoreCase("-gen") || args[0].equalsIgnoreCase("-generator"))
         {
-            runGenerator();
+            DataGenerator.run();
         }
         else if (args[0].equalsIgnoreCase("-exp") || args[0].equalsIgnoreCase("-experiment"))
         {
             if (args.length == 3)
             {
-                runExperiment(args[1], args[2]);
+                boolean found = Experiment.run(args[1], args[2]);
                 
                 if (!found) System.err.println("Unable to find experiment " + args[1] + " " + args[2]);
             }
@@ -50,155 +396,5 @@ public class Main
         {
             System.err.println("Wrong arguments: [-experiment|-gui|-generator] [args]");
         }
-    }
-    
-    /**
-     * Starts the GUI.
-     */
-    public static void runGUI()
-    {
-        new GUI();
-    }
-    
-    /**
-     * Runs the dataset generator.
-     */
-    public static void runGenerator()
-    {
-        //DataGenerator.circle();
-        DataGenerator.fix();
-    }
- 
-    /**
-     * Runs an experiment.
-     * 
-     * @param type Type (knn, linear, nn, dnn)
-     * @param file Dataset file
-     */
-    public static void runExperiment(String type, String file)
-    {
-        //Unset found
-        found = false;
-        
-        if (type.equalsIgnoreCase("knn"))
-        {
-            /**
-             * k-Nearest Neighbor classifiers
-             */
-            if (file.equalsIgnoreCase("iris")) evaluate(new KNN(3, 3), "iris", Dataset.Norm_NONE); // % 96.00%
-            if (file.equalsIgnoreCase("iris_test")) evaluate(new KNN(3, 3), "iris_training", "iris_test", Dataset.Norm_NEGPOS); // 96.67%  96.67%
-            if (file.equalsIgnoreCase("spiral")) evaluate(new KNN(3, 3), "spiral", Dataset.Norm_NONE); // % 99.33%
-            if (file.equalsIgnoreCase("diabetes")) evaluate(new KNN(3, 2), "diabetes", Dataset.Norm_NONE); // 85.94%
-            if (file.equalsIgnoreCase("circle")) evaluate(new KNN(3, 2), "circle", Dataset.Norm_NONE); // 100%
-            if (file.equalsIgnoreCase("glass")) evaluate(new KNN(3, 7), "glass", Dataset.Norm_NONE); // 86.45%
-            //Takes around 18 minutes for test set evaluation...
-            if (file.equalsIgnoreCase("mnist")) evaluate(new KNN(3, 10), "mnist_train", "mnist_test", Dataset.Norm_POS); // 97.17% (test set, L2 dist)
-            //if (file.equalsIgnoreCase("mnist")) evaluate(new KNN(3, 10), "mnist_train", "mnist_test", Dataset.Norm_POS); // 96.40% (test set, L1 dist)
-        }
-        
-        if (type.equalsIgnoreCase("linear"))
-        {
-            /**
-             * Linear classifiers 
-             */
-            if (file.equalsIgnoreCase("demo")) evaluate(new Linear(2, 3, 20, 0.1), "datademo", Dataset.Norm_NONE); // 100%
-            if (file.equalsIgnoreCase("demo_fixed")) evaluate(new Linear(), "datademo", Dataset.Norm_NONE); // 100%
-            if (file.equalsIgnoreCase("iris")) evaluate(new Linear(4, 3, 300, 0.1), "iris", Dataset.Norm_NONE); // 98%
-            if (file.equalsIgnoreCase("iris_test")) evaluate(new Linear(4, 3, 300, 0.1), "iris_training", "iris_test", Dataset.Norm_NONE); // 97.50%  93.33%
-            if (file.equalsIgnoreCase("spiral")) evaluate(new Linear(2, 3, 200, 0.1), "spiral", Dataset.Norm_NONE); // 49%
-            if (file.equalsIgnoreCase("diabetes")) evaluate(new Linear(8, 2, 50, 0.8), "diabetes", Dataset.Norm_NEGPOS); // 77.21%
-            if (file.equalsIgnoreCase("circle")) evaluate(new Linear(2, 2, 200, 0.1), "circle", Dataset.Norm_NONE); // 68.60%
-            if (file.equalsIgnoreCase("glass")) evaluate(new Linear(9, 7, 200, 0.5), "glass", Dataset.Norm_NEGPOS); // 58.88%
-            if (file.equalsIgnoreCase("mnist")) evaluate(new Linear(784, 10, 50, 0.1), "mnist_train", "mnist_test", Dataset.Norm_POS); // 87.58%  88.27%
-            //if (file.equalsIgnoreCase("mnist")) evaluate(new Linear(784, 10, 1000, 0.4), "mnist_train", "mnist_test", Dataset.Norm_POS); // %  91.37%
-        }
-        
-        if(type.equalsIgnoreCase("nn"))
-        {
-            /**
-             * Neural Network classifiers 
-             */
-            if (file.equalsIgnoreCase("demo")) evaluate(new NN(2, 3, 8, 100, 0.5), "datademo", Dataset.Norm_NONE); // 100%
-            if (file.equalsIgnoreCase("iris")) evaluate(new NN(4, 3, 4, 1000, 0.5), "iris", Dataset.Norm_NEGPOS); // 98.67% (98.6667% in Weka)
-            if (file.equalsIgnoreCase("iris_test")) evaluate(new NN(4, 3, 4, 1000, 0.5), "iris_training", "iris_test", Dataset.Norm_NEGPOS); // 99.17%  96.67%
-            if (file.equalsIgnoreCase("spiral")) evaluate(new NN(2, 3, 72, 8000, 0.4), "spiral", Dataset.Norm_NONE); // 99.33%
-            if (file.equalsIgnoreCase("diabetes")) evaluate(new NN(8, 2, 8, 6000, 0.3), "diabetes", Dataset.Norm_NEGPOS); // 80.73% (80.599% in Weka)
-            if (file.equalsIgnoreCase("circle")) evaluate(new NN(2, 2, 72, 1000, 0.4), "circle", Dataset.Norm_NONE); // 100%
-            if (file.equalsIgnoreCase("glass")) evaluate(new NN(9, 7, 72, 9000, 0.3), "glass", Dataset.Norm_NEGPOS); // 86.92% (85.98% in Weka)
-            
-            if (file.equalsIgnoreCase("mnist")) evaluate(new NN(784, 10, 8, 200, 0.1), "mnist_train", "mnist_test", Dataset.Norm_POS); // 89.51%  89.58%
-            //if (file.equalsIgnoreCase("mnist")) evaluate(new NN(784, 10, 12, 500, 0.05), "mnist_train", "mnist_test", Dataset.Norm_POS); // 88.06%  88.47%
-        }
-        
-        if (type.equalsIgnoreCase("dnn"))
-        {
-            /**
-             * Deep Neural Network classifiers 
-             */
-            if (file.equalsIgnoreCase("demo")) evaluate(new DeepNN(2, 3, 4, 4, 2000, 0.2), "datademo", Dataset.Norm_NONE); // 100%
-            if (file.equalsIgnoreCase("iris")) evaluate(new DeepNN(4, 3, 8, 4, 2000, 0.2), "iris", Dataset.Norm_NEGPOS); // 98.67%
-            if (file.equalsIgnoreCase("iris_test")) evaluate(new DeepNN(4, 3, 8, 4, 2000, 0.2), "iris_training", "iris_test", Dataset.Norm_NEGPOS); // 99.17%  96.67%
-            if (file.equalsIgnoreCase("spiral")) evaluate(new DeepNN(2, 3, 42, 24, 12000, 0.08), "spiral", Dataset.Norm_NONE); // 99.33%
-            if (file.equalsIgnoreCase("diabetes")) evaluate(new DeepNN(8, 2, 24, 8, 6000, 0.2), "diabetes", Dataset.Norm_NEGPOS); // 80.73%
-            if (file.equalsIgnoreCase("circle")) evaluate(new DeepNN(2, 2, 12, 8, 1000, 0.1), "circle", Dataset.Norm_NEGPOS); // 100%
-        }
-    }
-    
-    /**
-     * Trains and evaluates a classifier on a dataset.
-     * 
-     * @param c The classifier
-     * @param dataset_name Train and test dataset
-     * @param norm_type Normalization type (None, Pos, NegPos)
-     */
-    private static void evaluate(Classifier c, String dataset_name, int norm_type)
-    {
-        evaluate(c, dataset_name, null, norm_type);
-    }
-    
-    /**
-     * Trains and evaluates a classifier on a dataset.
-     * 
-     * @param c The classifier
-     * @param dataset_name Train dataset
-     * @param testset_name Test dataset
-     * @param norm_type Normalization type (None, Pos, NegPos)
-     */
-    private static void evaluate(Classifier c, String dataset_name, String testset_name, int norm_type)
-    {
-        //Check if dataset is found
-        File f = new File("data/" + dataset_name + ".csv");
-        if (!f.exists()) return;
-        
-        //Set found
-        found = true;
-        
-        //Read data
-        DataSource reader = new DataSource("data/" + dataset_name + ".csv");
-        Dataset data = reader.read();
-        data.normalizeAttributes(norm_type);
-        c.setData(data);
-        
-        //Train classifier
-        long st = System.currentTimeMillis();
-        c.train();
-        long el = System.currentTimeMillis() - st;
-        System.out.println("Training time: " + el + " ms");
-        //Evaluate accuracy
-        System.out.println("Performance (whole dataset):");
-        c.evaluate(data);
-        
-        //Evaluate on test dataset (if it is specified)
-        if (testset_name != null)
-        {
-            //Read test data
-            reader = new DataSource("data/" + testset_name + ".csv");
-            data = reader.read();
-            data.normalizeAttributes(norm_type);
-            
-            //Evaluate accuracy
-            System.out.println("Performance (test dataset):");
-            c.evaluate(data);
-        }
-    }
+    }      
 }
