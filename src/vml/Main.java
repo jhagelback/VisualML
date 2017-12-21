@@ -3,13 +3,14 @@ package vml;
 
 import java.text.DecimalFormat;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
+import javafx.event.*;
 import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.animation.AnimationTimer;
+import javafx.stage.WindowEvent;
 
 /**
  * Main class for the Visual ML application.
@@ -128,12 +129,19 @@ public class Main extends Application
         pane.add(p, 0, 1);
         
         //Create scene
-        Scene scene = new Scene(pane, 100 * VizCanvas.cell_w + 180, 100 * VizCanvas.cell_w + 70);
+        Scene scene = new Scene(pane, 100 * VizCanvas.cell_w + 160, 100 * VizCanvas.cell_w + 55);
         
         //Start JavaFX stage
         primaryStage.setTitle("Visual ML");
         primaryStage.setScene(scene);
         primaryStage.show();
+        
+        //Close request
+        primaryStage.setOnCloseRequest(null);
+        primaryStage.setOnCloseRequest((WindowEvent we) -> {
+            running = false;
+            primaryStage.close();
+        });
         
         //Timer for updating the visualization canvas
         new AnimationTimer() {
