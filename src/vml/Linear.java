@@ -240,12 +240,13 @@ public class Linear extends Classifier
         int num_train = X.columns();
         double loss = 0;
         
+        //Calculate exponentials
+        //DoubleMatrix2D exp_scores = op.exp(scores);
+        
         //To avoid numerical instability
         DoubleMatrix2D exp_scores = op.shift_columns(scores);
         exp_scores = op.exp(scores);
         
-        //Calculate exponentials
-        //DoubleMatrix2D exp_scores = op.exp(scores);
         //Normalize
         DoubleMatrix2D probs = op.average_columns(exp_scores);
         DoubleMatrix1D corect_logprobs = op.vector_zeros(num_train);
