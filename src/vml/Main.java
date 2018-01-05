@@ -148,7 +148,7 @@ public class Main extends Application
             private long lastUpdate = 0 ;
             @Override
             public void handle(long now) {
-                if (now - lastUpdate >= 400_000_000) {
+                if (now - lastUpdate >= 200_000_000) {
                     p.update();
                     lastUpdate = now;
                     label_it.setText("Iteration: " + iteration);
