@@ -376,12 +376,11 @@ public class Main extends Application
      */
     public static void main(String[] args) 
     {
-        args = new String[3];
-        //args[0] = "-gen";
-        //args[0] = "-exp";
-        args[0] = "-gui";
-        args[1] = "linear";
-        args[2] = "iris";
+        //No args. Start GUI
+        if (args.length == 0) 
+        {
+            args = new String[]{"-gui"};
+        }
         
         if (args[0].equalsIgnoreCase("-gui"))
         {
@@ -390,6 +389,7 @@ public class Main extends Application
         else if (args[0].equalsIgnoreCase("-gen") || args[0].equalsIgnoreCase("-generator"))
         {
             DataGenerator.run();
+            System.exit(0);
         }
         else if (args[0].equalsIgnoreCase("-exp") || args[0].equalsIgnoreCase("-experiment"))
         {
@@ -403,10 +403,12 @@ public class Main extends Application
             {
                 System.err.println("Wrong arguments: -experiment [type] [dataset]");
             }
+            System.exit(0);
         }
         else
         {
             System.err.println("Wrong arguments: [-experiment|-gui|-generator] [args]");
+            System.exit(0);
         }
     }      
 }

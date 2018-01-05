@@ -1,20 +1,9 @@
 
 package vml;
 
-import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
-import javafx.geometry.VPos;
-import javafx.scene.Scene;
 import javafx.scene.paint.*;
 import javafx.scene.shape.*;
 import javafx.scene.canvas.*;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
-import javafx.stage.Stage;
-import javafx.animation.AnimationTimer;
 
 /**
  *

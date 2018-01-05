@@ -51,11 +51,10 @@ public class Experiment
             if (file.equalsIgnoreCase("iris")) evaluate(new Linear(4, 3, 300, 0.1), "iris", Dataset.Norm_NONE); // 98%
             if (file.equalsIgnoreCase("iris_test")) evaluate(new Linear(4, 3, 300, 0.1), "iris_training", "iris_test", Dataset.Norm_NONE); // 97.50%  93.33%
             if (file.equalsIgnoreCase("spiral")) evaluate(new Linear(2, 3, 200, 0.1), "spiral", Dataset.Norm_NONE); // 49%
-            if (file.equalsIgnoreCase("diabetes")) evaluate(new Linear(8, 2, 50, 0.8), "diabetes", Dataset.Norm_NEGPOS); // 77.21%
+            if (file.equalsIgnoreCase("diabetes")) evaluate(new Linear(8, 2, 50, 0.8), "diabetes", Dataset.Norm_NEGPOS); // 77.34%
             if (file.equalsIgnoreCase("circle")) evaluate(new Linear(2, 2, 200, 0.1), "circle", Dataset.Norm_NONE); // 68.60%
-            if (file.equalsIgnoreCase("glass")) evaluate(new Linear(9, 7, 200, 0.5), "glass", Dataset.Norm_NEGPOS); // 58.88%
-            if (file.equalsIgnoreCase("mnist")) evaluate(new Linear(784, 10, 50, 0.1), "mnist_train", "mnist_test", Dataset.Norm_POS); // 87.58%  88.27%
-            //if (file.equalsIgnoreCase("mnist")) evaluate(new Linear(784, 10, 1000, 0.4), "mnist_train", "mnist_test", Dataset.Norm_POS); // %  91.37%
+            if (file.equalsIgnoreCase("glass")) evaluate(new Linear(9, 7, 200, 0.5), "glass", Dataset.Norm_NEGPOS); // 58.41%
+            if (file.equalsIgnoreCase("mnist")) evaluate(new Linear(784, 10, 50, 0.5), "mnist_train", "mnist_test", Dataset.Norm_POS); // 88.15%  88.89%
         }
         
         if(type.equalsIgnoreCase("nn"))
@@ -64,15 +63,13 @@ public class Experiment
              * Neural Network classifiers 
              */
             if (file.equalsIgnoreCase("demo")) evaluate(new NN(2, 3, 8, 100, 0.5), "datademo", Dataset.Norm_NONE); // 100%
-            if (file.equalsIgnoreCase("iris")) evaluate(new NN(4, 3, 4, 1000, 0.5), "iris", Dataset.Norm_NEGPOS); // 98.67% (98.6667% in Weka)
+            if (file.equalsIgnoreCase("iris")) evaluate(new NN(4, 3, 4, 1000, 0.5), "iris", Dataset.Norm_NEGPOS); // 98.67%
             if (file.equalsIgnoreCase("iris_test")) evaluate(new NN(4, 3, 4, 1000, 0.5), "iris_training", "iris_test", Dataset.Norm_NEGPOS); // 99.17%  96.67%
             if (file.equalsIgnoreCase("spiral")) evaluate(new NN(2, 3, 72, 8000, 0.4), "spiral", Dataset.Norm_NONE); // 99.33%
             if (file.equalsIgnoreCase("diabetes")) evaluate(new NN(8, 2, 8, 6000, 0.3), "diabetes", Dataset.Norm_NEGPOS); // 80.73% (80.599% in Weka)
             if (file.equalsIgnoreCase("circle")) evaluate(new NN(2, 2, 72, 1000, 0.4), "circle", Dataset.Norm_NONE); // 100%
-            if (file.equalsIgnoreCase("glass")) evaluate(new NN(9, 7, 72, 9000, 0.3), "glass", Dataset.Norm_NEGPOS); // 86.92% (85.98% in Weka)
-            
-            if (file.equalsIgnoreCase("mnist")) evaluate(new NN(784, 10, 8, 200, 0.1), "mnist_train", "mnist_test", Dataset.Norm_POS); // 89.51%  89.58%
-            //if (file.equalsIgnoreCase("mnist")) evaluate(new NN(784, 10, 12, 500, 0.05), "mnist_train", "mnist_test", Dataset.Norm_POS); // 88.06%  88.47%
+            if (file.equalsIgnoreCase("glass")) evaluate(new NN(9, 7, 72, 9000, 0.3), "glass", Dataset.Norm_NEGPOS); // 85.98%
+            if (file.equalsIgnoreCase("mnist")) evaluate(new NN(784, 10, 8, 1000, 0.05), "mnist_train", "mnist_test", Dataset.Norm_POS); // 89.26%  89.50%
         }
         
         if (type.equalsIgnoreCase("dnn"))
@@ -80,11 +77,11 @@ public class Experiment
             /**
              * Deep Neural Network classifiers 
              */
-            if (file.equalsIgnoreCase("demo")) evaluate(new DeepNN(2, 3, 4, 4, 2000, 0.2), "datademo", Dataset.Norm_NONE); // 100%
-            if (file.equalsIgnoreCase("iris")) evaluate(new DeepNN(4, 3, 8, 4, 2000, 0.2), "iris", Dataset.Norm_NEGPOS); // 98.67%
+            if (file.equalsIgnoreCase("demo")) evaluate(new DeepNN(2, 3, 4, 4, 2000, 0.5), "datademo", Dataset.Norm_NONE); // 100%
+            if (file.equalsIgnoreCase("iris")) evaluate(new DeepNN(4, 3, 8, 4, 2000, 0.3), "iris", Dataset.Norm_NEGPOS); // 98.67%
             if (file.equalsIgnoreCase("iris_test")) evaluate(new DeepNN(4, 3, 8, 4, 2000, 0.2), "iris_training", "iris_test", Dataset.Norm_NEGPOS); // 99.17%  96.67%
             if (file.equalsIgnoreCase("spiral")) evaluate(new DeepNN(2, 3, 42, 24, 12000, 0.08), "spiral", Dataset.Norm_NONE); // 99.33%
-            if (file.equalsIgnoreCase("diabetes")) evaluate(new DeepNN(8, 2, 24, 8, 6000, 0.2), "diabetes", Dataset.Norm_NEGPOS); // 80.73%
+            if (file.equalsIgnoreCase("diabetes")) evaluate(new DeepNN(8, 2, 24, 12, 6000, 0.2), "diabetes", Dataset.Norm_NEGPOS); // 80.08%
             if (file.equalsIgnoreCase("circle")) evaluate(new DeepNN(2, 2, 12, 8, 1000, 0.1), "circle", Dataset.Norm_NEGPOS); // 100%
         }
         
@@ -133,7 +130,10 @@ public class Experiment
         System.out.println("Training time: " + el + " ms");
         //Evaluate accuracy
         System.out.println("Performance (whole dataset):");
+        st = System.currentTimeMillis();
         c.evaluate(data);
+        el = System.currentTimeMillis() - st;
+        System.out.println("Evaluation time: " + el + " ms");
         
         //Evaluate on test dataset (if it is specified)
         if (testset_name != null)
@@ -145,7 +145,10 @@ public class Experiment
             
             //Evaluate accuracy
             System.out.println("Performance (test dataset):");
+            st = System.currentTimeMillis();
             c.evaluate(data);
+            el = System.currentTimeMillis() - st;
+            System.out.println("Evaluation time: " + el + " ms");
         }
     }
 }

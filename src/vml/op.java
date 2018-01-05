@@ -4,7 +4,10 @@ package vml;
 import cern.colt.function.*;
 import cern.colt.matrix.*;
 import cern.colt.matrix.linalg.Algebra;
-import java.util.Random;
+import cern.jet.math.Functions;
+import cern.jet.math.Mult;
+import cern.jet.math.PlusMult;
+import cern.jet.random.Uniform;
 
 /**
  * Class for doing a range of matrix and vector operations.
@@ -16,7 +19,7 @@ public class op
     /**
      * Randomizer to use
      */
-    public static Random rnd = new Random(2);
+    private static Uniform rnd = new Uniform(1.0, 0.0, 2);
     
     /********************************
      * 
@@ -38,7 +41,6 @@ public class op
     
     public static DoubleMatrix2D matrix_rnd(int rows, int cols)
     {
-        //return DoubleFactory2D.dense.random(rows, cols);
         return matrix_rnd(rows, cols, 1.0);
     }
     /**
@@ -92,7 +94,6 @@ public class op
      */
     public static DoubleMatrix1D vector_rnd(int size)
     {
-        //return DoubleFactory1D.dense.random(size);
         return vector_rnd(size, 1.0);
     }
     
@@ -105,7 +106,6 @@ public class op
      */
     public static DoubleMatrix1D vector_rnd(int size, double scale)
     {
-        //return DoubleFactory1D.dense.random(size);
         DoubleMatrix1D m = vector_zeros(size);
         for (int c = 0; c < m.size(); c++)
         {
@@ -130,30 +130,6 @@ public class op
      * View matrix
      * 
      ********************************/
-    
-    /**
-     * Returns a row in a matrix as a vector.
-     * 
-     * @param m The matrix
-     * @param r The row
-     * @return The row as a matrix
-     */
-    public static DoubleMatrix1D row(DoubleMatrix2D m, int r)
-    {
-        return m.viewRow(r);
-    }
-    
-    /**
-     * Returns a column in a matrix as a vector.
-     * 
-     * @param m The matrix
-     * @param c The column
-     * @return The column as a matrix
-     */
-    public static DoubleMatrix1D column(DoubleMatrix2D m, int c)
-    {
-        return m.viewColumn(c);
-    }
     
     /**
      * Returns the index of the highest value in a vector.
@@ -209,20 +185,7 @@ public class op
      */
     public static DoubleMatrix1D divide(DoubleMatrix1D m, double scale)
     {
-        DoubleFunction f = (double v) -> v / scale;
-        m.assign(f);
-        return m;
-    }
-    
-    /**
-     * Calculates exponents of all values in a vector.
-     * 
-     * @param m The vector
-     * @return Result vector
-     */
-    public static DoubleMatrix1D exp(DoubleMatrix1D m)
-    {
-        DoubleFunction f = (double v) -> Math.pow(Math.E, v);
+        Mult f = Mult.div(scale);
         m.assign(f);
         return m;
     }
@@ -254,6 +217,19 @@ public class op
     }
     
     /**
+     * Calculates exponents of all values in a vector.
+     * 
+     * @param m The vector
+     * @return Result vector
+     */
+    public static DoubleMatrix1D exp(DoubleMatrix1D m)
+    {
+        DoubleFunction f = (double v) -> Math.pow(Math.E, v);
+        m.assign(f);
+        return m;
+    }
+    
+    /**
      * Calculates exponents of all values in a matrix.
      * 
      * @param m The matrix
@@ -276,18 +252,12 @@ public class op
     {
         for (int c = 0; c < m.columns(); c++)
         {
-            //Calculate sum
-            double sum = 0;
-            for (int r = 0; r < m.rows(); r++)
-            {
-                sum += m.get(r, c);
-            }
+            //Calculate sum for this column
+            double sum = m.viewColumn(c).zSum();
             
             //Normalize values
-            for (int r = 0; r < m.rows(); r++)
-            {
-                m.set(r, c, m.get(r, c) / sum);
-            }
+            Mult f = Mult.div(sum);
+            m.viewColumn(c).assign(f);
         }
         return m;
     }
@@ -311,7 +281,7 @@ public class op
      */
     public static void divide(DoubleMatrix2D m, double scale)
     {
-        DoubleFunction f = (double v) -> v / scale;
+        Mult f = Mult.div(scale);
         m.assign(f);
     }
     
@@ -323,7 +293,7 @@ public class op
      */
     public static void scale(DoubleMatrix2D m, double scale)
     {
-        DoubleFunction f = (double v) -> v * scale;
+        Mult f = Mult.mult(scale);
         m.assign(f);
     }
     
@@ -335,7 +305,7 @@ public class op
      */
     public static void scale(DoubleMatrix1D m, double scale)
     {
-        DoubleFunction f = (double v) -> v * scale;
+        Mult f = Mult.mult(scale);
         m.assign(f);
     }
     
@@ -366,7 +336,7 @@ public class op
      */
     public static void add(DoubleMatrix2D a, DoubleMatrix2D b)
     {
-        DoubleDoubleFunction f = (double v1, double v2) -> v1 + v2;
+        DoubleDoubleFunction f = Functions.plus;
         a.assign(b, f);
     }
     
@@ -383,7 +353,7 @@ public class op
     }
     
     /**
-     * Adds a constant to an index in a vectot.
+     * Adds a constant to an index in a vector.
      * 
      * @param m The vector
      * @param i Index to append to
@@ -413,7 +383,7 @@ public class op
     }
     
     /**
-     * Adds a scaled matrix b to a vector a.
+     * Adds a scaled matrix b to a matrix a.
      * 
      * @param a Matrix a
      * @param b Matrix b
@@ -421,14 +391,8 @@ public class op
      */
     public static void add(DoubleMatrix2D a, DoubleMatrix2D b, double scale)
     {
-        for (int r = 0; r < a.rows(); r++)
-        {
-            for (int c = 0; c < a.columns(); c++)
-            {
-                double old = a.get(r, c);
-                a.set(r, c, old + b.get(r, c) * scale);
-            }
-        }
+        PlusMult f = PlusMult.plusMult(scale);
+        a.assign(b, f);
     }
     
     /**
@@ -443,11 +407,7 @@ public class op
         
         for (int r = 0; r < m.rows(); r++)
         {
-            double sum = 0;
-            for (int c = 0; c < m.columns(); c++)
-            {
-                sum += m.get(r, c);
-            }
+            double sum = m.viewRow(r).zSum();
             v.set(r, sum);
         }
         

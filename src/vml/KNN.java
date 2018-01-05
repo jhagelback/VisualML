@@ -133,11 +133,9 @@ public class KNN extends Classifier
         
         //Iterate over the training data
         //and calculate distances
-        for (KInstance ki : d)
-        {
+        d.stream().forEach((ki) -> {
             ki.dist = op.L2_dist(inst.x, ki.x);
-            //ki.dist = op.L1_dist(inst.x, ki.x);
-        }
+        });
         
         //Sort list based on distance
         Collections.sort(d);
@@ -150,7 +148,7 @@ public class KNN extends Classifier
         {
             int pred_y = d.get(j).label;
             res.set(pred_y, res.get(pred_y) + 1);
-            dist.set(pred_y, res.get(pred_y) + d.get(j).dist);
+            dist.set(pred_y, dist.get(pred_y) + d.get(j).dist);
         }
         
         double bestNo = 0;

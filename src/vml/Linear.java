@@ -221,7 +221,7 @@ public class Linear extends Classifier
     @Override
     public int classify(int i)
     {
-        DoubleMatrix1D act = op.column(scores, i);
+        DoubleMatrix1D act = scores.viewColumn(i);
         int pred_class = op.argmax(act);
         return pred_class;
     }
@@ -305,8 +305,8 @@ public class Linear extends Classifier
         for (int i = 0; i < num_train; i++)
         {
             //Get vectors
-            DoubleMatrix1D score = op.column(scores, i);
-            DoubleMatrix1D xi = op.column(X, i);
+            DoubleMatrix1D score = scores.viewColumn(i);
+            DoubleMatrix1D xi = X.viewColumn(i);
              
             //Correct label (class value)
             int corr_index = (int)y.get(i);

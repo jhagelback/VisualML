@@ -116,7 +116,7 @@ public class NN extends Classifier
     @Override
     public int classify(int i)
     {
-        DoubleMatrix1D act = op.column(out.scores, i);
+        DoubleMatrix1D act = out.scores.viewColumn(i);
         int pred_class = op.argmax(act);
         return pred_class;
     }

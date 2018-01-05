@@ -186,14 +186,6 @@ public class Dataset
     }
     
     /**
-     * Shuffles the dataset.
-     */
-    public void shuffle()
-    {
-        Collections.shuffle(data, op.rnd);
-    }
-    
-    /**
      * Creates an input matrix for this dataset.
      * 
      * @return Input matrix
