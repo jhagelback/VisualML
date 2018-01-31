@@ -1,8 +1,6 @@
 
 package vml;
 
-import cern.colt.matrix.*;
-
 /**
  * Hidden layer using ReLU.
  * 
@@ -11,20 +9,20 @@ import cern.colt.matrix.*;
 public class HiddenLayer
 {
     //Weights matrix
-    public DoubleMatrix2D w;
+    public Matrix w;
     //Bias vector
-    public DoubleMatrix1D b;
+    public Vector b;
     //Gradients for gradient descent optimization
-    private DoubleMatrix2D dW;
-    private DoubleMatrix1D dB;
+    private Matrix dW;
+    private Vector dB;
     //Training dataset
-    private DoubleMatrix2D X;
+    private Matrix X;
     //Class values vector
-    private DoubleMatrix1D y;
+    private Vector y;
     //Scores matrix = X*W
-    public DoubleMatrix2D scores;
+    public Matrix scores;
     //ReLU gradients matrix
-    public DoubleMatrix2D dhidden;
+    public Matrix dhidden;
     //L2 regularization
     private double RW;
     //L2 regularization strength
@@ -42,9 +40,9 @@ public class HiddenLayer
     public HiddenLayer(int noInputs, int noOutputs, double learningrate) 
     {
         //Init weight matrix
-        w = op.matrix_rnd(noOutputs, noInputs, 0.1);
-        //Init bias vector with 0's
-        b = op.vector_zeros(noOutputs);
+        w = Matrix.random(noOutputs, noInputs, 0.1, Classifier.rnd);
+        //Init bias vector to 0's
+        b = Vector.zeros(noOutputs);
         
         //Learning rate
         this.learningrate = learningrate;
@@ -55,15 +53,15 @@ public class HiddenLayer
      * 
      * @param X Input data matrix
      */
-    public void forward(DoubleMatrix2D X)
+    public void forward(Matrix X)
     {
         this.X = X;
         
         //Activation
-        scores = op.mul(w, X);
-        scores = op.add(scores, b);
+        scores = Matrix.activation(w, X, b);
+        
         //ReLU activation
-        op.max(scores, 0);
+        scores.max(0);
     }
     
     /**
@@ -73,33 +71,12 @@ public class HiddenLayer
      * @param dscores Gradients for next layer
      * @return Current regularization loss
      */
-    public double backward(DoubleMatrix2D w2, DoubleMatrix2D dscores)
+    public double backward(Matrix w2, Matrix dscores)
     {
         //Evaluate gradients
         grad_relu(w2, dscores);
-        //debug();
-        //Update weights
-        updateWeights();
         
         return 0.5 * RW;
-    }
-    
-    /**
-     * For debugging output.
-     */
-    private void debug()
-    {
-        System.out.println("\nWeights:");
-        System.out.println(w);
-        System.out.println(b);
-        
-        System.out.println("\nGradients: ");
-        System.out.println(dW);
-        System.out.println(dB);
-        
-        java.util.Scanner s = new java.util.Scanner(System.in);
-        String i = s.next();
-        if (i.equals("q")) System.exit(0);
     }
     
     /**
@@ -108,42 +85,31 @@ public class HiddenLayer
      * @param w2 Weights for next layer
      * @param dscores Gradients for next layer
      */
-    public void grad_relu(DoubleMatrix2D w2, DoubleMatrix2D dscores)
+    public void grad_relu(Matrix w2, Matrix dscores)
     {
         //Re-calculate regularization
         calc_regularization();
         
         //Backprop into hidden layer
-        dhidden = op.mul(op.transpose(w2), dscores);
+        dhidden = Matrix.transpose_mul(w2, dscores);
         //Backprop the ReLU non-linearity (set dhidden to 0 if activation is 0
-        for (int r = 0; r < dhidden.rows(); r++)
-        {
-            for (int c = 0; c < dhidden.columns(); c++)
-            {
-                //Check if activation is <= 0
-                if (scores.get(r, c) <= 0)
-                {
-                    //Switch off
-                    dhidden.set(r, c, 0);
-                }
-            }
-        }
+        dhidden.backprop_relu(scores);
         
         //Momentum
-        DoubleMatrix2D oldDW = dW;
+        Matrix oldDW = dW;
         
         //And finally the gradients
-        dW = op.mul(dhidden, op.transpose(X));
-        dB = op.sum_rows(dhidden);
+        dW = Matrix.mul_transpose(dhidden, X);
+        dB = dhidden.sum_rows();
         
         if (oldDW != null)
         {
-            op.add(dW, oldDW, 0.1);
+            dW.add(oldDW, 0.1);
         }
         
         //Add regularization to gradients
         //The weight matrix scaled by Lambda*0.5 is added
-        op.add(dW, w, lambda * 0.5);
+        dW.add(w, lambda * 0.5);
     }
     
     /**
@@ -152,20 +118,9 @@ public class HiddenLayer
     public void updateWeights()
     {
         //Update weights
-        for (int r = 0; r < w.rows(); r++)
-        {
-            for (int c = 0; c < w.columns(); c++)
-            {
-                double old = w.get(r, c);
-                w.set(r, c, old - dW.get(r, c) * learningrate);
-            }
-        }
+        w.update_weights(dW, learningrate);
         //Update bias
-        for (int c = 0; c < b.size(); c++)
-        {
-            double old = b.get(c);
-            b.set(c, old - dB.get(c) * learningrate);
-        }
+        b.update_weights(dB, learningrate);
     }
     
     /**
@@ -174,15 +129,6 @@ public class HiddenLayer
     private void calc_regularization()
     {
         //Regularization
-        RW = 0;
-        
-        for (int r = 0; r < w.rows(); r++)
-        {
-            for (int c = 0; c < w.columns(); c++)
-            {
-                RW += Math.pow(w.get(r, c), 2);
-            }
-        }
-        RW *= lambda;
+        RW = w.L2_norm() * lambda;
     }
 }

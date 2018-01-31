@@ -1,7 +1,6 @@
 
 package vml;
 
-import cern.colt.matrix.*;
 import java.text.DecimalFormat;
 
 /**
@@ -12,18 +11,18 @@ import java.text.DecimalFormat;
 public class Linear extends Classifier
 {
     //Weights matrix
-    public DoubleMatrix2D w;
+    public Matrix w;
     //Bias vector
-    public DoubleMatrix1D b;
+    public Vector b;
     //Gradients for gradient descent optimization
-    private DoubleMatrix2D dW;
-    private DoubleMatrix1D dB;
+    private Matrix dW;
+    private Vector dB;
     //Training dataset
-    private DoubleMatrix2D X;
+    private Matrix X;
     //Class values vector
-    private DoubleMatrix1D y;
-    //Scores matrix = X*W
-    private DoubleMatrix2D scores;
+    private Vector y;
+    //Scores matrix = X*W+b
+    private Matrix scores;
     //L2 regularization
     private double RW;
     //L2 regularization strength
@@ -51,14 +50,16 @@ public class Linear extends Classifier
     public Linear(int noInputs, int noCategories, int iterations, double learningrate) 
     {
         //Init weight matrix
-        w = op.matrix_rnd(noCategories, noInputs, 0.1);
+        w = Matrix.random(noCategories, noInputs, 0.1, Classifier.rnd);
         //Init bias vector to 0's
-        b = op.vector_zeros(noCategories);
+        b = Vector.zeros(noCategories);
         
         //Learning rate
         this.learningrate = learningrate;
         //Training iterations
         this.iterations = iterations;
+        
+        System.out.println("Linear Softmax classifier");
     }
     
     /**
@@ -76,9 +77,9 @@ public class Linear extends Classifier
         double[] b_init = {0.00, 0.50, -0.50};
         
         //Init weight matrix
-        w = op.matrix(w_init);
+        w = new Matrix(w_init);
         //Init bias vector
-        b = op.vector(b_init);
+        b = new Vector(b_init);
         //Learning rate
         learningrate = 1.0;
     }
@@ -110,8 +111,8 @@ public class Linear extends Classifier
         double best_loss = Double.MAX_VALUE;
         int best_iteration = 0;
         double loss = 0;
-        DoubleMatrix2D bestW = null;
-        DoubleMatrix1D bestB = null;
+        Matrix bestW = null;
+        Vector bestB = null;
         
         for (int i = 1; i <= iterations; i++)
         {
@@ -198,8 +199,7 @@ public class Linear extends Classifier
     public void activation(Dataset test)
     {
         //Activation
-        scores = op.mul(w, test.input_matrix());
-        scores = op.add(scores, b);
+        scores = Matrix.activation(w, test.input_matrix(), b);
     }
     
     /**
@@ -208,8 +208,7 @@ public class Linear extends Classifier
     private void activation()
     {
         //Activation
-        scores = op.mul(w, X);
-        scores = op.add(scores, b);  
+        scores = Matrix.activation(w, X, b);
     }
     
     /**
@@ -221,8 +220,7 @@ public class Linear extends Classifier
     @Override
     public int classify(int i)
     {
-        DoubleMatrix1D act = scores.viewColumn(i);
-        int pred_class = op.argmax(act);
+        int pred_class = scores.argmax(i);
         return pred_class;
     }
     
@@ -241,43 +239,31 @@ public class Linear extends Classifier
         double loss = 0;
         
         //Calculate exponentials
-        //DoubleMatrix2D exp_scores = op.exp(scores);
+        //Matrix logprobs = scores.exp();
         
         //To avoid numerical instability
-        DoubleMatrix2D exp_scores = op.shift_columns(scores);
-        exp_scores = op.exp(scores);
+        Matrix logprobs = scores.shift_columns();
+        logprobs.exp();
         
         //Normalize
-        DoubleMatrix2D probs = op.average_columns(exp_scores);
-        DoubleMatrix1D corect_logprobs = op.vector_zeros(num_train);
-        for (int j = 0; j < num_train; j++)
-        {
-            DoubleMatrix1D prob = probs.viewColumn(j);
-            int corr_index = (int)y.get(j);
-            double class_score = prob.get(corr_index);
-            double Li = -1.0 * Math.log(class_score) / Math.log(Math.E);
-            corect_logprobs.set(j, Li);
-        }
+        logprobs.normalize();
+        
+        //Calculate cross-entropy loss vector
+        Vector loss_vec = logprobs.calc_loss(y);
+        
         //Average loss
-        loss = op.sum(corect_logprobs) / num_train;
+        loss = loss_vec.sum() / num_train;
         //Regularization loss
         loss += RW;
         
         //Gradients
-        DoubleMatrix2D dscores = probs;
-        for (int j = 0; j < num_train; j++)
-        {
-            int corr_index = (int)y.get(j);
-            dscores.set(corr_index, j, dscores.get(corr_index, j) - 1);
-        }
-        op.divide(dscores, num_train);
-        
-        dW = op.mul(dscores, op.transpose(X));
-        dB = op.sum_rows(dscores);
+        Matrix dscores = logprobs.calc_dscores(y);
+        dW = Matrix.mul_transpose(dscores, X);
+        dB = dscores.sum_rows();
         
         //Add regularization to gradients
         //The weight matrix scaled by Lambda*0.5 is added
-        op.add(dW, w, lambda * 0.5);
+        dW.add(w, lambda * 0.5);
         
         return loss;
     }
@@ -293,8 +279,8 @@ public class Linear extends Classifier
         calc_regularization();
         
         //Gradients matrix
-        dW = op.matrix_zeros(w.rows(), w.columns());
-        dB = op.vector_zeros(w.rows());
+        dW = Matrix.zeros(w.rows(), w.columns());
+        dB = Vector.zeros(w.rows());
         
         //Init some variables
         int num_classes = w.rows();
@@ -305,8 +291,8 @@ public class Linear extends Classifier
         for (int i = 0; i < num_train; i++)
         {
             //Get vectors
-            DoubleMatrix1D score = scores.viewColumn(i);
-            DoubleMatrix1D xi = X.viewColumn(i);
+            Vector score = scores.getColumn(i);
+            Vector xi = X.getColumn(i);
              
             //Correct label (class value)
             int corr_index = (int)y.get(i);
@@ -324,26 +310,26 @@ public class Linear extends Classifier
                     {
                         //Update gradients matrix
                         loss += margin;
-                        op.add(dW, xi, j, 1.0);
-                        op.add(dW, xi, corr_index, -1.0);
+                        dW.addToRow(xi, j, 1.0);
+                        dW.addToRow(xi, corr_index, -1.0);
                         //Update bias vector
-                        op.add(dB, j, 1);
-                        op.add(dB, corr_index, -1);
+                        dB.add(j, 1);
+                        dB.add(corr_index, -1);
                     }
                 }
             }
         }
         
         //Average gradients
-        op.divide(dW, num_train);
-        op.divide(dB, num_train);
+        dW.divide(num_train);
+        dB.divide(num_train);
         
         //Average loss + reqularization
         loss = loss / num_train + RW;
         
         //Add regularization to gradients
         //The weight matrix scaled by Lambda*0.5 is added
-        op.add(dW, w, lambda * 0.5);
+        dW.add(w, lambda * 0.5);
         
         return loss;
     }
@@ -354,20 +340,9 @@ public class Linear extends Classifier
     private void updateWeights()
     {
         //Update weights
-        for (int r = 0; r < w.rows(); r++)
-        {
-            for (int c = 0; c < w.columns(); c++)
-            {
-                double old = w.get(r, c);
-                w.set(r, c, old - dW.get(r, c) * learningrate);
-            }
-        }
+        w.update_weights(dW, learningrate);
         //Update bias
-        for (int c = 0; c < b.size(); c++)
-        {
-            double old = b.get(c);
-            b.set(c, old - dB.get(c) * learningrate);
-        }
+        b.update_weights(dB, learningrate);
     }
     
     /**
@@ -380,14 +355,7 @@ public class Linear extends Classifier
         
         if (use_regularization)
         {
-            for (int r = 0; r < w.rows(); r++)
-            {
-                for (int c = 0; c < w.columns(); c++)
-                {
-                    RW += Math.pow(w.get(r, c), 2);
-                }
-            }
-            RW *= lambda;
+            RW = w.L2_norm() * lambda;
         }
     }
 }

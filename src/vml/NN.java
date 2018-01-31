@@ -1,7 +1,6 @@
 
 package vml;
 
-import cern.colt.matrix.*;
 import java.text.DecimalFormat;
 
 /**
@@ -12,9 +11,9 @@ import java.text.DecimalFormat;
 public class NN extends Classifier
 {
     //Training dataset
-    private DoubleMatrix2D X;
+    private Matrix X;
     //Class values vector
-    private DoubleMatrix1D y;
+    private Vector y;
     //Number of training iterations
     private int iterations = 100;
     //Hidden layer
@@ -41,6 +40,8 @@ public class NN extends Classifier
         //Create layers
         hidden = new HiddenLayer(noInputs, hidden_size, learningrate);
         out = new OutLayer(hidden_size, noCategories, learningrate);
+        
+        System.out.println("Neural Network classifier");
     }
     
     /**
@@ -64,7 +65,7 @@ public class NN extends Classifier
     public void activation(Dataset test)
     {
         //To avoid errors when using the GUI, we need to keep a reference to the training data
-        DoubleMatrix2D train = X;
+        Matrix train = X;
         
         X = test.input_matrix();
         forward();
@@ -91,6 +92,10 @@ public class NN extends Classifier
     {        
         double loss = out.backward(y);
         loss += hidden.backward(out.w, out.dscores);
+        
+        out.updateWeights();
+        hidden.updateWeights();
+        
         return loss;
     }
     
@@ -116,8 +121,7 @@ public class NN extends Classifier
     @Override
     public int classify(int i)
     {
-        DoubleMatrix1D act = out.scores.viewColumn(i);
-        int pred_class = op.argmax(act);
+        int pred_class = out.scores.argmax(i);
         return pred_class;
     }
     
@@ -132,10 +136,10 @@ public class NN extends Classifier
         
         //Optimization Gradient Descent
         
-        DoubleMatrix2D bOW = null;
-        DoubleMatrix2D bHW = null;
-        DoubleMatrix1D bOB = null;
-        DoubleMatrix1D bHB = null;
+        Matrix bOW = null;
+        Matrix bHW = null;
+        Vector bOB = null;
+        Vector bHB = null;
         
         double loss = 0;
         double best_loss = Double.MAX_VALUE;

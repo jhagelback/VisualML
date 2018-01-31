@@ -1,7 +1,6 @@
 
 package vml;
 
-import cern.colt.matrix.*;
 import java.util.*;
 
 /**
@@ -144,13 +143,13 @@ public class Dataset
         for (Instance inst : data)
         {
             //Create new scaled attributed vector
-            DoubleMatrix1D nv = op.vector_zeros(inst.x.size());
-            for (int c = 0; c < nv.size(); c++)
+            double[] nv = new double[inst.x.size()];
+            for (int i = 0; i < nv.length; i++)
             {
-                nv.set(c, (inst.x.get(c) - min[c]) / (max[c] - min[c])); // 0 ... 1
+                nv[i] = (inst.x.get(i) - min[i]) / (max[i] - min[i]); // 0 ... 1
             }
             //Set new instance vector
-            inst.x = nv;
+            inst.x = new Vector(nv);
         }
     }
     
@@ -163,13 +162,13 @@ public class Dataset
         for (Instance inst : data)
         {
             //Create new scaled attributed vector
-            DoubleMatrix1D nv = op.vector_zeros(inst.x.size());
-            for (int c = 0; c < nv.size(); c++)
+            double[] nv = new double[inst.x.size()];
+            for (int i = 0; i < nv.length; i++)
             {
-                nv.set(c, (inst.x.get(c) - min[c]) / (max[c] - min[c]) * 2.0 - 1.0); // -1 ... 1
+                nv[i] = (inst.x.get(i) - min[i]) / (max[i] - min[i]) * 2.0 - 1.0; // -1 ... 1
             }
             //Set new instance vector
-            inst.x = nv;
+            inst.x = new Vector(nv);
         }
     }
     
@@ -190,10 +189,10 @@ public class Dataset
      * 
      * @return Input matrix
      */
-    public DoubleMatrix2D input_matrix()
+    public Matrix input_matrix()
     {
         //Create instances matrix
-        DoubleMatrix2D X = op.matrix_zeros(noInputs(), size());
+        Matrix X = Matrix.zeros(noInputs(), size());
         for (int r = 0; r < size(); r++)
         {
             Instance inst = data.get(r);
@@ -211,10 +210,10 @@ public class Dataset
      * 
      * @return Label vector
      */
-    public DoubleMatrix1D label_vector()
+    public Vector label_vector()
     {
         //Create label (correct class) vector
-        DoubleMatrix1D y = op.vector_zeros(size());
+        Vector y = Vector.zeros(size());
         for (int r = 0; r < size(); r++)
         {
             Instance inst = data.get(r);

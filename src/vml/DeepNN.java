@@ -1,7 +1,6 @@
 
 package vml;
 
-import cern.colt.matrix.*;
 import java.text.DecimalFormat;
 
 /**
@@ -12,9 +11,9 @@ import java.text.DecimalFormat;
 public class DeepNN extends Classifier
 {
     //Training dataset
-    private DoubleMatrix2D X;
+    private Matrix X;
     //Class values vector
-    private DoubleMatrix1D y;
+    private Vector y;
     //Number of training iterations
     private int iterations = 100;
     //Hidden layer 1
@@ -45,6 +44,8 @@ public class DeepNN extends Classifier
         h1 = new HiddenLayer(noInputs, h1_size, learningrate);
         h2 = new HiddenLayer(h1_size, h2_size, learningrate);
         out = new OutLayer(h2_size, noCategories, learningrate);
+        
+        System.out.println("Deep Neural Network classifier");
     }
     
     /**
@@ -68,7 +69,7 @@ public class DeepNN extends Classifier
     public void activation(Dataset test)
     {
         //To avoid errors when using the GUI, we need to keep a reference to the training data
-        DoubleMatrix2D train = X;
+        Matrix train = X;
         
         X = test.input_matrix();
         forward();
@@ -97,6 +98,11 @@ public class DeepNN extends Classifier
         double loss = out.backward(y);
         loss += h2.backward(out.w, out.dscores);
         loss += h1.backward(h2.w, h2.dhidden);
+        
+        out.updateWeights();
+        h2.updateWeights();
+        h1.updateWeights();
+        
         return loss;
     }
     
@@ -122,8 +128,7 @@ public class DeepNN extends Classifier
     @Override
     public int classify(int i)
     {
-        DoubleMatrix1D act = out.scores.viewColumn(i);
-        int pred_class = op.argmax(act);
+        int pred_class = out.scores.argmax(i);
         return pred_class;
     }
     
@@ -138,12 +143,12 @@ public class DeepNN extends Classifier
         
         //Optimization Gradient Descent
         
-        DoubleMatrix2D bOW = null;
-        DoubleMatrix2D bH1W = null;
-        DoubleMatrix2D bH2W = null;
-        DoubleMatrix1D bOB = null;
-        DoubleMatrix1D bH1B = null;
-        DoubleMatrix1D bH2B = null;
+        Matrix bOW = null;
+        Matrix bH1W = null;
+        Matrix bH2W = null;
+        Vector bOB = null;
+        Vector bH1B = null;
+        Vector bH2B = null;
         
         double loss = 0;
         double best_loss = Double.MAX_VALUE;

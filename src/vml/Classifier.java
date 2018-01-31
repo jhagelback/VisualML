@@ -2,6 +2,7 @@
 package vml;
 
 import java.text.DecimalFormat;
+import java.util.Random;
 
 /**
  * Base class for classifiers.
@@ -12,6 +13,8 @@ public abstract class Classifier
 {
     //Output formatting
     private DecimalFormat df = new DecimalFormat("0.00"); 
+    //Randomizer
+    public static Random rnd = new Random(2);
     
     /**
      * Trains the classifier on a dataset.

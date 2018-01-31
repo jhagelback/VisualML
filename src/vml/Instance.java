@@ -1,8 +1,6 @@
 
 package vml;
 
-import cern.colt.matrix.*;
-
 /**
  * Hold a data instance (example).
  * 
@@ -11,7 +9,7 @@ import cern.colt.matrix.*;
 public class Instance 
 {
     //Attributes vector
-    protected DoubleMatrix1D x;
+    protected Vector x;
     //Label (class value)
     protected int label;
     
@@ -23,7 +21,7 @@ public class Instance
      */
     public Instance(double[] attr, int label)
     {
-        x = op.vector(attr);
+        x = new Vector(attr);
         this.label = label;
     }
     

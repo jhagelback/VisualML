@@ -1,8 +1,6 @@
 
 package vml;
 
-import cern.colt.matrix.*;
-
 /**
  * Output layer using Softmax.
  * 
@@ -11,26 +9,28 @@ import cern.colt.matrix.*;
 public class OutLayer
 {
     //Weights matrix
-    public DoubleMatrix2D w;
+    public Matrix w;
     //Bias vector
-    public DoubleMatrix1D b;
+    public Vector b;
     //Gradients for gradient descent optimization
-    private DoubleMatrix2D dW;
-    private DoubleMatrix1D dB;
-    //Input data
-    private DoubleMatrix2D X;
+    private Matrix dW;
+    private Vector dB;
+    //Training dataset
+    private Matrix X;
     //Class values vector
-    private DoubleMatrix1D y;
-    //Scores matrix
-    public DoubleMatrix2D scores;
+    private Vector y;
+    //Scores matrix = X*W+b
+    public Matrix scores;
     //Softmax gradients matrix
-    public DoubleMatrix2D dscores;
+    public Matrix dscores;
     //L2 regularization
     private double RW;
     //L2 regularization strength
     private double lambda = 0.001;
     //Learningrate
     private double learningrate = 0.1;
+    //Set to true to use L2 regularization
+    private boolean use_regularization;
     
     /**
      * Constructor.
@@ -42,9 +42,9 @@ public class OutLayer
     public OutLayer(int noInputs, int noCategories, double learningrate) 
     {
         //Init weight matrix
-        w = op.matrix_rnd(noCategories, noInputs, 0.1);
-        //Init bias vector with 0's
-        b = op.vector_zeros(noCategories);
+        w = Matrix.random(noCategories, noInputs, 0.1, Classifier.rnd);
+        //Init bias vector to 0's
+        b = Vector.zeros(noCategories);
         
         //Learning rate
         this.learningrate = learningrate;
@@ -55,13 +55,12 @@ public class OutLayer
      * 
      * @param X Input data matrix
      */
-    public void forward(DoubleMatrix2D X)
+    public void forward(Matrix X)
     {
         this.X = X;
         
         //Activation
-        scores = op.mul(w, X);
-        scores = op.add(scores, b);
+        scores = Matrix.activation(w, X, b);
     }
     
     /**
@@ -70,40 +69,15 @@ public class OutLayer
      * @param y Labels vector
      * @return Current loss
      */
-    public double backward(DoubleMatrix1D y)
+    public double backward(Vector y)
     {
         //Input data
         this.y = y;
         
         //Calculate loss and evaluate gradients
         double loss = grad_softmax();
-        //debug(loss);
-        //Update weights
-        updateWeights();
         
         return loss;
-    }
-    
-    /**
-     * For debugging output.
-     * 
-     * @param loss Current loss
-     */
-    private void debug(double loss)
-    {
-        System.out.println("Loss: " + loss);
-        
-        System.out.println("\nWeights:");
-        System.out.println(w);
-        System.out.println(b);
-        
-        System.out.println("\nGradients: ");
-        System.out.println(dW);
-        System.out.println(dB);
-        
-        java.util.Scanner s = new java.util.Scanner(System.in);
-        String i = s.next();
-        if (i.equals("q")) System.exit(0);
     }
     
     /**
@@ -114,9 +88,8 @@ public class OutLayer
      */
     public int classify(int i)
     {
-        DoubleMatrix1D act = scores.viewColumn(i);
-        int pred_class = op.argmax(act);
-        return pred_class;    
+        int pred_class = scores.argmax(i);
+        return pred_class; 
     }
     
     /**
@@ -133,52 +106,32 @@ public class OutLayer
         int num_train = X.columns();
         double loss = 0;
         
-        //To avoid numerical instability
-        DoubleMatrix2D exp_scores = op.shift_columns(scores);
-        exp_scores = op.exp(scores);
-        
         //Calculate exponentials
-        //DoubleMatrix2D exp_scores = op.exp(scores);
-        //Normalize
-        DoubleMatrix2D probs = op.average_columns(exp_scores);
+        //Matrix logprobs = scores.exp();
         
-        DoubleMatrix1D corect_logprobs = op.vector_zeros(num_train);
-        for (int j = 0; j < num_train; j++)
-        {
-            DoubleMatrix1D prob = probs.viewColumn(j);
-            int corr_index = (int)y.get(j);
-            double class_score = prob.get(corr_index);
-            double Li = -1.0 * Math.log(class_score) / Math.log(Math.E);
-            corect_logprobs.set(j, Li);
-        }
+        //To avoid numerical instability
+        Matrix logprobs = scores.shift_columns();
+        logprobs.exp();
+        
+        //Normalize
+        logprobs.normalize();
+        
+        //Calculate cross-entropy loss vector
+        Vector loss_vec = logprobs.calc_loss(y);
+        
         //Average loss
-        loss = op.sum(corect_logprobs) / num_train;
+        loss = loss_vec.sum() / num_train;
         //Regularization loss
-        loss += 0.5 * RW;
+        loss += RW;
         
         //Gradients
-        dscores = probs;
-        for (int j = 0; j < num_train; j++)
-        {
-            int corr_index = (int)y.get(j);
-            dscores.set(corr_index, j, dscores.get(corr_index, j) - 1);
-        }
-        op.divide(dscores, num_train);
-        
-        //Momentum
-        DoubleMatrix2D oldDW = dW;
-        
-        dW = op.mul(dscores, op.transpose(X));
-        dB = op.sum_rows(dscores);
-        
-        if (oldDW != null)
-        {
-            op.add(dW, oldDW, 0.1);
-        }
+        dscores = logprobs.calc_dscores(y);
+        dW = Matrix.mul_transpose(dscores, X);
+        dB = dscores.sum_rows();
         
         //Add regularization to gradients
         //The weight matrix scaled by Lambda*0.5 is added
-        op.add(dW, w, lambda * 0.5);
+        dW.add(w, lambda * 0.5);
         
         return loss;
     }
@@ -186,23 +139,12 @@ public class OutLayer
     /**
      * Updates the weights matrix.
      */
-    private void updateWeights()
+    public void updateWeights()
     {
         //Update weights
-        for (int r = 0; r < w.rows(); r++)
-        {
-            for (int c = 0; c < w.columns(); c++)
-            {
-                double old = w.get(r, c);
-                w.set(r, c, old - dW.get(r, c) * learningrate);
-            }
-        }
+        w.update_weights(dW, learningrate);
         //Update bias
-        for (int c = 0; c < b.size(); c++)
-        {
-            double old = b.get(c);
-            b.set(c, old - dB.get(c) * learningrate);
-        }
+        b.update_weights(dB, learningrate);
     }
     
     /**
@@ -213,13 +155,9 @@ public class OutLayer
         //Regularization
         RW = 0;
         
-        for (int r = 0; r < w.rows(); r++)
+        if (use_regularization)
         {
-            for (int c = 0; c < w.columns(); c++)
-            {
-                RW += Math.pow(w.get(r, c), 2);
-            }
+            RW = w.L2_norm() * lambda;
         }
-        RW *= lambda;
     }
 }

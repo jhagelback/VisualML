@@ -1,7 +1,6 @@
 
 package vml;
 
-import cern.colt.matrix.DoubleMatrix1D;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -18,7 +17,7 @@ public class KNN extends Classifier
     private class KInstance implements Comparable
     {
         //Attributes
-        DoubleMatrix1D x;
+        Vector x;
         //Label
         int label;
         //Distance
@@ -30,7 +29,7 @@ public class KNN extends Classifier
          * @param x Attributes
          * @param label Label
          */
-        public KInstance(DoubleMatrix1D x, int label)
+        public KInstance(Vector x, int label)
         {
             this.x = x;
             this.label = label;
@@ -133,8 +132,8 @@ public class KNN extends Classifier
         
         //Iterate over the training data
         //and calculate distances
-        d.stream().forEach((ki) -> {
-            ki.dist = op.L2_dist(inst.x, ki.x);
+        d.stream().parallel().forEach((ki) -> {
+            ki.dist = Vector.L2_dist(inst.x, ki.x);
         });
         
         //Sort list based on distance
@@ -142,8 +141,8 @@ public class KNN extends Classifier
         
         //Create result array with number of
         //occurences for each label, plus distances
-        DoubleMatrix1D res = op.vector_zeros(noCategories);
-        DoubleMatrix1D dist = op.vector_zeros(noCategories);
+        Vector res = Vector.zeros(noCategories);
+        Vector dist = Vector.zeros(noCategories);
         for (int j = 0; j < K; j++)
         {
             int pred_y = d.get(j).label;

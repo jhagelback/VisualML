@@ -54,7 +54,8 @@ public class Experiment
             if (file.equalsIgnoreCase("diabetes")) evaluate(new Linear(8, 2, 50, 0.8), "diabetes", Dataset.Norm_NEGPOS); // 77.34%
             if (file.equalsIgnoreCase("circle")) evaluate(new Linear(2, 2, 200, 0.1), "circle", Dataset.Norm_NONE); // 68.60%
             if (file.equalsIgnoreCase("glass")) evaluate(new Linear(9, 7, 200, 0.5), "glass", Dataset.Norm_NEGPOS); // 58.41%
-            if (file.equalsIgnoreCase("mnist")) evaluate(new Linear(784, 10, 50, 0.5), "mnist_train", "mnist_test", Dataset.Norm_POS); // 88.15%  88.89%
+            //if (file.equalsIgnoreCase("mnist")) evaluate(new Linear2(784, 10, 50, 0.5), "mnist_train", "mnist_test", Dataset.Norm_POS); // 88.15%  88.89%
+            if (file.equalsIgnoreCase("mnist")) evaluate(new Linear(784, 10, 10, 0.5), "mnist_train", "mnist_test", Dataset.Norm_POS); // 88.15%  88.89%
         }
         
         if(type.equalsIgnoreCase("nn"))
@@ -69,7 +70,7 @@ public class Experiment
             if (file.equalsIgnoreCase("diabetes")) evaluate(new NN(8, 2, 8, 6000, 0.3), "diabetes", Dataset.Norm_NEGPOS); // 80.73% (80.599% in Weka)
             if (file.equalsIgnoreCase("circle")) evaluate(new NN(2, 2, 72, 1000, 0.4), "circle", Dataset.Norm_NONE); // 100%
             if (file.equalsIgnoreCase("glass")) evaluate(new NN(9, 7, 72, 9000, 0.3), "glass", Dataset.Norm_NEGPOS); // 85.98%
-            if (file.equalsIgnoreCase("mnist")) evaluate(new NN(784, 10, 8, 1000, 0.05), "mnist_train", "mnist_test", Dataset.Norm_POS); // 89.26%  89.50%
+            if (file.equalsIgnoreCase("mnist")) evaluate(new NN(784, 10, 8, 1000, 0.05), "mnist_train", "mnist_test", Dataset.Norm_POS); // 89.25%  89.50%
         }
         
         if (type.equalsIgnoreCase("dnn"))
