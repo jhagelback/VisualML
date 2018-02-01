@@ -4,7 +4,7 @@ package vml;
 import java.text.DecimalFormat;
 
 /**
- * Two-layer neural network classifier.
+ * Neural Network Softmax classifier.
  * 
  * @author Johan Hagelbäck (johan.hagelback@gmail.com)
  */
@@ -27,33 +27,32 @@ public class NN extends Classifier
     /**
      * Creates a new neural network.
      * 
-     * @param noInputs Number of input variables in the dataset
-     * @param noCategories Number of categories (class values)
+     * @param data Training dataset
+     * @param test Test dataset
      * @param hidden_size Size of hidden layer
      * @param iterations Training iterations
      * @param learningrate Learning rate
      */
-    public NN(int noInputs, int noCategories, int hidden_size, int iterations, double learningrate) 
+    public NN(Dataset data, Dataset test, int hidden_size, int iterations, double learningrate) 
     {
-        this.iterations = iterations;
+        //Set dataset
+        this.data = data;
+        this.test = test;
+        X = data.input_matrix();
+        y = data.label_vector();
+        
+        //Size of dataset
+        int noCategories = data.noCategories();
+        int noInputs = data.noInputs();
         
         //Create layers
         hidden = new HiddenLayer(noInputs, hidden_size, learningrate);
         out = new OutLayer(hidden_size, noCategories, learningrate);
         
+        //Training iterations
+        this.iterations = iterations;
+        
         System.out.println("Neural Network classifier");
-    }
-    
-    /**
-     * Sets training dataset.
-     * 
-     * @param data Training dataset
-     */
-    @Override
-    public void setData(Dataset data)
-    {
-        X = data.input_matrix();
-        y = data.label_vector();
     }
     
     /**

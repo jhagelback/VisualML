@@ -4,7 +4,7 @@ package vml;
 import java.text.DecimalFormat;
 
 /**
- * Linear classifier.
+ * Linear Softmax classifier.
  * 
  * @author Johan Hagelbäck (johan.hagelback@gmail.com)
  */
@@ -42,13 +42,23 @@ public class Linear extends Classifier
     /**
      * Constructor.
      * 
-     * @param noInputs Number of input values
-     * @param noCategories Number of categories
+     * @param data Training dataset
+     * @param test Test dataset
      * @param iterations Number of training iterations
      * @param learningrate Learning rate
      */
-    public Linear(int noInputs, int noCategories, int iterations, double learningrate) 
+    public Linear(Dataset data, Dataset test, int iterations, double learningrate) 
     {
+        //Set dataset
+        this.data = data;
+        this.test = test;
+        X = data.input_matrix();
+        y = data.label_vector();
+        
+        //Size of dataset
+        int noCategories = data.noCategories();
+        int noInputs = data.noInputs();
+        
         //Init weight matrix
         w = Matrix.random(noCategories, noInputs, 0.1, Classifier.rnd);
         //Init bias vector to 0's
@@ -63,7 +73,7 @@ public class Linear extends Classifier
     }
     
     /**
-     * Initializes the weight matrix as the example in
+     * Initializes the weight matrix and bias vector as the example in
      * http://vision.stanford.edu/teaching/cs231n-demos/linear-classify/
      */
     public Linear()
@@ -82,16 +92,10 @@ public class Linear extends Classifier
         b = new Vector(b_init);
         //Learning rate
         learningrate = 1.0;
-    }
-    
-    /**
-     * Sets training dataset.
-     * 
-     * @param data Training dataset
-     */
-    @Override
-    public void setData(Dataset data)
-    {
+        
+        //Read data
+        DataSource reader = new DataSource("data/datademo.csv");
+        data = reader.read();
         X = data.input_matrix();
         y = data.label_vector();
     }

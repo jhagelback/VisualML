@@ -1,8 +1,6 @@
 
 package vml;
 
-import java.io.File;
-
 /**
  * Used to run experiments without showing the GUI.
  * 
@@ -18,138 +16,196 @@ public class Experiment
      * 
      * @param type Type (knn, linear, nn, dnn)
      * @param file Dataset file
-     * @return True if the specified experiment was found, false if not
      */
-    public static boolean run(String type, String file)
+    public static void run(String type, String file)
     {
-        //Unset found
-        found = false;
+        type = "linear";
+        file = "mnist";
         
-        if (type.equalsIgnoreCase("knn"))
+        //Set to lower case
+        type = type.toLowerCase();
+        file = file.toLowerCase();
+        
+        if (type.equals("knn"))
         {
             /**
              * k-Nearest Neighbor classifiers
              */
-            if (file.equalsIgnoreCase("iris")) evaluate(new KNN(3, 3), "iris", Dataset.Norm_NONE); // % 96.00%
-            if (file.equalsIgnoreCase("iris_test")) evaluate(new KNN(3, 3), "iris_training", "iris_test", Dataset.Norm_NEGPOS); // 96.67%  96.67%
-            if (file.equalsIgnoreCase("spiral")) evaluate(new KNN(3, 3), "spiral", Dataset.Norm_NONE); // % 99.33%
-            if (file.equalsIgnoreCase("diabetes")) evaluate(new KNN(3, 2), "diabetes", Dataset.Norm_NONE); // 85.94%
-            if (file.equalsIgnoreCase("circle")) evaluate(new KNN(3, 2), "circle", Dataset.Norm_NONE); // 100%
-            if (file.equalsIgnoreCase("glass")) evaluate(new KNN(3, 7), "glass", Dataset.Norm_NONE); // 86.45%
-            //Takes around 18 minutes for test set evaluation...
-            if (file.equalsIgnoreCase("mnist")) evaluate(new KNN(3, 10), "mnist_train", "mnist_test", Dataset.Norm_POS); // 97.17% (test set, L2 dist)
-            //if (file.equalsIgnoreCase("mnist")) evaluate(new KNN(3, 10), "mnist_train", "mnist_test", Dataset.Norm_POS); // 96.40% (test set, L1 dist)
+            switch (file) 
+            {
+                case "iris":
+                    evaluate(ClassifierFactory.createKNN("iris", null, 3, Dataset.Norm_NONE)); // % 96.00% N
+                    break;
+                case "iris_test":
+                    evaluate(ClassifierFactory.createKNN("iris_training", "iris_test", 3, Dataset.Norm_NONE)); // 96.67%  96.67% N
+                    break;
+                case "spiral":
+                    evaluate(ClassifierFactory.createKNN("spiral", null, 3, Dataset.Norm_NONE)); // % 99.33% N
+                    break;
+                case "diabetes":
+                    evaluate(ClassifierFactory.createKNN("diabetes", null, 3, Dataset.Norm_NONE)); // 85.94% N
+                    break;
+                case "circle":
+                    evaluate(ClassifierFactory.createKNN("circle", null, 3, Dataset.Norm_NONE)); // 100% N
+                    break;
+                case "glass":
+                    evaluate(ClassifierFactory.createKNN("glass", null, 3, Dataset.Norm_NONE)); // 86.45% N
+                    break;
+                case "mnist":
+                    evaluate(ClassifierFactory.createKNN("mnist_train", "mnist_test", 3, Dataset.Norm_POS)); // 97.17% (test set, L2 dist)
+                    break;
+                default:
+                    System.err.println("Unknown dataset '" + file + "' for classifier KNN");
+                    System.exit(0);
+            }
         }
         
-        if (type.equalsIgnoreCase("linear"))
+        else if (type.equals("linear"))
         {
             /**
              * Linear classifiers 
              */
-            if (file.equalsIgnoreCase("demo")) evaluate(new Linear(2, 3, 20, 0.1), "datademo", Dataset.Norm_NONE); // 100%
-            if (file.equalsIgnoreCase("demo_fixed")) evaluate(new Linear(), "datademo", Dataset.Norm_NONE); // 100%
-            if (file.equalsIgnoreCase("iris")) evaluate(new Linear(4, 3, 300, 0.1), "iris", Dataset.Norm_NONE); // 98%
-            if (file.equalsIgnoreCase("iris_test")) evaluate(new Linear(4, 3, 300, 0.1), "iris_training", "iris_test", Dataset.Norm_NONE); // 97.50%  93.33%
-            if (file.equalsIgnoreCase("spiral")) evaluate(new Linear(2, 3, 200, 0.1), "spiral", Dataset.Norm_NONE); // 49%
-            if (file.equalsIgnoreCase("diabetes")) evaluate(new Linear(8, 2, 50, 0.8), "diabetes", Dataset.Norm_NEGPOS); // 77.34%
-            if (file.equalsIgnoreCase("circle")) evaluate(new Linear(2, 2, 200, 0.1), "circle", Dataset.Norm_NONE); // 68.60%
-            if (file.equalsIgnoreCase("glass")) evaluate(new Linear(9, 7, 200, 0.5), "glass", Dataset.Norm_NEGPOS); // 58.41%
-            //if (file.equalsIgnoreCase("mnist")) evaluate(new Linear2(784, 10, 50, 0.5), "mnist_train", "mnist_test", Dataset.Norm_POS); // 88.15%  88.89%
-            if (file.equalsIgnoreCase("mnist")) evaluate(new Linear(784, 10, 10, 0.5), "mnist_train", "mnist_test", Dataset.Norm_POS); // 88.15%  88.89%
+            switch (file) 
+            {
+                case "demo":
+                    evaluate(ClassifierFactory.createLinear("datademo", null, 10, 1.0, Dataset.Norm_NONE)); // 100% N
+                    break;
+                case "demo_fixed":
+                    evaluate(ClassifierFactory.createLinearDemo()); // 100% N
+                    break;
+                case "iris":
+                    evaluate(ClassifierFactory.createLinear("iris", null, 300, 0.1, Dataset.Norm_NONE)); // 98% N
+                    break;
+                case "iris.2d":
+                    evaluate(ClassifierFactory.createLinear("iris.2D", null, 50, 1.0, Dataset.Norm_NEGPOS)); // 96.00% N
+                    break;
+                case "iris_test":
+                    evaluate(ClassifierFactory.createLinear("iris_training", "iris_test", 300, 0.1, Dataset.Norm_NONE)); // 97.50%  93.33% N
+                    break;
+                case "spiral":
+                    evaluate(ClassifierFactory.createLinear("spiral", null, 200, 0.1, Dataset.Norm_NONE)); // 49% N
+                    break;
+                case "diabetes":
+                    evaluate(ClassifierFactory.createLinear("diabetes", null, 40, 1.0, Dataset.Norm_NEGPOS)); // 77.21% N
+                    break;
+                case "circle":
+                    evaluate(ClassifierFactory.createLinear("circle", null, 20, 1.0, Dataset.Norm_NONE)); // 68.60% N
+                    break;
+                case "glass":
+                    evaluate(ClassifierFactory.createLinear("glass", null, 50, 1.0, Dataset.Norm_NEGPOS)); // 58.88% N
+                    break;
+                case "mnist":
+                    //evaluate(ClassifierFactory.createLinear("mnist_train", "mnist_test", 50, 1.0, Dataset.Norm_POS)); // 88.86%  89.55%
+                    //evaluate(ClassifierFactory.createLinear("mnist_train", "mnist_test", 100, 1.0, Dataset.Norm_POS)); // 89.99%  90.49%
+                    evaluate(ClassifierFactory.createLinear("mnist_train", "mnist_test", 200, 1.0, Dataset.Norm_POS)); // 89.99%  90.49%
+                    break;
+                default:
+                    System.err.println("Unknown dataset '" + file + "' for classifier Linear");
+                    System.exit(0);
+            }
         }
         
-        if(type.equalsIgnoreCase("nn"))
+        else if(type.equals("nn"))
         {
             /**
              * Neural Network classifiers 
              */
-            if (file.equalsIgnoreCase("demo")) evaluate(new NN(2, 3, 8, 100, 0.5), "datademo", Dataset.Norm_NONE); // 100%
-            if (file.equalsIgnoreCase("iris")) evaluate(new NN(4, 3, 4, 1000, 0.5), "iris", Dataset.Norm_NEGPOS); // 98.67%
-            if (file.equalsIgnoreCase("iris_test")) evaluate(new NN(4, 3, 4, 1000, 0.5), "iris_training", "iris_test", Dataset.Norm_NEGPOS); // 99.17%  96.67%
-            if (file.equalsIgnoreCase("spiral")) evaluate(new NN(2, 3, 72, 8000, 0.4), "spiral", Dataset.Norm_NONE); // 99.33%
-            if (file.equalsIgnoreCase("diabetes")) evaluate(new NN(8, 2, 8, 6000, 0.3), "diabetes", Dataset.Norm_NEGPOS); // 80.73% (80.599% in Weka)
-            if (file.equalsIgnoreCase("circle")) evaluate(new NN(2, 2, 72, 1000, 0.4), "circle", Dataset.Norm_NONE); // 100%
-            if (file.equalsIgnoreCase("glass")) evaluate(new NN(9, 7, 72, 9000, 0.3), "glass", Dataset.Norm_NEGPOS); // 85.98%
-            if (file.equalsIgnoreCase("mnist")) evaluate(new NN(784, 10, 8, 1000, 0.05), "mnist_train", "mnist_test", Dataset.Norm_POS); // 89.25%  89.50%
+            switch (file) 
+            {
+                case "demo":
+                    evaluate(ClassifierFactory.createNN("datademo", null, 8, 20, 1.0, Dataset.Norm_NONE)); // 100% N
+                    break;
+                case "iris":
+                    evaluate(ClassifierFactory.createNN("iris", null, 2, 500, 1.0, Dataset.Norm_NEGPOS)); // 98.67% N     
+                    break;
+                case "iris.2d":
+                    evaluate(ClassifierFactory.createNN("iris.2D", null, 2, 200, 1.0, Dataset.Norm_NEGPOS)); // 96.00% N     
+                    break;
+                case "iris_test":
+                    evaluate(ClassifierFactory.createNN("iris_training", "iris_test", 2, 500, 1.0, Dataset.Norm_NEGPOS)); // 99.17%  96.67% N
+                    break;
+                case "spiral":
+                    evaluate(ClassifierFactory.createNN("spiral", null, 72, 8000, 0.4, Dataset.Norm_NONE)); // 99.33% N
+                    break;
+                case "gaussian":
+                    evaluate(ClassifierFactory.createNN("gaussian", null, 8, 50, 1.0, Dataset.Norm_NEGPOS)); // 99.12% N
+                    break;
+                case "flame":
+                    evaluate(ClassifierFactory.createNN("flame", null, 16, 1200, 0.5, Dataset.Norm_NONE)); // 99.17% N
+                    break;
+                case "jain":
+                    evaluate(ClassifierFactory.createNN("jain", null, 16, 300, 0.8, Dataset.Norm_NONE)); // 95.71% N
+                    break;
+                case "diabetes":
+                    evaluate(ClassifierFactory.createNN("diabetes", null, 8, 6000, 1.0, Dataset.Norm_NEGPOS)); // 81.12% N
+                    break;
+                case "circle":
+                    evaluate(ClassifierFactory.createNN("circle", null, 16, 100, 1.0, Dataset.Norm_NONE)); // 100% N         
+                    break;
+                case "glass":
+                    evaluate(ClassifierFactory.createNN("glass", null, 72, 2000, 1.0, Dataset.Norm_NEGPOS)); // 86.45% N     
+                    break;
+                case "mnist":
+                    evaluate(ClassifierFactory.createNN("mnist_train", "mnist_test", 8, 100, 1.0, Dataset.Norm_POS)); // 89.25%  89.50%
+                    break;
+                default:
+                    System.err.println("Unknown dataset '" + file + "' for classifier NN");
+                    System.exit(0);
+            }
         }
         
-        if (type.equalsIgnoreCase("dnn"))
+        else if (type.equals("dnn"))
         {
             /**
              * Deep Neural Network classifiers 
              */
-            if (file.equalsIgnoreCase("demo")) evaluate(new DeepNN(2, 3, 4, 4, 2000, 0.5), "datademo", Dataset.Norm_NONE); // 100%
-            if (file.equalsIgnoreCase("iris")) evaluate(new DeepNN(4, 3, 8, 4, 2000, 0.3), "iris", Dataset.Norm_NEGPOS); // 98.67%
-            if (file.equalsIgnoreCase("iris_test")) evaluate(new DeepNN(4, 3, 8, 4, 2000, 0.2), "iris_training", "iris_test", Dataset.Norm_NEGPOS); // 99.17%  96.67%
-            if (file.equalsIgnoreCase("spiral")) evaluate(new DeepNN(2, 3, 42, 24, 12000, 0.08), "spiral", Dataset.Norm_NONE); // 99.33%
-            if (file.equalsIgnoreCase("diabetes")) evaluate(new DeepNN(8, 2, 24, 12, 6000, 0.2), "diabetes", Dataset.Norm_NEGPOS); // 80.08%
-            if (file.equalsIgnoreCase("circle")) evaluate(new DeepNN(2, 2, 12, 8, 1000, 0.1), "circle", Dataset.Norm_NEGPOS); // 100%
+            switch (file) 
+            {
+                case "demo":
+                    evaluate(ClassifierFactory.createDNN("datademo", null, 4, 4, 2000, 0.1, Dataset.Norm_NONE)); // 100% N
+                    break;
+                case "iris":
+                    evaluate(ClassifierFactory.createDNN("iris", null, 8, 4, 500, 1.0, Dataset.Norm_NEGPOS)); // 98.00% N
+                    break;
+                case "iris_test":
+                    evaluate(ClassifierFactory.createDNN("iris_training", "iris_test", 8, 4, 500, 1.0, Dataset.Norm_NEGPOS)); // 98.33%  96.67% N
+                    break;
+                case "spiral":
+                    evaluate(ClassifierFactory.createDNN("spiral", null, 42, 24, 8000, 0.1, Dataset.Norm_NONE)); // 99.33% N
+                    break;
+                case "diabetes":
+                    evaluate(ClassifierFactory.createDNN("diabetes", null, 24, 12, 5000, 1.0, Dataset.Norm_NEGPOS)); // 81.64% N
+                    break;
+                case "circle":
+                    evaluate(ClassifierFactory.createDNN("circle", null, 12, 8, 100, 1.0, Dataset.Norm_NEGPOS)); // 100% N
+                    break;
+                default:
+                    System.err.println("Unknown dataset '" + file + "' for classifier DNN");
+                    System.exit(0);
+            }
         }
         
-        return found;
+        else
+        {
+            System.err.println("Unknown classifier '" + type + "'");
+            System.exit(0);
+        }
     }
     
     /**
-     * Trains and evaluates a classifier on a dataset.
+     * Trains a classifier on a training dataset and evaluates on the training dataset
+     * and, if specified, test dataset.
      * 
      * @param c The classifier
-     * @param dataset_name Train and test dataset
-     * @param norm_type Normalization type (None, Pos, NegPos)
      */
-    private static void evaluate(Classifier c, String dataset_name, int norm_type)
+    private static void evaluate(Classifier c)
     {
-        evaluate(c, dataset_name, null, norm_type);
-    }
-    
-    /**
-     * Trains and evaluates a classifier on a dataset.
-     * 
-     * @param c The classifier
-     * @param dataset_name Train dataset
-     * @param testset_name Test dataset
-     * @param norm_type Normalization type (None, Pos, NegPos)
-     */
-    private static void evaluate(Classifier c, String dataset_name, String testset_name, int norm_type)
-    {
-        //Check if dataset is found
-        File f = new File("data/" + dataset_name + ".csv");
-        if (!f.exists()) return;
-        
-        //Set found
-        found = true;
-        
-        //Read data
-        DataSource reader = new DataSource("data/" + dataset_name + ".csv");
-        Dataset data = reader.read();
-        data.normalizeAttributes(norm_type);
-        c.setData(data);
-        
         //Train classifier
         long st = System.currentTimeMillis();
         c.train();
         long el = System.currentTimeMillis() - st;
         System.out.println("Training time: " + el + " ms");
         //Evaluate accuracy
-        System.out.println("Performance (whole dataset):");
-        st = System.currentTimeMillis();
-        c.evaluate(data);
-        el = System.currentTimeMillis() - st;
-        System.out.println("Evaluation time: " + el + " ms");
-        
-        //Evaluate on test dataset (if it is specified)
-        if (testset_name != null)
-        {
-            //Read test data
-            reader = new DataSource("data/" + testset_name + ".csv");
-            data = reader.read();
-            data.normalizeAttributes(norm_type);
-            
-            //Evaluate accuracy
-            System.out.println("Performance (test dataset):");
-            st = System.currentTimeMillis();
-            c.evaluate(data);
-            el = System.currentTimeMillis() - st;
-            System.out.println("Evaluation time: " + el + " ms");
-        }
+        c.evaluate();
     }
 }

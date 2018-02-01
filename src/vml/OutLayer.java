@@ -145,6 +145,8 @@ public class OutLayer
         w.update_weights(dW, learningrate);
         //Update bias
         b.update_weights(dB, learningrate);
+        
+        //learningrate *= 0.999;
     }
     
     /**

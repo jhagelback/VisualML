@@ -17,8 +17,6 @@ public class HiddenLayer
     private Vector dB;
     //Training dataset
     private Matrix X;
-    //Class values vector
-    private Vector y;
     //Scores matrix = X*W
     public Matrix scores;
     //ReLU gradients matrix
@@ -27,6 +25,8 @@ public class HiddenLayer
     private double RW;
     //L2 regularization strength
     private double lambda = 0.001;
+    //Sets if momentum shall be used
+    private boolean use_momentum = true;
     //Learningrate
     private double learningrate = 0.1;
     
@@ -96,13 +96,17 @@ public class HiddenLayer
         dhidden.backprop_relu(scores);
         
         //Momentum
-        Matrix oldDW = dW;
+        Matrix oldDW = null;
+        if (dW != null && use_momentum)
+        {
+            oldDW = dW.copy();
+        }
         
         //And finally the gradients
         dW = Matrix.mul_transpose(dhidden, X);
         dB = dhidden.sum_rows();
         
-        if (oldDW != null)
+        if (oldDW != null && use_momentum)
         {
             dW.add(oldDW, 0.1);
         }
@@ -121,6 +125,8 @@ public class HiddenLayer
         w.update_weights(dW, learningrate);
         //Update bias
         b.update_weights(dB, learningrate);
+        
+        //learningrate *= 0.999;
     }
     
     /**

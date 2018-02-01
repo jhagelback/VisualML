@@ -47,33 +47,32 @@ public class KNN extends Classifier
     
     //Training data
     private ArrayList<KInstance> d;
-    //Test data
-    private Dataset test;
     //K-value
     private int K = 3;
     //Number of categories
     private int noCategories;
+    //Internal test dataset
+    private Dataset tdata;
     
     /**
      * Creates a classifier.
      * 
-     * @param K K-value
-     * @param noCategories Number of categories
-     */
-    public KNN(int K, int noCategories)
-    {
-        this.K = K;
-        this.noCategories = noCategories;
-    }
-    
-    /**
-     * Sets training dataset.
-     * 
      * @param data Training dataset
+     * @param test Test dataset
+     * @param K K-value
      */
-    @Override
-    public void setData(Dataset data)
+    public KNN(Dataset data, Dataset test, int K)
     {
+        //Set dataset
+        this.data = data;
+        this.test = test;
+        
+        //Size of dataset
+        noCategories = data.noCategories();
+        
+        //K-value
+        this.K = K;
+        
         //Init internal data array
         d = new ArrayList<>(data.size());
         //Iterate over all training instances
@@ -83,6 +82,8 @@ public class KNN extends Classifier
             KInstance ki = new KInstance(inst.x, inst.label);
             d.add(ki);
         }
+        
+        System.out.println("k-Nearest Neighbor classifier");
     }
     
     /**
@@ -91,7 +92,7 @@ public class KNN extends Classifier
     @Override
     public void train()
     {
-        //Nothing is done here
+        //Do nothing here
     }
     
     /**
@@ -115,7 +116,7 @@ public class KNN extends Classifier
     public void activation(Dataset test)
     {
         //Sets test dataset
-        this.test = test;
+        tdata = test;
     }
     
     /**
@@ -128,7 +129,7 @@ public class KNN extends Classifier
     public int classify(int i)
     {
         //Get instance
-        Instance inst = test.get(i);
+        Instance inst = tdata.get(i);
         
         //Iterate over the training data
         //and calculate distances

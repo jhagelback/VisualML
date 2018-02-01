@@ -174,118 +174,124 @@ public class Main extends Application
         //Linear tasks
         MenuItem mitem = new MenuItem("Demo");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(new Linear(2, 3, 20, 0.05), "datademo", Dataset.Norm_NONE, 1);
+            initClassifier(ClassifierFactory.createLinear("datademo", null, 10, 1.0, Dataset.Norm_NONE), 1);
         }); 
         lmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Demo fixed");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(new Linear(), "datademo", Dataset.Norm_NONE, 1);
+            initClassifier(ClassifierFactory.createLinearDemo(), 1);
         }); 
         lmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(new Linear(2, 3, 200, 0.1), "spiral", Dataset.Norm_NONE, 1);
+            initClassifier(ClassifierFactory.createLinear("spiral", null, 200, 0.1, Dataset.Norm_NONE), 1);
         }); 
         lmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(new Linear(2, 3, 20, 0.4), "iris.2D", Dataset.Norm_NEGPOS, 5);
+            initClassifier(ClassifierFactory.createLinear("iris.2D", null, 50, 1.0, Dataset.Norm_NEGPOS), 1);
         }); 
         lmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Circle");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(new Linear(2, 2, 20, 0.1), "circle", Dataset.Norm_NONE, 1);
+            initClassifier(ClassifierFactory.createLinear("circle", null, 20, 1.0, Dataset.Norm_NONE), 1);
         }); 
         lmenu.getItems().add(mitem);
         
         //NN tasks
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(new NN(2, 3, 72, 8000, 0.2), "spiral", Dataset.Norm_NONE, 100);
+            initClassifier(ClassifierFactory.createNN("spiral", null, 72, 8000, 0.4, Dataset.Norm_NONE), 100);
         }); 
         nmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Circle");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(new NN(2, 2, 72, 20, 0.4), "circle", Dataset.Norm_NONE, 20);
+            initClassifier(ClassifierFactory.createNN("circle", null, 16, 100, 1.0, Dataset.Norm_NONE), 10);
+        }); 
+        nmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Iris.2D");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.createNN("iris.2D", null, 2, 200, 1.0, Dataset.Norm_NEGPOS), 20);
         }); 
         nmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Gaussian");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(new NN(2, 2, 72, 20, 0.4), "gaussian", Dataset.Norm_NEGPOS, 20);
+            initClassifier(ClassifierFactory.createNN("gaussian", null, 8, 50, 1.0, Dataset.Norm_NEGPOS), 5);
         }); 
         nmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Flame");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(new NN(2, 2, 72, 20, 0.4), "flame", Dataset.Norm_NONE, 100);
+            initClassifier(ClassifierFactory.createNN("flame", null, 16, 1200, 0.5, Dataset.Norm_NONE), 30);
         }); 
         nmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Jain's toy problem");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(new NN(2, 2, 12, 20, 0.2), "jain", Dataset.Norm_NONE, 100);
+            initClassifier(ClassifierFactory.createNN("jain", null, 16, 300, 0.8, Dataset.Norm_NONE), 10);
         }); 
         nmenu.getItems().add(mitem);
         
         //Deep NN tasks
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(new DeepNN(2, 3, 42, 24, 8000, 0.05), "spiral", Dataset.Norm_NONE, 100);
+            initClassifier(ClassifierFactory.createDNN("spiral", null, 42, 24, 8000, 0.1, Dataset.Norm_NONE), 100);
         }); 
         dmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Circle");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(new DeepNN(2, 2, 12, 8, 20, 0.1), "circle", Dataset.Norm_NONE, 50);
+            initClassifier(ClassifierFactory.createDNN("circle", null, 12, 8, 100, 1.0, Dataset.Norm_NEGPOS), 10);
         }); 
         dmenu.getItems().add(mitem);
         
         //kNN tasks
         mitem = new MenuItem("Demo");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(new KNN(3, 3), "datademo", Dataset.Norm_NONE, 1);
+            initClassifier(ClassifierFactory.createKNN("datademo", null, 3, Dataset.Norm_NONE), 1);
         }); 
         kmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(new KNN(3, 3), "spiral", Dataset.Norm_NONE, 1);
+            initClassifier(ClassifierFactory.createKNN("spiral", null, 3, Dataset.Norm_NONE), 1);
         }); 
         kmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(new KNN(3, 3), "iris.2D", Dataset.Norm_NONE, 1);
+            initClassifier(ClassifierFactory.createKNN("iris.2D", null, 3, Dataset.Norm_NEGPOS), 1);
         }); 
         kmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Circle");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(new KNN(2, 3), "circle", Dataset.Norm_NONE, 1);
+            initClassifier(ClassifierFactory.createKNN("circle", null, 3, Dataset.Norm_NONE), 1);
         }); 
         kmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Gaussian");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(new KNN(2, 3), "gaussian", Dataset.Norm_NEGPOS, 1);
+            initClassifier(ClassifierFactory.createKNN("gaussian", null, 3, Dataset.Norm_NEGPOS), 1);
         }); 
         kmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Flame");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(new KNN(2, 3), "flame", Dataset.Norm_NONE, 1);
+            initClassifier(ClassifierFactory.createKNN("flame", null, 3, Dataset.Norm_NONE), 1);
         }); 
         kmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Jain's toy problem");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(new KNN(2, 3), "jain", Dataset.Norm_NONE, 1);
+            initClassifier(ClassifierFactory.createKNN("jain", null, 3, Dataset.Norm_NONE), 1);
         }); 
         kmenu.getItems().add(mitem);
         
@@ -298,32 +304,21 @@ public class Main extends Application
      * Inits a new task to visualize.
      * 
      * @param c The classifier
-     * @param dataset_name Name of dataset
-     * @param norm_type Normalization type (None, Pos, NegPos)
      * @param it_steps Iterations to take each step
      */
-    private void initClassifier(Classifier c, String dataset_name, int norm_type, int it_steps)
+    private void initClassifier(Classifier c, int it_steps)
     {
-        //Read data
-        DataSource reader = new DataSource("data/" + dataset_name + ".csv");
-        data = reader.read();
-        //Normalize
-        data.normalizeAttributes(norm_type);
-        //Set data to classifier
-        c.setData(data);
         //Init stuff
         this.c = c;
         this.it_steps = it_steps;
         this.iteration = 0;
         this.loss = 0;
         this.acc = 0;
-        p.setTask(c, data);
+        p.setTask(c, c.getData());
         //Update panel
         p.update();
         
-        acc = c.evaluate(data);
-        //Update data
-        c.setData(data);
+        acc = c.evaluate();
     }
     
     /**
@@ -340,10 +335,7 @@ public class Main extends Application
                 loss = c.iterate();
             }
             //Current classifier accuracy
-            c.setData(data);
-            acc = c.evaluate(data);
-            //Update data
-            c.setData(data);
+            acc = c.evaluate();
             
             //No errors occured, generate frame
             p.build_frame();
@@ -376,6 +368,11 @@ public class Main extends Application
      */
     public static void main(String[] args) 
     {
+        args = new String[3];
+        args[0] = "-exp";
+        args[1] = "linear";
+        args[2] = "glass";
+        
         //No args. Start GUI
         if (args.length == 0) 
         {
@@ -390,9 +387,7 @@ public class Main extends Application
         {
             if (args.length == 3)
             {
-                boolean found = Experiment.run(args[1], args[2]);
-                
-                if (!found) System.err.println("Unable to find experiment " + args[1] + " " + args[2]);
+                Experiment.run(args[1], args[2]);
             }
             else
             {

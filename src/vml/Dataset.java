@@ -18,6 +18,8 @@ public class Dataset
     private double[] max;
     //Used for checking number of categories
     private HashMap<Integer,Integer> cats;
+    //Type of normalization used
+    private int norm_type = 0;
     
     public static int Norm_NONE = 0;
     public static int Norm_POS = 1;
@@ -129,9 +131,21 @@ public class Dataset
      */
     public void normalizeAttributes(int type)
     {
+        norm_type = type;
+        
         if (type == Norm_NONE) return;
         else if (type == Norm_POS) normalizePos();
         else if (type == Norm_NEGPOS) normalizeNegPos();
+    }
+    
+    /**
+     * Returns the normalization type (None, Pos, NegPos) used on this dataset.
+     * 
+     * @return Type of normalization
+     */
+    public int getNormalizationType()
+    {
+        return norm_type;
     }
     
     /**

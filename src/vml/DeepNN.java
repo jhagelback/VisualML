@@ -4,7 +4,7 @@ package vml;
 import java.text.DecimalFormat;
 
 /**
- * Three-layer deep neural network classifier.
+ * Deep Neural Network Softmax classifier.
  * 
  * @author Johan Hagelbäck (johan.hagelback@gmail.com)
  */
@@ -29,35 +29,34 @@ public class DeepNN extends Classifier
     /**
      * Creates a new deep neural network.
      * 
-     * @param noInputs Number of input variables in the dataset
-     * @param noCategories Number of categories (class values)
+     * @param data Training dataset
+     * @param test Test dataset
      * @param h1_size Size of first hidden layer
      * @param h2_size Size of second hidden layer
      * @param iterations Training iterations
      * @param learningrate Learning rate
      */
-    public DeepNN(int noInputs, int noCategories, int h1_size, int h2_size, int iterations, double learningrate) 
+    public DeepNN(Dataset data, Dataset test, int h1_size, int h2_size, int iterations, double learningrate) 
     {
-        this.iterations = iterations;
+        //Set dataset
+        this.data = data;
+        this.test = test;
+        X = data.input_matrix();
+        y = data.label_vector();
+        
+        //Size of dataset
+        int noCategories = data.noCategories();
+        int noInputs = data.noInputs();
         
         //Create layers
         h1 = new HiddenLayer(noInputs, h1_size, learningrate);
         h2 = new HiddenLayer(h1_size, h2_size, learningrate);
         out = new OutLayer(h2_size, noCategories, learningrate);
         
+        //Training iterations
+        this.iterations = iterations;
+        
         System.out.println("Deep Neural Network classifier");
-    }
-    
-    /**
-     * Sets training dataset.
-     * 
-     * @param data Training dataset
-     */
-    @Override
-    public void setData(Dataset data)
-    {
-        X = data.input_matrix();
-        y = data.label_vector();
     }
     
     /**

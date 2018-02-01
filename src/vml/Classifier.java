@@ -15,18 +15,25 @@ public abstract class Classifier
     private DecimalFormat df = new DecimalFormat("0.00"); 
     //Randomizer
     public static Random rnd = new Random(2);
+    //Training dataset
+    protected Dataset data;
+    //Test dataset
+    protected Dataset test;
     
     /**
      * Trains the classifier on a dataset.
      */
     public abstract void train();
-    
+        
     /**
-     * Sets training dataset.
+     * Returns the training dataset.
      * 
-     * @param data Training dataset
+     * @return Training dataset
      */
-    public abstract void setData(Dataset data);
+    public Dataset getData()
+    {
+        return data;
+    }
     
     /**
      * Classifies an instance in the dataset.
@@ -51,28 +58,53 @@ public abstract class Classifier
     public abstract void activation(Dataset test);
     
     /**
-     * Evaluates the accuracy on a test dataset.
+     * Evaluates the accuracy on the training dataset and, if specified, test dataset.
      * 
-     * @param test The test dataset
-     * @return Accuracy on the test dataset
+     * @return Accuracy
      */
-    public double evaluate(Dataset test)
+    public double evaluate()
     {
-        //Activation for the test dataset
-        activation(test);
+        System.out.println("\nTraining dataset");
+        long st = System.currentTimeMillis();
+        double acc = evaluate(data);
+        long el = System.currentTimeMillis() - st;
+        System.out.println("Evaluation time: " + el + " ms");
+        
+        if (test != null)
+        {
+            System.out.println("\nTest dataset");
+            st = System.currentTimeMillis();
+            acc = evaluate(test);
+            el = System.currentTimeMillis() - st;
+            System.out.println("Evaluation time: " + el + " ms");
+        }
+        
+        return acc;
+    }
+    
+    /**
+     * Evaluates the accuracy on a dataset.
+     * 
+     * @param d The dataset
+     * @return Accuracy on the dataset
+     */
+    private double evaluate(Dataset d)
+    {
+        //Activation for the dataset
+        activation(d);
         int correct = 0;
         
-        for (int i = 0; i < test.size(); i++)
+        for (int i = 0; i < d.size(); i++)
         {
             int pred_class = classify(i);
-            if (pred_class == test.get(i).label)
+            if (pred_class == d.get(i).label)
             {
                 correct++;
             }
         }
-        double perc = (double)correct / (double)test.size() * 100.0;
+        double perc = (double)correct / (double)d.size() * 100.0;
         
-        System.out.println("Accuracy: " + correct + "/" + test.size() + "  " + df.format(perc) + "%");
+        System.out.println("Accuracy: " + correct + "/" + d.size() + "  " + df.format(perc) + "%");
         return perc;
     }
     
