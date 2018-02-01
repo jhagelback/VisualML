@@ -368,11 +368,6 @@ public class Main extends Application
      */
     public static void main(String[] args) 
     {
-        args = new String[3];
-        args[0] = "-exp";
-        args[1] = "linear";
-        args[2] = "glass";
-        
         //No args. Start GUI
         if (args.length == 0) 
         {
