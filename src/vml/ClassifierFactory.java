@@ -370,7 +370,7 @@ public class ClassifierFactory
                     break;
                 case "glass":
                     s = new NNSettings();
-                    s.layers = new int[]{64,32};
+                    s.layers = new int[]{64,32}; //96.26
                     s.iterations = 6000;
                     s.use_regularization = false;
                     s.learningrate = 0.8;

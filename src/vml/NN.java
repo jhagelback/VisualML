@@ -59,9 +59,7 @@ public class NN extends Classifier
         //Create layers
         out = new OutLayer(settings.layers[settings.layers.length - 1], noCategories, settings);
         
-        System.out.println("Layers: " + hidden.length);
-        
-        System.out.println("Neural Network classifier");
+        System.out.println("Neural Network classifier (" + hidden.length + " hidden layers)");
     }
     
     /**

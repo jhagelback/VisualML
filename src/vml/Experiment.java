@@ -8,9 +8,6 @@ package vml;
  */
 public class Experiment 
 {
-    //Used to see if the specified experiment was found or not
-    private static boolean found;
-    
     /**
      * Runs an experiment.
      * 
@@ -19,9 +16,6 @@ public class Experiment
      */
     public static void run(String type, String file)
     {
-        type = "knn";
-        file = "glass";
-        
         //Set to lower case
         type = type.toLowerCase();
         file = file.toLowerCase();
@@ -91,7 +85,7 @@ public class Experiment
             else if (file.equals("circle")) evaluate(ClassifierFactory.createNN("circle", null, s)); // 100%        
             else if (file.equals("glass")) evaluate(ClassifierFactory.createNN("glass", null, s)); // 90.65%     
             //Takes around 25 mins to train 200 iterations
-            else if (file.equals("demo")) evaluate(ClassifierFactory.createNN("mnist_train", "mnist_test", s)); //88.48% 88.68% no momentum
+            else if (file.equals("mnist")) evaluate(ClassifierFactory.createNN("mnist_train", "mnist_test", s)); //88.48% 88.68% no momentum
             else
             {
                 System.err.println("Unknown dataset '" + file + "' for classifier NN");
