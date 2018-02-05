@@ -174,7 +174,7 @@ public class Main extends Application
         //Linear tasks
         MenuItem mitem = new MenuItem("Demo");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createLinear("datademo", null, 10, 1.0, Dataset.Norm_NONE), 1);
+            initClassifier(ClassifierFactory.createLinear("demo", null, ClassifierFactory.getLSettings("demo")), 1);
         }); 
         lmenu.getItems().add(mitem);
         
@@ -186,112 +186,112 @@ public class Main extends Application
         
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createLinear("spiral", null, 200, 0.1, Dataset.Norm_NONE), 1);
+            initClassifier(ClassifierFactory.createLinear("spiral", null, ClassifierFactory.getLSettings("spiral")), 1);
         }); 
         lmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createLinear("iris.2D", null, 50, 1.0, Dataset.Norm_NEGPOS), 1);
+            initClassifier(ClassifierFactory.createLinear("iris.2d", null, ClassifierFactory.getLSettings("iris.2d")), 1);
         }); 
         lmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Circle");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createLinear("circle", null, 20, 1.0, Dataset.Norm_NONE), 1);
+            initClassifier(ClassifierFactory.createLinear("circle", null, ClassifierFactory.getLSettings("circle")), 1);
         }); 
         lmenu.getItems().add(mitem);
         
         //NN tasks
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createNN("spiral", null, 72, 8000, 0.4, Dataset.Norm_NONE), 100);
+            initClassifier(ClassifierFactory.createNN("spiral", null, ClassifierFactory.getNNSettings("nn", "spiral")), 100);
         }); 
         nmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Circle");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createNN("circle", null, 16, 100, 1.0, Dataset.Norm_NONE), 10);
+            initClassifier(ClassifierFactory.createNN("circle", null, ClassifierFactory.getNNSettings("nn", "circle")), 10);
         }); 
         nmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createNN("iris.2D", null, 2, 200, 1.0, Dataset.Norm_NEGPOS), 20);
+            initClassifier(ClassifierFactory.createNN("iris.2d", null, ClassifierFactory.getNNSettings("nn", "iris.2d")), 20);
         }); 
         nmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Gaussian");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createNN("gaussian", null, 8, 50, 1.0, Dataset.Norm_NEGPOS), 5);
+            initClassifier(ClassifierFactory.createNN("gaussian", null, ClassifierFactory.getNNSettings("nn", "gaussian")), 5);
         }); 
         nmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Flame");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createNN("flame", null, 16, 1200, 0.5, Dataset.Norm_NONE), 30);
+            initClassifier(ClassifierFactory.createNN("flame", null, ClassifierFactory.getNNSettings("nn", "flame")), 30);
         }); 
         nmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Jain's toy problem");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createNN("jain", null, 16, 300, 0.8, Dataset.Norm_NONE), 10);
+            initClassifier(ClassifierFactory.createNN("jain", null, ClassifierFactory.getNNSettings("nn", "jain")), 10);
         }); 
         nmenu.getItems().add(mitem);
         
         //Deep NN tasks
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createDNN("spiral", null, 42, 24, 8000, 0.1, Dataset.Norm_NONE), 100);
+            initClassifier(ClassifierFactory.createNN("spiral", null, ClassifierFactory.getNNSettings("dnn", "spiral")), 100);
         }); 
         dmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Circle");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createDNN("circle", null, 12, 8, 100, 1.0, Dataset.Norm_NEGPOS), 10);
+            initClassifier(ClassifierFactory.createNN("circle", null, ClassifierFactory.getNNSettings("dnn", "circle")), 10);
         }); 
         dmenu.getItems().add(mitem);
         
         //kNN tasks
         mitem = new MenuItem("Demo");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createKNN("datademo", null, 3, Dataset.Norm_NONE), 1);
+            initClassifier(ClassifierFactory.createKNN("demo", null, ClassifierFactory.getKNNSettings("demo")), 1);
         }); 
         kmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createKNN("spiral", null, 3, Dataset.Norm_NONE), 1);
+            initClassifier(ClassifierFactory.createKNN("spiral", null, ClassifierFactory.getKNNSettings("spiral")), 1);
         }); 
         kmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createKNN("iris.2D", null, 3, Dataset.Norm_NEGPOS), 1);
+            initClassifier(ClassifierFactory.createKNN("iris.2d", null, ClassifierFactory.getKNNSettings("iris.2d")), 1);
         }); 
         kmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Circle");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createKNN("circle", null, 3, Dataset.Norm_NONE), 1);
+            initClassifier(ClassifierFactory.createKNN("circle", null, ClassifierFactory.getKNNSettings("circle")), 1);
         }); 
         kmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Gaussian");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createKNN("gaussian", null, 3, Dataset.Norm_NEGPOS), 1);
+            initClassifier(ClassifierFactory.createKNN("gaussian", null, ClassifierFactory.getKNNSettings("gaussian")), 1);
         }); 
         kmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Flame");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createKNN("flame", null, 3, Dataset.Norm_NONE), 1);
+            initClassifier(ClassifierFactory.createKNN("flame", null, ClassifierFactory.getKNNSettings("flame")), 1);
         }); 
         kmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Jain's toy problem");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createKNN("jain", null, 3, Dataset.Norm_NONE), 1);
+            initClassifier(ClassifierFactory.createKNN("jain", null, ClassifierFactory.getKNNSettings("jain")), 1);
         }); 
         kmenu.getItems().add(mitem);
         
@@ -368,6 +368,11 @@ public class Main extends Application
      */
     public static void main(String[] args) 
     {
+        args = new String[3];
+        args[0] = "-exp";
+        args[1] = "linear";
+        args[2] = "glass";
+        
         //No args. Start GUI
         if (args.length == 0) 
         {

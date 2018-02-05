@@ -25,16 +25,10 @@ public class Linear extends Classifier
     private Matrix scores;
     //L2 regularization
     private double RW;
-    //L2 regularization strength
-    private double lambda = 0.01;
-    //Learningrate
-    private double learningrate = 0.1;
+    //Configuration settings
+    private LSettings settings;
     //Delta for SVM loss calculations
     private double delta = 1.0;
-    //Set to true to use L2 regularization
-    private boolean use_regularization;
-    //Number of training iterations
-    private int iterations = 20;
     
     //For output
     private DecimalFormat df = new DecimalFormat("0.0000"); 
@@ -44,10 +38,9 @@ public class Linear extends Classifier
      * 
      * @param data Training dataset
      * @param test Test dataset
-     * @param iterations Number of training iterations
-     * @param learningrate Learning rate
+     * @param settings Configuration settings for this classifier
      */
-    public Linear(Dataset data, Dataset test, int iterations, double learningrate) 
+    public Linear(Dataset data, Dataset test, LSettings settings) 
     {
         //Set dataset
         this.data = data;
@@ -64,10 +57,8 @@ public class Linear extends Classifier
         //Init bias vector to 0's
         b = Vector.zeros(noCategories);
         
-        //Learning rate
-        this.learningrate = learningrate;
-        //Training iterations
-        this.iterations = iterations;
+        //Settings
+        this.settings = settings;
         
         System.out.println("Linear Softmax classifier");
     }
@@ -90,8 +81,10 @@ public class Linear extends Classifier
         w = new Matrix(w_init);
         //Init bias vector
         b = new Vector(b_init);
-        //Learning rate
-        learningrate = 1.0;
+        //Settings
+        settings = new LSettings();
+        settings.learningrate = 1.0;
+        settings.iterations = 20;
         
         //Read data
         DataSource reader = new DataSource("data/datademo.csv");
@@ -107,9 +100,7 @@ public class Linear extends Classifier
     public void train()
     {
         //For output
-        int out_step = getOutputStep(iterations);
-        
-        use_regularization = true;
+        int out_step = getOutputStep(settings.iterations);
         
         //Optimization Gradient Descent
         double best_loss = Double.MAX_VALUE;
@@ -118,7 +109,7 @@ public class Linear extends Classifier
         Matrix bestW = null;
         Vector bestB = null;
         
-        for (int i = 1; i <= iterations; i++)
+        for (int i = 1; i <= settings.iterations; i++)
         {
             loss = iterate();
             
@@ -141,7 +132,7 @@ public class Linear extends Classifier
             }
             
             //Output result
-            if (i % out_step == 0 || i == iterations || i == 1) System.out.println("  iteration " + i + ":  loss " + df.format(loss));
+            if (i % out_step == 0 || i == settings.iterations || i == 1) System.out.println("  iteration " + i + ":  loss " + df.format(loss));
         }
         
         //Set best weights
@@ -267,7 +258,10 @@ public class Linear extends Classifier
         
         //Add regularization to gradients
         //The weight matrix scaled by Lambda*0.5 is added
-        dW.add(w, lambda * 0.5);
+        if (settings.use_regularization)
+        {
+            dW.add(w, settings.lambda * 0.5);
+        }
         
         return loss;
     }
@@ -333,7 +327,7 @@ public class Linear extends Classifier
         
         //Add regularization to gradients
         //The weight matrix scaled by Lambda*0.5 is added
-        dW.add(w, lambda * 0.5);
+        dW.add(w, settings.lambda * 0.5);
         
         return loss;
     }
@@ -344,9 +338,9 @@ public class Linear extends Classifier
     private void updateWeights()
     {
         //Update weights
-        w.update_weights(dW, learningrate);
+        w.update_weights(dW, settings.learningrate);
         //Update bias
-        b.update_weights(dB, learningrate);
+        b.update_weights(dB, settings.learningrate);
     }
     
     /**
@@ -357,9 +351,9 @@ public class Linear extends Classifier
         //Regularization
         RW = 0;
         
-        if (use_regularization)
+        if (settings.use_regularization)
         {
-            RW = w.L2_norm() * lambda;
+            RW = w.L2_norm() * settings.lambda;
         }
     }
 }

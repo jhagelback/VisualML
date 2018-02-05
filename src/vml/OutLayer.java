@@ -25,29 +25,33 @@ public class OutLayer
     public Matrix dscores;
     //L2 regularization
     private double RW;
-    //L2 regularization strength
-    private double lambda = 0.001;
-    //Learningrate
-    private double learningrate = 0.1;
-    //Set to true to use L2 regularization
-    private boolean use_regularization;
+    //Configuration settings
+    private NNSettings settings;
     
     /**
      * Constructor.
      * 
      * @param noInputs Number of input values
      * @param noCategories Number of categories
-     * @param learningrate Learning rate
+     * @param settings Configuration settings for this classifier
      */
-    public OutLayer(int noInputs, int noCategories, double learningrate) 
+    public OutLayer(int noInputs, int noCategories, NNSettings settings) 
     {
         //Init weight matrix
         w = Matrix.random(noCategories, noInputs, 0.1, Classifier.rnd);
         //Init bias vector to 0's
         b = Vector.zeros(noCategories);
         
-        //Learning rate
-        this.learningrate = learningrate;
+        //Settings
+        this.settings = settings;
+    }
+    
+    public OutLayer copy()
+    {
+        OutLayer no = new OutLayer(1, 1, settings);
+        no.w = w.copy();
+        no.b = b.copy();
+        return no;
     }
     
     /**
@@ -131,7 +135,10 @@ public class OutLayer
         
         //Add regularization to gradients
         //The weight matrix scaled by Lambda*0.5 is added
-        dW.add(w, lambda * 0.5);
+        if (settings.use_regularization)
+        {
+            dW.add(w, settings.output_lambda * 0.5);
+        }
         
         return loss;
     }
@@ -142,11 +149,9 @@ public class OutLayer
     public void updateWeights()
     {
         //Update weights
-        w.update_weights(dW, learningrate);
+        w.update_weights(dW, settings.learningrate);
         //Update bias
-        b.update_weights(dB, learningrate);
-        
-        //learningrate *= 0.999;
+        b.update_weights(dB, settings.learningrate);
     }
     
     /**
@@ -157,9 +162,9 @@ public class OutLayer
         //Regularization
         RW = 0;
         
-        if (use_regularization)
+        if (settings.use_regularization)
         {
-            RW = w.L2_norm() * lambda;
+            RW = w.L2_norm() * settings.output_lambda;
         }
     }
 }

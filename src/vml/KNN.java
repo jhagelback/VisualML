@@ -47,21 +47,21 @@ public class KNN extends Classifier
     
     //Training data
     private ArrayList<KInstance> d;
-    //K-value
-    private int K = 3;
     //Number of categories
     private int noCategories;
     //Internal test dataset
     private Dataset tdata;
+    //Configuration settings
+    private KNNSettings settings;
     
     /**
      * Creates a classifier.
      * 
      * @param data Training dataset
      * @param test Test dataset
-     * @param K K-value
+     * @param settings Configuration settings for this classifier
      */
-    public KNN(Dataset data, Dataset test, int K)
+    public KNN(Dataset data, Dataset test, KNNSettings settings)
     {
         //Set dataset
         this.data = data;
@@ -70,8 +70,8 @@ public class KNN extends Classifier
         //Size of dataset
         noCategories = data.noCategories();
         
-        //K-value
-        this.K = K;
+        //Settings
+        this.settings = settings;
         
         //Init internal data array
         d = new ArrayList<>(data.size());
@@ -144,7 +144,7 @@ public class KNN extends Classifier
         //occurences for each label, plus distances
         Vector res = Vector.zeros(noCategories);
         Vector dist = Vector.zeros(noCategories);
-        for (int j = 0; j < K; j++)
+        for (int j = 0; j < settings.K; j++)
         {
             int pred_y = d.get(j).label;
             res.set(pred_y, res.get(pred_y) + 1);

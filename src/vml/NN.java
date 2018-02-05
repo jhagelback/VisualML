@@ -14,12 +14,12 @@ public class NN extends Classifier
     private Matrix X;
     //Class values vector
     private Vector y;
-    //Number of training iterations
-    private int iterations = 100;
-    //Hidden layer
-    private HiddenLayer hidden;
+    //Hidden layers
+    private HiddenLayer[] hidden;
     //Output layer
     private OutLayer out;
+    //Configuration settings
+    private NNSettings settings;
     
     //For output
     private DecimalFormat df = new DecimalFormat("0.0000"); 
@@ -29,11 +29,9 @@ public class NN extends Classifier
      * 
      * @param data Training dataset
      * @param test Test dataset
-     * @param hidden_size Size of hidden layer
-     * @param iterations Training iterations
-     * @param learningrate Learning rate
+     * @param settings Configuration settings for this classifier
      */
-    public NN(Dataset data, Dataset test, int hidden_size, int iterations, double learningrate) 
+    public NN(Dataset data, Dataset test, NNSettings settings) 
     {
         //Set dataset
         this.data = data;
@@ -45,12 +43,23 @@ public class NN extends Classifier
         int noCategories = data.noCategories();
         int noInputs = data.noInputs();
         
-        //Create layers
-        hidden = new HiddenLayer(noInputs, hidden_size, learningrate);
-        out = new OutLayer(hidden_size, noCategories, learningrate);
+        //Settings
+        this.settings = settings;
         
-        //Training iterations
-        this.iterations = iterations;
+        hidden = new HiddenLayer[settings.layers.length];
+        hidden[0] = new HiddenLayer(noInputs, settings.layers[0], settings);
+        if (hidden.length > 1)
+        {
+            for (int i = 1; i < hidden.length; i++)
+            {
+                hidden[i] = new HiddenLayer(settings.layers[i-1], settings.layers[i], settings);
+            }
+        }
+        
+        //Create layers
+        out = new OutLayer(settings.layers[settings.layers.length - 1], noCategories, settings);
+        
+        System.out.println("Layers: " + hidden.length);
         
         System.out.println("Neural Network classifier");
     }
@@ -77,9 +86,16 @@ public class NN extends Classifier
      * Performs the forward pass (activation).
      */
     public void forward()
-    {        
-        hidden.forward(X);
-        out.forward(hidden.scores);
+    {
+        //First hidden layer (data as input)
+        hidden[0].forward(X);
+        //Subsequent hidden layers (previous hidden layer as input)
+        for (int i = 1; i < hidden.length; i++)
+        {
+            hidden[i].forward(hidden[i-1].scores);
+        }
+        //Output layer (last hidden layer as input)
+        out.forward(hidden[hidden.length-1].scores);
     }
     
     /**
@@ -88,12 +104,23 @@ public class NN extends Classifier
      * @return Current loss
      */
     public double backward()
-    {        
+    {
+        //Output layer
         double loss = out.backward(y);
-        loss += hidden.backward(out.w, out.dscores);
+        //Last hidden layer (gradients from output layer)
+        loss += hidden[hidden.length-1].backward(out.w, out.dscores);
+        //Rest of the hidden layers (gradients from next layer)
+        for (int i = hidden.length - 2; i >= 0; i--)
+        {
+            loss += hidden[i].backward(hidden[i+1].w, hidden[i+1].dhidden);
+        }
         
+        //Weights updates
         out.updateWeights();
-        hidden.updateWeights();
+        for (int i = hidden.length - 1; i >= 0; i--)
+        {
+            hidden[i].updateWeights();
+        }
         
         return loss;
     }
@@ -131,20 +158,17 @@ public class NN extends Classifier
     public void train()
     {
         //For output
-        int out_step = getOutputStep(iterations);
+        int out_step = getOutputStep(settings.iterations);
         
         //Optimization Gradient Descent
-        
-        Matrix bOW = null;
-        Matrix bHW = null;
-        Vector bOB = null;
-        Vector bHB = null;
+        OutLayer bOut = null;
+        HiddenLayer[] bHidden = new HiddenLayer[hidden.length];
         
         double loss = 0;
         double best_loss = Double.MAX_VALUE;
         int best_iteration = 0;
         
-        for (int i = 1; i <= iterations; i++)
+        for (int i = 1; i <= settings.iterations; i++)
         {
             loss = iterate();
             
@@ -161,24 +185,24 @@ public class NN extends Classifier
             {
                 best_loss = loss;
                 best_iteration = i;
-                //Copy best weights
-                bOW = out.w.copy();
-                bOB = out.b.copy();
-                bHW = hidden.w.copy();
-                bHB = hidden.b.copy();
+                //Copy best layers
+                bOut = out.copy();
+                for (int h = 0; h < hidden.length; h++)
+                {
+                    bHidden[h] = hidden[h].copy();
+                }
             }
             
             //Output result
-            if (i % out_step == 0 || i == iterations || i == 1) System.out.println("  iteration " + i + ":  loss " + df.format(loss));
+            if (i % out_step == 0 || i == settings.iterations || i == 1) System.out.println("  iteration " + i + ":  loss " + df.format(loss));
         }
         
         //Set best weights
-        hidden.w = bHW;
-        hidden.b = bHB;
-        out.w = bOW;
-        out.b = bOB;
+        out = bOut;
+        hidden = bHidden;
         
-        loss = iterate();
-        System.out.println("  Best loss " + df.format(loss) + " at iteration " + best_iteration);
+        forward();
+        //loss = iterate();
+        System.out.println("  Best loss " + df.format(best_loss) + " at iteration " + best_iteration);
     }
 }

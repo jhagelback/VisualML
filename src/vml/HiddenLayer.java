@@ -23,29 +23,33 @@ public class HiddenLayer
     public Matrix dhidden;
     //L2 regularization
     private double RW;
-    //L2 regularization strength
-    private double lambda = 0.001;
-    //Sets if momentum shall be used
-    private boolean use_momentum = true;
-    //Learningrate
-    private double learningrate = 0.1;
+    //Configuration settings
+    private NNSettings settings;
     
     /**
      * Constructor.
      * 
      * @param noInputs Number of input values
      * @param noOutputs Number of outut values
-     * @param learningrate Learning rate
+     * @param settings Configuration settings for this classifier
      */
-    public HiddenLayer(int noInputs, int noOutputs, double learningrate) 
+    public HiddenLayer(int noInputs, int noOutputs, NNSettings settings) 
     {
         //Init weight matrix
         w = Matrix.random(noOutputs, noInputs, 0.1, Classifier.rnd);
         //Init bias vector to 0's
         b = Vector.zeros(noOutputs);
         
-        //Learning rate
-        this.learningrate = learningrate;
+        //Settings
+        this.settings = settings;
+    }
+    
+    public HiddenLayer copy()
+    {
+        HiddenLayer nh = new HiddenLayer(1, 1, settings);
+        nh.w = w.copy();
+        nh.b = b.copy();
+        return nh;
     }
     
     /**
@@ -97,7 +101,7 @@ public class HiddenLayer
         
         //Momentum
         Matrix oldDW = null;
-        if (dW != null && use_momentum)
+        if (dW != null && settings.use_momentum)
         {
             oldDW = dW.copy();
         }
@@ -106,14 +110,17 @@ public class HiddenLayer
         dW = Matrix.mul_transpose(dhidden, X);
         dB = dhidden.sum_rows();
         
-        if (oldDW != null && use_momentum)
+        if (oldDW != null && settings.use_momentum)
         {
             dW.add(oldDW, 0.1);
         }
         
         //Add regularization to gradients
         //The weight matrix scaled by Lambda*0.5 is added
-        dW.add(w, lambda * 0.5);
+        if (settings.use_regularization)
+        {
+            dW.add(w, settings.hidden_lambda * 0.5);
+        }
     }
     
     /**
@@ -122,11 +129,9 @@ public class HiddenLayer
     public void updateWeights()
     {
         //Update weights
-        w.update_weights(dW, learningrate);
+        w.update_weights(dW, settings.learningrate);
         //Update bias
-        b.update_weights(dB, learningrate);
-        
-        //learningrate *= 0.999;
+        b.update_weights(dB, settings.learningrate);
     }
     
     /**
@@ -135,6 +140,11 @@ public class HiddenLayer
     private void calc_regularization()
     {
         //Regularization
-        RW = w.L2_norm() * lambda;
+        RW = 0;
+        
+        if (settings.use_regularization)
+        {
+            RW = w.L2_norm() * settings.output_lambda;
+        }
     }
 }
