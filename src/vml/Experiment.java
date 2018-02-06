@@ -16,8 +16,6 @@ public class Experiment
      */
     public static void run(String id)
     {
-        id = "dnn_glass";
-        
         Classifier c = ClassifierFactory.build(id);
         if (c == null)
         {
