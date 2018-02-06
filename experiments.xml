@@ -68,8 +68,8 @@
     </Experiment>
     <Experiment id="l_mnist">
         <Classifier>Linear</Classifier>
-        <TrainingData>data/mnist_train.csv</TrainingData> <!-- 0.00% -->
-        <TestData>data/mnist_test.csv</TestData> <!-- 0.00% -->
+        <TrainingData>data_mnist/mnist_train.csv</TrainingData> <!-- 0.00% -->
+        <TestData>data_mnist/mnist_test.csv</TestData> <!-- 0.00% -->
         <Iterations>200</Iterations>
         <LearningRate>1.0</LearningRate>
         <NormalizationType>Pos</NormalizationType>
@@ -186,8 +186,8 @@
     </Experiment>
     <Experiment id="nn_mnist">
         <Classifier>NN</Classifier>
-        <TrainingData>data/mnist_train.csv</TrainingData> <!-- 0.00% -->
-        <TestData>data/mnist_test.csv</TestData> <!-- 0.00% -->
+        <TrainingData>data_mnist/mnist_train.csv</TrainingData> <!-- 0.00% -->
+        <TestData>data_mnist/mnist_test.csv</TestData> <!-- 0.00% -->
         <Iterations>200</Iterations>
         <LearningRate>0.2</LearningRate>
         <UseRegularization>false</UseRegularization>
@@ -342,8 +342,8 @@
     </Experiment>
     <Experiment id="knn_mnist">
         <Classifier>KNN</Classifier>
-        <TrainingData>data/mnist_train.csv</TrainingData> <!-- 0.00% -->
-        <TestData>data/mnist_test.csv</TestData> <!-- 0.00% -->
+        <TrainingData>data_mnist/mnist_train.csv</TrainingData> <!-- 0.00% -->
+        <TestData>data_mnist/mnist_test.csv</TestData> <!-- 0.00% -->
         <K>3</K>
     </Experiment>
 </Experiments>
