@@ -1,0 +1,349 @@
+<?xml version="1.0"?>
+<Experiments>
+    <!--
+        Linear Classifiers
+        
+        The following parameters are available:
+        
+        <Classifier>Linear</Classifier>                         Linear
+        <TrainingData>data/demo.csv</TrainingData>              Path
+        <TestData></TestData>                                   Path (or empty if no test data is used)
+        <Iterations>10</Iterations>                             Integer
+        <LearningRate>1.0</LearningRate>                        Decimal value 0 ... 1
+        <UseRegularization>true</UseRegularization>             True or False
+        <RegularizationStrength>0.01</RegularizationStrength>   Decimal value
+        <NormalizationType>None</NormalizationType>             Can be None, NegPos or Pos
+    -->
+    <Experiment id="l_demo">
+        <Classifier>Linear</Classifier>
+        <TrainingData>data/demo.csv</TrainingData> <!-- 100.00% -->
+        <Iterations>10</Iterations>
+        <LearningRate>1.0</LearningRate>
+    </Experiment>
+    <Experiment id="l_iris">
+        <Classifier>Linear</Classifier>
+        <TrainingData>data/iris.csv</TrainingData> <!-- 98.00% -->
+        <Iterations>300</Iterations>
+        <LearningRate>0.1</LearningRate>
+    </Experiment>
+    <Experiment id="l_iris_2d">
+        <Classifier>Linear</Classifier>
+        <TrainingData>data/iris.2d.csv</TrainingData> <!-- 96.00% -->
+        <Iterations>50</Iterations>
+        <LearningRate>1.0</LearningRate>
+        <NormalizationType>NegPos</NormalizationType>
+    </Experiment>
+    <Experiment id="l_iris_test">
+        <Classifier>Linear</Classifier>
+        <TrainingData>data/iris_training.csv</TrainingData> <!-- 97.50% -->
+        <TestData>data/iris_test.csv</TestData> <!-- 93.33% -->
+        <Iterations>300</Iterations>
+        <LearningRate>0.1</LearningRate>
+    </Experiment>
+    <Experiment id="l_spiral">
+        <Classifier>Linear</Classifier>
+        <TrainingData>data/spiral.csv</TrainingData> <!-- 49.00% -->
+        <Iterations>200</Iterations>
+        <LearningRate>0.1</LearningRate>
+    </Experiment>
+    <Experiment id="l_diabetes">
+        <Classifier>Linear</Classifier>
+        <TrainingData>data/diabetes.csv</TrainingData> <!-- 77.21% -->
+        <Iterations>40</Iterations>
+        <LearningRate>1.0</LearningRate>
+        <NormalizationType>NegPos</NormalizationType>
+    </Experiment>
+    <Experiment id="l_circle">
+        <Classifier>Linear</Classifier>
+        <TrainingData>data/circle.csv</TrainingData> <!-- 68.60% -->
+        <Iterations>20</Iterations>
+        <LearningRate>1.0</LearningRate>
+    </Experiment>
+    <Experiment id="l_glass">
+        <Classifier>Linear</Classifier>
+        <TrainingData>data/glass.csv</TrainingData> <!-- 58.88% -->
+        <Iterations>50</Iterations>
+        <LearningRate>1.0</LearningRate>
+        <NormalizationType>NegPos</NormalizationType>
+    </Experiment>
+    <Experiment id="l_mnist">
+        <Classifier>Linear</Classifier>
+        <TrainingData>data/mnist_train.csv</TrainingData> <!-- 0.00% -->
+        <TestData>data/mnist_test.csv</TestData> <!-- 0.00% -->
+        <Iterations>200</Iterations>
+        <LearningRate>1.0</LearningRate>
+        <NormalizationType>Pos</NormalizationType>
+    </Experiment>
+    <!--
+        Neural Network Classifiers
+        
+        The following parameters are available:
+        
+        <Classifier>NN</Classifier>                             NN
+        <TrainingData>data/demo.csv</TrainingData>              Path
+        <TestData></TestData>                                   Path (or empty if no test data is used)
+        <Iterations>10</Iterations>                             Integer
+        <LearningRate>1.0</LearningRate>                        Decimal value 0 ... 1
+        <UseRegularization>true</UseRegularization>             True or False
+        <RegularizationStrength>0.01</RegularizationStrength>   Decimal value
+        <UseMomentum>true</UseMomentum>                         True or False
+        <HiddenLayers>16</HiddenLayers>                         Number of units in the hidden layer
+        <NormalizationType>None</NormalizationType>             Can be None, NegPos or Pos
+    -->
+    <Experiment id="nn_demo">
+        <Classifier>NN</Classifier>
+        <TrainingData>data/demo.csv</TrainingData> <!-- 100.00% -->
+        <Iterations>20</Iterations>
+        <LearningRate>1.0</LearningRate>
+        <HiddenLayers>8</HiddenLayers>
+    </Experiment>
+    <Experiment id="nn_iris">
+        <Classifier>NN</Classifier>
+        <TrainingData>data/iris.csv</TrainingData> <!-- 98.67% -->
+        <Iterations>500</Iterations>
+        <LearningRate>1.0</LearningRate>
+        <UseRegularization>false</UseRegularization>
+        <HiddenLayers>2</HiddenLayers>
+        <NormalizationType>NegPos</NormalizationType>
+    </Experiment>
+    <Experiment id="nn_iris_2d">
+        <Classifier>NN</Classifier>
+        <TrainingData>data/iris.2D.csv</TrainingData> <!-- 96.00% -->
+        <Iterations>200</Iterations>
+        <LearningRate>1.0</LearningRate>
+        <UseRegularization>false</UseRegularization>
+        <HiddenLayers>2</HiddenLayers>
+        <NormalizationType>NegPos</NormalizationType>
+    </Experiment>
+    <Experiment id="nn_iris_test">
+        <Classifier>NN</Classifier>
+        <TrainingData>data/iris_training.csv</TrainingData> <!-- 99.17% -->
+        <TestData>data/iris_test.csv</TestData> <!-- 96.67% -->
+        <Iterations>500</Iterations>
+        <LearningRate>1.0</LearningRate>
+        <UseRegularization>false</UseRegularization>
+        <HiddenLayers>2</HiddenLayers>
+        <NormalizationType>NegPos</NormalizationType>
+    </Experiment>
+    <Experiment id="nn_spiral">
+        <Classifier>NN</Classifier>
+        <TrainingData>data/spiral.csv</TrainingData> <!-- 99.33% -->
+        <Iterations>8000</Iterations>
+        <LearningRate>0.4</LearningRate>
+        <UseRegularization>false</UseRegularization>
+        <HiddenLayers>72</HiddenLayers>
+    </Experiment>
+    <Experiment id="nn_gaussian">
+        <Classifier>NN</Classifier>
+        <TrainingData>data/gaussian.csv</TrainingData> <!-- 99.12% -->
+        <Iterations>50</Iterations>
+        <LearningRate>1.0</LearningRate>
+        <UseRegularization>false</UseRegularization>
+        <HiddenLayers>8</HiddenLayers>
+        <NormalizationType>NegPos</NormalizationType>
+    </Experiment>
+    <Experiment id="nn_flame">
+        <Classifier>NN</Classifier>
+        <TrainingData>data/flame.csv</TrainingData> <!-- 99.17% -->
+        <Iterations>1200</Iterations>
+        <LearningRate>0.5</LearningRate>
+        <UseRegularization>true</UseRegularization>
+        <HiddenLayers>16</HiddenLayers>
+    </Experiment>
+    <Experiment id="nn_jain">
+        <Classifier>NN</Classifier>
+        <TrainingData>data/jain.csv</TrainingData> <!-- 95.44% -->
+        <Iterations>300</Iterations>
+        <LearningRate>0.8</LearningRate>
+        <UseRegularization>false</UseRegularization>
+        <HiddenLayers>16</HiddenLayers>
+    </Experiment>
+    <Experiment id="nn_diabetes">
+        <Classifier>NN</Classifier>
+        <TrainingData>data/diabetes.csv</TrainingData> <!-- 82.29% -->
+        <Iterations>6000</Iterations>
+        <LearningRate>1.0</LearningRate>
+        <UseRegularization>true</UseRegularization>
+        <HiddenLayers>8</HiddenLayers>
+        <NormalizationType>NegPos</NormalizationType>
+    </Experiment>
+    <Experiment id="nn_circle">
+        <Classifier>NN</Classifier>
+        <TrainingData>data/circle.csv</TrainingData> <!-- 100.00% -->
+        <Iterations>100</Iterations>
+        <LearningRate>1.0</LearningRate>
+        <UseRegularization>false</UseRegularization>
+        <HiddenLayers>16</HiddenLayers>
+    </Experiment>
+    <Experiment id="nn_glass">
+        <Classifier>NN</Classifier>
+        <TrainingData>data/glass.csv</TrainingData> <!-- 90.65% -->
+        <Iterations>4000</Iterations>
+        <LearningRate>1.0</LearningRate>
+        <UseRegularization>false</UseRegularization>
+        <HiddenLayers>72</HiddenLayers>
+        <NormalizationType>NegPos</NormalizationType>
+    </Experiment>
+    <Experiment id="nn_mnist">
+        <Classifier>NN</Classifier>
+        <TrainingData>data/mnist_train.csv</TrainingData> <!-- 0.00% -->
+        <TestData>data/mnist_test.csv</TestData> <!-- 0.00% -->
+        <Iterations>200</Iterations>
+        <LearningRate>0.2</LearningRate>
+        <UseRegularization>false</UseRegularization>
+        <HiddenLayers>8</HiddenLayers>
+        <NormalizationType>Pos</NormalizationType>
+    </Experiment>
+    <!--
+        Deep Neural Network Classifiers
+        
+        The following parameters are available:
+        
+        <Classifier>NN</Classifier>                             NN
+        <TrainingData>data/demo.csv</TrainingData>              Path
+        <TestData></TestData>                                   Path (or empty if no test data is used)
+        <Iterations>10</Iterations>                             Integer
+        <LearningRate>1.0</LearningRate>                        Decimal value 0 ... 1
+        <UseRegularization>true</UseRegularization>             True or False
+        <RegularizationStrength>0.01</RegularizationStrength>   Decimal value
+        <UseMomentum>true</UseMomentum>                         True or False
+        <HiddenLayers>16,8</HiddenLayers>                       Number of units in the hidden layers
+        <NormalizationType>None</NormalizationType>             Can be None, NegPos or Pos
+    -->
+    <Experiment id="dnn_demo">
+        <Classifier>NN</Classifier>
+        <TrainingData>data/demo.csv</TrainingData> <!-- 100.00% -->
+        <Iterations>2000</Iterations>
+        <LearningRate>0.1</LearningRate>
+        <UseRegularization>true</UseRegularization>
+        <HiddenLayers>4,4</HiddenLayers>
+    </Experiment>
+    <Experiment id="dnn_iris">
+        <Classifier>NN</Classifier>
+        <TrainingData>data/iris.csv</TrainingData> <!-- 98.67% -->
+        <Iterations>2000</Iterations>
+        <LearningRate>0.8</LearningRate>
+        <UseRegularization>false</UseRegularization>
+        <HiddenLayers>8,4</HiddenLayers>
+        <NormalizationType>NegPos</NormalizationType>
+    </Experiment>
+    <Experiment id="dnn_iris_test">
+        <Classifier>NN</Classifier>
+        <TrainingData>data/iris_training.csv</TrainingData> <!-- 99.17% -->
+        <TestData>data/iris_test.csv</TestData> <!-- 96.67% -->
+        <Iterations>2000</Iterations>
+        <LearningRate>0.8</LearningRate>
+        <UseRegularization>false</UseRegularization>
+        <HiddenLayers>8,4</HiddenLayers>
+        <NormalizationType>NegPos</NormalizationType>
+    </Experiment>
+    <Experiment id="dnn_spiral">
+        <Classifier>NN</Classifier>
+        <TrainingData>data/spiral.csv</TrainingData> <!-- 99.33% -->
+        <Iterations>8000</Iterations>
+        <LearningRate>0.1</LearningRate>
+        <UseRegularization>false</UseRegularization>
+        <HiddenLayers>42,24</HiddenLayers>
+    </Experiment>
+    <Experiment id="dnn_diabetes">
+        <Classifier>NN</Classifier>
+        <TrainingData>data/diabetes.csv</TrainingData> <!-- 92.45% -->
+        <Iterations>8000</Iterations>
+        <LearningRate>1.0</LearningRate>
+        <UseRegularization>false</UseRegularization>
+        <HiddenLayers>24,12</HiddenLayers>
+        <NormalizationType>NegPos</NormalizationType>
+    </Experiment>
+    <Experiment id="dnn_circle">
+        <Classifier>NN</Classifier>
+        <TrainingData>data/circle.csv</TrainingData> <!-- 100.00% -->
+        <Iterations>100</Iterations>
+        <LearningRate>1.0</LearningRate>
+        <UseRegularization>false</UseRegularization>
+        <HiddenLayers>12,8</HiddenLayers>
+        <NormalizationType>NegPos</NormalizationType>
+    </Experiment>
+    <Experiment id="dnn_glass">
+        <Classifier>NN</Classifier>
+        <TrainingData>data/glass.csv</TrainingData> <!-- 96.26% -->
+        <Iterations>6000</Iterations>
+        <LearningRate>0.8</LearningRate>
+        <UseRegularization>false</UseRegularization>
+        <HiddenLayers>64,32</HiddenLayers>
+        <NormalizationType>NegPos</NormalizationType>
+    </Experiment>
+    <!--
+        k-Nearest Neighbor Classifiers
+        
+        The following parameters are available:
+        
+        <Classifier>KNN</Classifier>                            KNN
+        <TrainingData>data/demo.csv</TrainingData>              Path
+        <TestData></TestData>                                   Path (or empty if no test data is used)
+        <K>3</K>                                                Integer
+        <NormalizationType>None</NormalizationType>             Can be None, NegPos or Pos
+    -->
+    <Experiment id="knn_demo">
+        <Classifier>KNN</Classifier>
+        <TrainingData>data/demo.csv</TrainingData> <!-- 100.00% -->
+        <K>2</K>
+    </Experiment>
+    <Experiment id="knn_iris">
+        <Classifier>KNN</Classifier>
+        <TrainingData>data/iris.csv</TrainingData> <!-- 96.00% -->
+        <K>3</K>
+    </Experiment>
+    <Experiment id="knn_iris_2d">
+        <Classifier>KNN</Classifier>
+        <TrainingData>data/iris.2D.csv</TrainingData> <!-- 98.67% -->
+        <K>3</K>
+    </Experiment>
+    <Experiment id="knn_iris_test">
+        <Classifier>KNN</Classifier>
+        <TrainingData>data/iris_training.csv</TrainingData> <!-- 96.67% -->
+        <TestData>data/iris_test.csv</TestData> <!-- 96.67% -->
+        <K>3</K>
+    </Experiment>
+    <Experiment id="knn_spiral">
+        <Classifier>KNN</Classifier>
+        <TrainingData>data/spiral.csv</TrainingData> <!-- 99.33% -->
+        <K>3</K>
+    </Experiment>
+    <Experiment id="knn_diabetes">
+        <Classifier>KNN</Classifier>
+        <TrainingData>data/diabetes.csv</TrainingData> <!-- 85.94% -->
+        <K>3</K>
+    </Experiment>
+    <Experiment id="knn_circle">
+        <Classifier>KNN</Classifier>
+        <TrainingData>data/circle.csv</TrainingData> <!-- 100.00% -->
+        <K>3</K>
+    </Experiment>
+    <Experiment id="knn_glass">
+        <Classifier>KNN</Classifier>
+        <TrainingData>data/glass.csv</TrainingData> <!-- 86.45% -->
+        <K>3</K>
+    </Experiment>
+    <Experiment id="knn_gaussian">
+        <Classifier>KNN</Classifier>
+        <TrainingData>data/gaussian.csv</TrainingData> <!-- 99.51% -->
+        <K>3</K>
+        <NormalizationType>NegPos</NormalizationType>
+    </Experiment>
+    <Experiment id="knn_flame">
+        <Classifier>KNN</Classifier>
+        <TrainingData>data/flame.csv</TrainingData> <!-- 99.58% -->
+        <K>3</K>
+    </Experiment>
+    <Experiment id="knn_jain">
+        <Classifier>KNN</Classifier>
+        <TrainingData>data/jain.csv</TrainingData> <!-- 100.00% -->
+        <K>3</K>
+    </Experiment>
+    <Experiment id="knn_mnist">
+        <Classifier>KNN</Classifier>
+        <TrainingData>data/mnist_train.csv</TrainingData> <!-- 0.00% -->
+        <TestData>data/mnist_test.csv</TestData> <!-- 0.00% -->
+        <K>3</K>
+    </Experiment>
+</Experiments>
