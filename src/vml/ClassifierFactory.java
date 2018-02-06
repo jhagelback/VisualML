@@ -258,6 +258,12 @@ public class ClassifierFactory
             KNNSettings settings = new KNNSettings();
             if (exists(e, "K")) settings.K = getInt(e, "K");
             if (exists(e, "NormalizationType")) settings.normalization_type = getNormType(e, "NormalizationType");
+            if (exists(e, "DistanceMeasure"))
+            {
+                String t = get(e, "DistanceMeasure");
+                if (t.equalsIgnoreCase("L1")) settings.distance_measure = KNNSettings.L1;
+                if (t.equalsIgnoreCase("L2")) settings.distance_measure = KNNSettings.L2;
+            }
             
             //Read training dataset
             Dataset data = ClassifierFactory.readDataset(dataset_name);

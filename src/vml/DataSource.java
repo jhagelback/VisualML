@@ -15,6 +15,8 @@ public class DataSource
     private String filename;
     //Conversion from string label to int label
     private HashMap<String,Integer> catToInt;
+    //Mapping from int label to string label
+    private HashMap<Integer,String> intToCat;
     
     /**
      * Creates a new data reader.
@@ -25,6 +27,7 @@ public class DataSource
     {
         this.filename = filename;
         catToInt = new HashMap<>();
+        intToCat = new HashMap<>();
     }
     
     /**
@@ -57,6 +60,9 @@ public class DataSource
         {
             ex.printStackTrace();
         }
+        
+        //Set int label to category label
+        dset.setLabelMapping(intToCat);
         
         return dset;
     }
@@ -102,6 +108,13 @@ public class DataSource
                 }
                 //Get category as integer
                 label = catToInt.get(slab);
+                
+                //Mapping from category int to string
+                if (!intToCat.containsKey(label))
+                {
+                    //Add new mapping
+                    intToCat.put(label, slab);
+                }
             }
             
             //Create instance

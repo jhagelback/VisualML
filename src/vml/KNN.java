@@ -133,9 +133,18 @@ public class KNN extends Classifier
         
         //Iterate over the training data
         //and calculate distances
-        d.stream().parallel().forEach((ki) -> {
-            ki.dist = Vector.L2_dist(inst.x, ki.x);
-        });
+        if (settings.distance_measure == KNNSettings.L1)
+        {
+            d.stream().parallel().forEach((ki) -> {
+                ki.dist = Vector.L1_dist(inst.x, ki.x);
+            });
+        }
+        if (settings.distance_measure == KNNSettings.L2)
+        {
+            d.stream().parallel().forEach((ki) -> {
+                ki.dist = Vector.L2_dist(inst.x, ki.x);
+            });
+        }
         
         //Sort list based on distance
         Collections.sort(d);

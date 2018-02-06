@@ -18,11 +18,16 @@ public class Dataset
     private double[] max;
     //Used for checking number of categories
     private HashMap<Integer,Integer> cats;
+    //Mapping from int label to string label
+    private HashMap<Integer,String> intToCat;
     //Type of normalization used
     private int norm_type = 0;
     
+    /** No normalization */
     public static int Norm_NONE = 0;
+    /** Normalize between 0 ... 1 */
     public static int Norm_POS = 1;
+    /** Normalize between -1 ... 1 */
     public static int Norm_NEGPOS = 2;
     
     /**
@@ -32,6 +37,27 @@ public class Dataset
     {
         data = new ArrayList<>();
         cats = new HashMap<>();
+    }
+    
+    /**
+     * Sets the mapping between integer labels and category labels.
+     * 
+     * @param intToCat The mapping
+     */
+    public void setLabelMapping(HashMap<Integer,String> intToCat)
+    {
+        this.intToCat = intToCat;
+    }
+    
+    /**
+     * Returns the category label for an integer label.
+     * 
+     * @param label Integer label
+     * @return Category label, or null of not found
+     */
+    public String getCategoryLabel(int label)
+    {
+        return intToCat.get(label);
     }
     
     /**

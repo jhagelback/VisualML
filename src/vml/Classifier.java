@@ -44,6 +44,24 @@ public abstract class Classifier
     public abstract int classify(int i);
     
     /**
+     * Classifies an instance.
+     * 
+     * @param i The instance
+     * @return Predicted category label
+     */
+    public String classify(Instance i)
+    {
+        Dataset t = new Dataset();
+        t.add(i);
+        
+        activation(t);
+        
+        int pred_label = classify(0);
+        
+        return data.getCategoryLabel(pred_label);
+    }
+    
+    /**
      * Executes one training iteration.
      * 
      * @return Current loss

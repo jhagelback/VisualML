@@ -19,11 +19,27 @@ public class KNNSettings
     int normalization_type = Dataset.Norm_NONE;
     
     /**
+     * Distance measure L1 (Manhattan distance)
+     */
+    static final int L1 = 1;
+    
+    /**
+     * Distance measure L2 (Euclidean distance)
+     */
+    static final int L2 = 2;
+    
+    /**
+     * Distance measure (L1 or L2) to use.
+     */
+    int distance_measure = L2;
+    
+    /**
      * Creates default settings.
      */
     public KNNSettings()
     {
         K = 3;
+        distance_measure = L2;
         normalization_type = Dataset.Norm_NONE;
     }
 }
