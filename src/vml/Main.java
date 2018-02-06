@@ -15,7 +15,7 @@ import javafx.stage.WindowEvent;
 /**
  * Main class for the Visual ML application.
  * 
- * @author Johan Hagelbäck (johan.hagelback@gmail.com)
+ * @author Johan Hagelbäck, Linnaeus University  (johan.hagelback@lnu.se)
  */
 public class Main extends Application
 {
@@ -174,124 +174,124 @@ public class Main extends Application
         //Linear tasks
         MenuItem mitem = new MenuItem("Demo");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createLinear("demo", null, ClassifierFactory.getLSettings("demo")), 1);
+            initClassifier(ClassifierFactory.build("l_demo"), 1);
         }); 
         lmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Demo fixed");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createLinearDemo(), 1);
+            initClassifier(new Linear(), 1);
         }); 
         lmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createLinear("spiral", null, ClassifierFactory.getLSettings("spiral")), 1);
+            initClassifier(ClassifierFactory.build("l_spiral"), 1);
         }); 
         lmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createLinear("iris.2d", null, ClassifierFactory.getLSettings("iris.2d")), 1);
+            initClassifier(ClassifierFactory.build("l_iris_2d"), 1);
         }); 
         lmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Circle");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createLinear("circle", null, ClassifierFactory.getLSettings("circle")), 1);
+            initClassifier(ClassifierFactory.build("l_circle"), 1);
         }); 
         lmenu.getItems().add(mitem);
         
         //NN tasks
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createNN("spiral", null, ClassifierFactory.getNNSettings("nn", "spiral")), 100);
+            initClassifier(ClassifierFactory.build("nn_spiral"), 100);
         }); 
         nmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Circle");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createNN("circle", null, ClassifierFactory.getNNSettings("nn", "circle")), 10);
+            initClassifier(ClassifierFactory.build("nn_circle"), 10);
         }); 
         nmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createNN("iris.2d", null, ClassifierFactory.getNNSettings("nn", "iris.2d")), 20);
+            initClassifier(ClassifierFactory.build("nn_iris_2d"), 20);
         }); 
         nmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Gaussian");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createNN("gaussian", null, ClassifierFactory.getNNSettings("nn", "gaussian")), 5);
+            initClassifier(ClassifierFactory.build("nn_gaussian"), 5);
         }); 
         nmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Flame");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createNN("flame", null, ClassifierFactory.getNNSettings("nn", "flame")), 30);
+            initClassifier(ClassifierFactory.build("nn_flame"), 30);
         }); 
         nmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Jain's toy problem");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createNN("jain", null, ClassifierFactory.getNNSettings("nn", "jain")), 10);
+            initClassifier(ClassifierFactory.build("nn_jain"), 10);
         }); 
         nmenu.getItems().add(mitem);
         
         //Deep NN tasks
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createNN("spiral", null, ClassifierFactory.getNNSettings("dnn", "spiral")), 100);
+            initClassifier(ClassifierFactory.build("dnn_spiral"), 100);
         }); 
         dmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Circle");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createNN("circle", null, ClassifierFactory.getNNSettings("dnn", "circle")), 10);
+            initClassifier(ClassifierFactory.build("dnn_circle"), 10);
         }); 
         dmenu.getItems().add(mitem);
         
         //kNN tasks
         mitem = new MenuItem("Demo");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createKNN("demo", null, ClassifierFactory.getKNNSettings("demo")), 1);
+            initClassifier(ClassifierFactory.build("knn_demo"), 1);
         }); 
         kmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createKNN("spiral", null, ClassifierFactory.getKNNSettings("spiral")), 1);
+            initClassifier(ClassifierFactory.build("knn_spiral"), 1);
         }); 
         kmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createKNN("iris.2d", null, ClassifierFactory.getKNNSettings("iris.2d")), 1);
+            initClassifier(ClassifierFactory.build("knn_iris_2d"), 1);
         }); 
         kmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Circle");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createKNN("circle", null, ClassifierFactory.getKNNSettings("circle")), 1);
+            initClassifier(ClassifierFactory.build("knn_circle"), 1);
         }); 
         kmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Gaussian");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createKNN("gaussian", null, ClassifierFactory.getKNNSettings("gaussian")), 1);
+            initClassifier(ClassifierFactory.build("knn_gaussian"), 1);
         }); 
         kmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Flame");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createKNN("flame", null, ClassifierFactory.getKNNSettings("flame")), 1);
+            initClassifier(ClassifierFactory.build("knn_flame"), 1);
         }); 
         kmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Jain's toy problem");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.createKNN("jain", null, ClassifierFactory.getKNNSettings("jain")), 1);
+            initClassifier(ClassifierFactory.build("knn_jain"), 1);
         }); 
         kmenu.getItems().add(mitem);
         
@@ -364,6 +364,11 @@ public class Main extends Application
     }
     
     /**
+     * Runs the application.
+     * Parameters:
+     * -gui or no parameters: Runs the visualization GUI
+     * -exp [id]: Runs the experiment with the specified id 
+     * 
      * @param args the command line arguments
      */
     public static void main(String[] args) 
@@ -378,15 +383,15 @@ public class Main extends Application
         {
             launch(args);
         }
-        else if (args[0].equalsIgnoreCase("-exp") || args[0].equalsIgnoreCase("-experiment"))
+        else if (args[0].equalsIgnoreCase("-exp"))
         {
-            if (args.length == 3)
+            if (args.length == 2)
             {
-                Experiment.run(args[1], args[2]);
+                Experiment.run(args[1]);
             }
             else
             {
-                System.err.println("Wrong arguments: -experiment [type] [dataset]");
+                System.err.println("Wrong arguments: -exp [id]");
             }
             System.exit(0);
         }

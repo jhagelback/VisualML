@@ -4,7 +4,7 @@ package vml;
 /**
  * Contains settings for the Neural Network classifier.
  * 
- * @author Johan Hagelbäck (johan.hagelback@gmail.com)
+ * @author Johan Hagelbäck, Linnaeus University  (johan.hagelback@lnu.se)
  */
 public class NNSettings 
 {
@@ -14,19 +14,14 @@ public class NNSettings
     double learningrate = 0.3;
     
     /**
-     * Setts if regularization shall be used or not.
+     * Sets if regularization shall be used or not.
      */
     boolean use_regularization = false;
     
     /**
-     * L2 regularization strength for the hidden layers.
+     * L2 regularization strength.
      */
-    double hidden_lambda = 0.001;
-    
-    /**
-     * L2 regularization strength for the output layer.
-     */
-    double output_lambda = 0.001;
+    double lambda = 0.001;
     
     /**
      * Sets if momentum shall be used by the hidden layers.
@@ -55,8 +50,7 @@ public class NNSettings
     {
         learningrate = 0.3;
         use_regularization = true;
-        hidden_lambda = 0.001;
-        output_lambda = 0.001;
+        lambda = 0.001;
         use_momentum = true;
         normalization_type = Dataset.Norm_NONE;
         layers = new int[]{16};

@@ -6,7 +6,7 @@ import java.util.*;
 /**
  * Container for datasets.
  * 
- * @author Johan Hagelbäck (johan.hagelback@gmail.com)
+ * @author Johan Hagelbäck, Linnaeus University  (johan.hagelback@lnu.se)
  */
 public class Dataset 
 {

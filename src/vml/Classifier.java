@@ -7,7 +7,7 @@ import java.util.Random;
 /**
  * Base class for classifiers.
  * 
- * @author Johan Hagelbäck (johan.hagelback@gmail.com)
+ * @author Johan Hagelbäck, Linnaeus University  (johan.hagelback@lnu.se)
  */
 public abstract class Classifier 
 {

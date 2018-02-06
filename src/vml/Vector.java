@@ -7,7 +7,7 @@ import java.util.Random;
 /**
  * Representation of a vector.
  * 
- * @author Johan Hagelbäck (johan.hagelback@gmail.com)
+ * @author Johan Hagelbäck, Linnaeus University  (johan.hagelback@lnu.se)
  */
 public class Vector 
 {

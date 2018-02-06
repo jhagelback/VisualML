@@ -4,7 +4,7 @@ package vml;
 /**
  * Contains settings for the k-Nearest Neighbor classifier.
  * 
- * @author Johan Hagelbäck (johan.hagelback@gmail.com)
+ * @author Johan Hagelbäck, Linnaeus University  (johan.hagelback@lnu.se)
  */
 public class KNNSettings 
 {

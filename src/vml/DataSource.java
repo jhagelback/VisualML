@@ -7,7 +7,7 @@ import java.util.HashMap;
 /**
  * Reads comma-separated values (csv) data files into a dataset container.
  * 
- * @author Johan Hagelbäck (johan.hagelback@gmail.com)
+ * @author Johan Hagelbäck, Linnaeus University  (johan.hagelback@lnu.se)
  */
 public class DataSource 
 {

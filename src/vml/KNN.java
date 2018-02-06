@@ -7,7 +7,7 @@ import java.util.Collections;
 /**
  * k-Nearest Neighbor classifier.
  * 
- * @author Johan Hagelbäck (johan.hagelback@gmail.com)
+ * @author Johan Hagelbäck, Linnaeus University  (johan.hagelback@lnu.se)
  */
 public class KNN extends Classifier
 {

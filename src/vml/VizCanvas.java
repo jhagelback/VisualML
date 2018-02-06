@@ -7,7 +7,7 @@ import javafx.scene.canvas.*;
 
 /**
  *
- * @author Johan Hagelbäck (johan.hagelback@gmail.com)
+ * @author Johan Hagelbäck, Linnaeus University  (johan.hagelback@lnu.se)
  */
 public class VizCanvas extends Canvas
 {

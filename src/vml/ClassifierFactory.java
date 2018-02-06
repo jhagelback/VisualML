@@ -2,125 +2,35 @@
 package vml;
 
 import java.io.File;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * Factory class for creating classifiers.
  * 
- * @author Johan Hagelbäck (johan.hagelback@gmail.com)
+ * @author Johan Hagelbäck, Linnaeus University  (johan.hagelback@lnu.se)
  */
 public class ClassifierFactory 
 {
-    /**
-     * Creates a Linear Softmax classifier.
-     * 
-     * @param dataset_name Training dataset
-     * @param testset_name Test dataset
-     * @param settings Configuration settings
-     * @return Linear classifier
-     */
-    public static Classifier createLinear(String dataset_name, String testset_name, LSettings settings)
-    {
-        //Read training dataset
-        Dataset data = readDataset(dataset_name);
-        if (data == null)
-        {
-            System.out.println("Unable to find training dataset '" + dataset_name + "'");
-            System.exit(0);
-        }
-        //Read test dataset
-        Dataset test = readDataset(testset_name);
-        
-        //Normalize attributes
-        data.normalizeAttributes(settings.normalization_type);
-        if (test != null)
-        {
-            test.normalizeAttributes(settings.normalization_type);
-        }
-        
-        //Init classifier
-        Classifier c = new Linear(data, test, settings);
-        
-        return c;
-    }
+    //experiments.xml root node
+    private static Element root;
     
     /**
-     * Creates the demonstration Linear classifier as shown here:
-     * http://vision.stanford.edu/teaching/cs231n-demos/linear-classify/
+     * Builds the classifier with the specified experiment id.
      * 
-     * @return Linear classifier
+     * @param id Experiment id
+     * @return Classifier, or null if experiments was not found
      */
-    public static Classifier createLinearDemo()
+    public static Classifier build(String id)
     {
-        //Init classifier
-        Classifier c = new Linear();
-        
-        return c;
-    }
-    
-    /**
-     * Creates a Neural Network Softmax classifier with one or more hidden layers.
-     * 
-     * @param dataset_name Training dataset
-     * @param testset_name Test dataset
-     * @param settings Configuration settings
-     * @return Neural Network classifier
-     */
-    public static Classifier createNN(String dataset_name, String testset_name, NNSettings settings)
-    {
-        //Read training dataset
-        Dataset data = readDataset(dataset_name);
-        if (data == null)
-        {
-            System.out.println("Unable to find training dataset '" + dataset_name + "'");
-            System.exit(0);
-        }
-        //Read test dataset
-        Dataset test = readDataset(testset_name);
-        
-        //Normalize attributes
-        data.normalizeAttributes(settings.normalization_type);
-        if (test != null)
-        {
-            test.normalizeAttributes(settings.normalization_type);
-        }
-        
-        //Init classifier
-        Classifier c = new NN(data, test, settings);
-        
-        return c;
-    }
-    
-    /**
-     * Creates a k-Nearest Neighbor classifier.
-     * 
-     * @param dataset_name Training dataset
-     * @param testset_name Test dataset
-     * @param settings Configuration settings
-     * @return kNN classifier
-     */
-    public static Classifier createKNN(String dataset_name, String testset_name, KNNSettings settings)
-    {
-        //Read training dataset
-        Dataset data = readDataset(dataset_name);
-        if (data == null)
-        {
-            System.out.println("Unable to find training dataset '" + dataset_name + "'");
-            System.exit(0);
-        }
-        //Read test dataset
-        Dataset test = readDataset(testset_name);
-        
-        //Normalize attributes
-        data.normalizeAttributes(settings.normalization_type);
-        if (test != null)
-        {
-            test.normalizeAttributes(settings.normalization_type);
-        }
-        
-        //Init classifier
-        Classifier c = new KNN(data, test, settings);
-        
-        return c;
+        return readSettings(id);
     }
     
     /**
@@ -136,325 +46,344 @@ public class ClassifierFactory
         if (dataset_name == null) return null;
         String fname = dataset_name;
         if (!fname.endsWith(".csv")) fname += ".csv";
-        File f = new File("data/" + fname);
+        if (!fname.startsWith("data/")) fname = "data/" + fname;
+        File f = new File(fname);
         if (!f.exists()) return null;
         
         //Read data
-        DataSource reader = new DataSource("data/" + fname);
+        DataSource reader = new DataSource(fname);
         Dataset data = reader.read();
         
         return data;
     }
     
     /**
-     * Returns the settings to use for Linear classifiers on the supplied datasets.
+     * Reads the experiments.xml file and searches for the experiment with
+     * the specified id.
      * 
-     * @param file Dataset identifier
-     * @return Settings to use
+     * @param id Experiment id
+     * @return Classifier for this experiment, or null if experiment was not found
      */
-    public static LSettings getLSettings(String file)
+    public static Classifier readSettings(String id)
     {
-        LSettings s = null;
+        Classifier c = null;
         
-        switch(file)
+        try
         {
-            case "demo":
-                s = new LSettings();
-                s.iterations = 10;
-                s.learningrate = 1.0;
-                break;
-            case "iris":
-                s = new LSettings();
-                s.iterations = 300;
-                s.learningrate = 0.1;
-                break;
-            case "iris.2d":
-                s = new LSettings();
-                s.iterations = 50;
-                s.learningrate = 1.0;
-                s.normalization_type = Dataset.Norm_NEGPOS;
-                break;
-            case "iris_test":
-                s = new LSettings();
-                s.iterations = 300;
-                s.learningrate = 0.1;
-                break;
-            case "spiral":
-                s = new LSettings();
-                s.iterations = 200;
-                s.learningrate = 0.1;
-                break;
-            case "diabetes":
-                s = new LSettings();
-                s.iterations = 40;
-                s.learningrate = 1.0;
-                s.normalization_type = Dataset.Norm_NEGPOS;
-                break;
-            case "circle":
-                s = new LSettings();
-                s.iterations = 20;
-                s.learningrate = 1.0;
-                break;
-            case "glass":
-                s = new LSettings();
-                s.iterations = 50;
-                s.learningrate = 1.0;
-                s.normalization_type = Dataset.Norm_NEGPOS;
-                break;
-            case "mnist":
-                s = new LSettings();
-                s.iterations = 200;
-                s.learningrate = 1.0;
-                s.normalization_type = Dataset.Norm_POS;
-                break;
+            //Read xml file, if not already read into memory
+            if (root == null)
+            {
+                File xml = new File("experiments.xml");
+                if (!xml.exists())
+                {
+                    System.err.println("Experiments XML file does not exist");
+                    System.exit(1);
+                }
+                DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+                Document doc = dBuilder.parse(xml);
+                root = doc.getDocumentElement();
+            }
+            
+            //Search for experiment nodes
+            NodeList nodes = root.getElementsByTagName("Experiment");
+            for (int n = 0; n < nodes.getLength(); n++)
+            {
+                Node node = nodes.item(n);
+                //Convert from Node to Element
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element e = (Element) node;
+                    
+                    //Check if current node matches the experiment we are looking for
+                    String cid = e.getAttribute("id");
+                    if (cid.equalsIgnoreCase(id))
+                    {
+                        //Create classifier of correct type
+                        String ctype = e.getElementsByTagName("Classifier").item(0).getTextContent();
+                        if (ctype.equalsIgnoreCase("Linear"))
+                        {
+                            c = readLinear(e);
+                        }
+                        if (ctype.equalsIgnoreCase("NN"))
+                        {
+                            c = readNN(e);
+                        }
+                        if (ctype.equalsIgnoreCase("KNN"))
+                        {
+                            c = readKNN(e);
+                        }
+                    }      
+                }
+            }
+             
+        }
+        catch (Exception ex)
+        {
+            System.err.println("Experiments XML file is invalid");
+            System.exit(1);
         }
         
-        return s;
+        return c;
     }
     
     /**
-     * Returns the settings to use for Neural Network classifiers on the supplied datasets.
+     * Read settings and creates a Linear classifier.
      * 
-     * @param type Classifier type (nn or dnn)
-     * @param file Dataset identifier
-     * @return Settings to use
+     * @param e Experiment xml node
+     * @return The classifier
      */
-    public static NNSettings getNNSettings(String type, String file)
+    public static Classifier readLinear(Element e)
     {
-        NNSettings s = null;
+        Classifier c = null;
         
-        if (type.equalsIgnoreCase("nn"))
+        try
         {
-            /**
-             * Neural Network classifiers 
-             */
-            switch (file) 
+            String dataset_name = get(e, "TrainingData");
+            String testset_name = get(e, "TestData");
+            
+            //Read settings
+            LSettings settings = new LSettings();
+            if (exists(e, "Iterations")) settings.iterations = getInt(e, "Iterations");
+            if (exists(e, "LearningRate")) settings.learningrate = getDouble(e, "LearningRate");
+            if (exists(e, "RegularizationStrength")) settings.lambda = getDouble(e, "RegularizationStrength");
+            if (exists(e, "UseRegularization")) settings.use_regularization = getBoolean(e, "UseRegularization");
+            if (exists(e, "NormalizationType")) settings.normalization_type = getNormType(e, "NormalizationType");
+            
+            //Read training dataset
+            Dataset data = ClassifierFactory.readDataset(dataset_name);
+            if (data == null)
             {
-                case "demo":
-                    s = new NNSettings();
-                    s.layers = new int[]{8};
-                    s.iterations = 20;
-                    s.learningrate = 1.0;
-                    break;
-                case "iris":
-                    s = new NNSettings();
-                    s.layers = new int[]{2};
-                    s.iterations = 500;
-                    s.use_regularization = false;
-                    s.learningrate = 1.0;
-                    s.normalization_type = Dataset.Norm_NEGPOS;
-                    break;
-                case "iris.2d":
-                    s = new NNSettings();
-                    s.layers = new int[]{2};
-                    s.iterations = 200;
-                    s.use_regularization = false;
-                    s.learningrate = 1.0;
-                    s.normalization_type = Dataset.Norm_NEGPOS;
-                    break;
-                case "iris_test":
-                    s = new NNSettings();
-                    s.layers = new int[]{2};
-                    s.iterations = 500;
-                    s.use_regularization = false;
-                    s.learningrate = 1.0;
-                    s.normalization_type = Dataset.Norm_NEGPOS;
-                    break;
-                case "spiral":
-                    s = new NNSettings();
-                    s.layers = new int[]{72};
-                    s.iterations = 8000;
-                    s.use_regularization = false;
-                    s.learningrate = 0.4;
-                    break;
-                case "gaussian":
-                    s = new NNSettings();
-                    s.layers = new int[]{8};
-                    s.iterations = 50;
-                    s.use_regularization = false;
-                    s.learningrate = 1.0;
-                    s.normalization_type = Dataset.Norm_NEGPOS;
-                    break;
-                case "flame":
-                    s = new NNSettings();
-                    s.layers = new int[]{16};
-                    s.iterations = 1200;
-                    s.use_regularization = true;
-                    s.learningrate = 0.5;
-                    break;
-                case "jain":
-                    s = new NNSettings();
-                    s.layers = new int[]{16};
-                    s.iterations = 300;
-                    s.use_regularization = false;
-                    s.learningrate = 0.8;
-                    break;
-                case "diabetes":
-                    s = new NNSettings();
-                    s.layers = new int[]{8};
-                    s.iterations = 6000;
-                    s.use_regularization = true;
-                    s.learningrate = 1.0;
-                    s.normalization_type = Dataset.Norm_NEGPOS;
-                    break;
-                case "circle":
-                    s = new NNSettings();
-                    s.layers = new int[]{16};
-                    s.iterations = 100;
-                    s.use_regularization = false;
-                    s.learningrate = 1.0;   
-                    break;
-                case "glass":
-                    s = new NNSettings();
-                    s.layers = new int[]{72};
-                    s.iterations = 4000;
-                    s.use_regularization = false;
-                    s.learningrate = 1.0;
-                    s.normalization_type = Dataset.Norm_NEGPOS;
-                    break;
-                case "mnist":
-                    s = new NNSettings();
-                    s.layers = new int[]{8};
-                    s.iterations = 200;
-                    s.use_regularization = false;
-                    s.learningrate = 0.2;
-                    s.normalization_type = Dataset.Norm_POS;
-                    //Takes around 25 mins to train 200 iterations
-                    break;
+                System.out.println("Unable to find training dataset '" + dataset_name + "'");
+                System.exit(1);
             }
+            //Read test dataset
+            Dataset test = ClassifierFactory.readDataset(testset_name);
+
+            //Normalize attributes
+            data.normalizeAttributes(settings.normalization_type);
+            if (test != null)
+            {
+                test.normalizeAttributes(settings.normalization_type);
+            }
+
+            //Init classifier
+            c = new Linear(data, test, settings);
         }
-        if (type.equalsIgnoreCase("dnn"))
+        catch (Exception ex)
         {
-            /**
-             * Deep Neural Network classifiers 
-             */
-            switch (file) 
-            {
-                case "demo":
-                    s = new NNSettings();
-                    s.layers = new int[]{4,4};
-                    s.iterations = 2000;
-                    s.use_regularization = true;
-                    s.learningrate = 0.1;
-                    break;
-                case "iris":
-                    s = new NNSettings();
-                    s.layers = new int[]{8,4};
-                    s.iterations = 2000;
-                    s.use_regularization = false;
-                    s.learningrate = 0.8;
-                    s.normalization_type = Dataset.Norm_NEGPOS;
-                    break;
-                case "iris_test":
-                    s = new NNSettings();
-                    s.layers = new int[]{8,4};
-                    s.iterations = 2000;
-                    s.use_regularization = false;
-                    s.learningrate = 0.8;
-                    s.normalization_type = Dataset.Norm_NEGPOS;
-                    break;
-                case "spiral":
-                    s = new NNSettings();
-                    s.layers = new int[]{42,24};
-                    s.iterations = 8000;
-                    s.use_regularization = false;
-                    s.learningrate = 0.1;
-                    break;
-                case "diabetes":
-                    s = new NNSettings();
-                    s.layers = new int[]{24,12};
-                    s.iterations = 8000;
-                    s.use_regularization = false;
-                    s.learningrate = 1.0;
-                    s.normalization_type = Dataset.Norm_NEGPOS;
-                    break;
-                case "glass":
-                    s = new NNSettings();
-                    s.layers = new int[]{64,32}; //96.26
-                    s.iterations = 6000;
-                    s.use_regularization = false;
-                    s.learningrate = 0.8;
-                    s.normalization_type = Dataset.Norm_NEGPOS;
-                    break;
-                case "circle":
-                    s = new NNSettings();
-                    s.layers = new int[]{12,8};
-                    s.iterations = 100;
-                    s.use_regularization = false;
-                    s.learningrate = 1.0;
-                    s.normalization_type = Dataset.Norm_NEGPOS;
-                    break;
-            }
+            System.err.println("Experiments XML file is invalid");
+            System.exit(1);
         }
         
-        return s;
+        return c;
     }
     
     /**
-     * Returns the settings to use for kNN classifiers on the supplied datasets.
+     * Read settings and creates a Neural Network classifier.
      * 
-     * @param file Dataset identifier
-     * @return Settings to use
+     * @param e Experiment xml node
+     * @return The classifier
      */
-    public static KNNSettings getKNNSettings(String file)
+    public static Classifier readNN(Element e)
     {
-        KNNSettings s = null;
+        Classifier c = null;
         
-        switch(file)
+        try
         {
-            case "demo":
-                s = new KNNSettings();
-                s.K = 3;
-                break;
-            case "iris":
-                s = new KNNSettings();
-                s.K = 3;
-                break;
-            case "iris.2d":
-                s = new KNNSettings();
-                s.K = 3;
-                s.normalization_type = Dataset.Norm_NEGPOS;
-                break;
-            case "iris_test":
-                s = new KNNSettings();
-                s.K = 3;
-                break;
-            case "spiral":
-                s = new KNNSettings();
-                s.K = 3;
-                break;
-            case "diabetes":
-                s = new KNNSettings();
-                s.K = 3;
-                break;
-            case "circle":
-                s = new KNNSettings();
-                s.K = 3;
-                break;
-            case "glass":
-                s = new KNNSettings();
-                s.K = 3;
-                break;
-            case "gaussian":
-                s = new KNNSettings();
-                s.K = 3;
-                s.normalization_type = Dataset.Norm_NEGPOS;
-                break;
-            case "flame":
-                s = new KNNSettings();
-                s.K = 3;
-                break;
-            case "jain":
-                s = new KNNSettings();
-                s.K = 3;
-                break;
-            case "mnist":
-                s = new KNNSettings();
-                s.K = 3;
-                s.normalization_type = Dataset.Norm_POS;
-                break;
+            String dataset_name = get(e, "TrainingData");
+            String testset_name = get(e, "TestData");
+            
+            //Read settings
+            NNSettings settings = new NNSettings();
+            if (exists(e, "Iterations")) settings.iterations = getInt(e, "Iterations");
+            if (exists(e, "LearningRate")) settings.learningrate = getDouble(e, "LearningRate");
+            if (exists(e, "RegularizationStrength")) settings.lambda = getDouble(e, "RegularizationStrength");
+            if (exists(e, "UseRegularization")) settings.use_regularization = getBoolean(e, "UseRegularization");
+            if (exists(e, "NormalizationType")) settings.normalization_type = getNormType(e, "NormalizationType");
+            if (exists(e, "UseMomentum")) settings.use_momentum = getBoolean(e, "UseMomentum");
+            if (exists(e, "HiddenLayers"))
+            {
+                String[] t = get(e, "HiddenLayers").split(",");
+                settings.layers = new int[t.length];
+                for (int i = 0; i < t.length; i++)
+                {
+                    settings.layers[i] = Integer.parseInt(t[i].trim());
+                }
+            }
+            
+            //Read training dataset
+            Dataset data = ClassifierFactory.readDataset(dataset_name);
+            if (data == null)
+            {
+                System.out.println("Unable to find training dataset '" + dataset_name + "'");
+                System.exit(1);
+            }
+            //Read test dataset
+            Dataset test = ClassifierFactory.readDataset(testset_name);
+
+            //Normalize attributes
+            data.normalizeAttributes(settings.normalization_type);
+            if (test != null)
+            {
+                test.normalizeAttributes(settings.normalization_type);
+            }
+
+            //Init classifier
+            c = new NN(data, test, settings);
+        }
+        catch (Exception ex)
+        {
+            System.err.println("Experiments XML file is invalid");
+            System.exit(1);
         }
         
-        return s;
+        return c;
+    }
+    
+    /**
+     * Read settings and creates a k-Nearest Neighbor classifier.
+     * 
+     * @param e Experiment xml node
+     * @return The classifier
+     */
+    public static Classifier readKNN(Element e)
+    {
+        Classifier c = null;
+        
+        try
+        {
+            String dataset_name = get(e, "TrainingData");
+            String testset_name = get(e, "TestData");
+            
+            //Read settings
+            KNNSettings settings = new KNNSettings();
+            if (exists(e, "K")) settings.K = getInt(e, "K");
+            if (exists(e, "NormalizationType")) settings.normalization_type = getNormType(e, "NormalizationType");
+            
+            //Read training dataset
+            Dataset data = ClassifierFactory.readDataset(dataset_name);
+            if (data == null)
+            {
+                System.out.println("Unable to find training dataset '" + dataset_name + "'");
+                System.exit(1);
+            }
+            //Read test dataset
+            Dataset test = ClassifierFactory.readDataset(testset_name);
+
+            //Normalize attributes
+            data.normalizeAttributes(settings.normalization_type);
+            if (test != null)
+            {
+                test.normalizeAttributes(settings.normalization_type);
+            }
+
+            //Init classifier
+            c = new KNN(data, test, settings);
+        }
+        catch (Exception ex)
+        {
+            System.err.println("Experiments XML file is invalid");
+            System.exit(1);
+        }
+        
+        return c;
+    }
+    
+    /**
+     * Checks if a child node exists in this element.
+     * 
+     * @param e Current element
+     * @param node Child node to search for
+     * @return True if exists, false otherwise
+     */
+    private static boolean exists(Element e, String node)
+    {
+        return e.getElementsByTagName(node).getLength() != 0;
+    }
+    
+    /**
+     * Returns the text contents for a child node in this element.
+     * 
+     * @param e Current element
+     * @param node Child node to search for
+     * @return Text contents, or null if not found
+     */
+    private static String get(Element e, String node)
+    {
+        if (e.getElementsByTagName(node).getLength() == 1)
+        {
+            return e.getElementsByTagName(node).item(0).getTextContent();
+        }
+        return null;
+    }
+    
+    /**
+     * Returns the normalization type for a child node in this element.
+     * 
+     * @param e Current element
+     * @param node Child node to search for (NormalizationType)
+     * @return Normalization type (None, NegPos or Pos)
+     */
+    private static int getNormType(Element e, String node)
+    {
+        if (e.getElementsByTagName(node).getLength() == 1)
+        {
+            String t = e.getElementsByTagName(node).item(0).getTextContent();
+            if (t.equalsIgnoreCase("none")) return Dataset.Norm_NONE;
+            if (t.equalsIgnoreCase("NegPos")) return Dataset.Norm_NEGPOS;
+            if (t.equalsIgnoreCase("Pos")) return Dataset.Norm_POS;
+        }
+        return Dataset.Norm_NONE;
+    }
+    
+    /**
+     * Returns the boolean contents for a child node in this element.
+     * 
+     * @param e Current element
+     * @param node Child node to search for
+     * @return Boolean contents (true or false)
+     */
+    private static boolean getBoolean(Element e, String node)
+    {
+        if (e.getElementsByTagName(node).getLength() == 1)
+        {
+            String t = e.getElementsByTagName(node).item(0).getTextContent();
+            return t.equalsIgnoreCase("true");
+        }
+        return false;
+    }
+    
+    /**
+     * Returns the integer contents for a child node in this element.
+     * 
+     * @param e Current element
+     * @param node Child node to search for
+     * @return Integer contents, or 0 if not found
+     */
+    private static int getInt(Element e, String node) throws NumberFormatException
+    {
+        if (e.getElementsByTagName(node).getLength() == 1)
+        {
+            return Integer.parseInt(e.getElementsByTagName(node).item(0).getTextContent());
+        }
+        return 0;
+    }
+    
+    /**
+     * Returns the decimal value contents for a child node in this element.
+     * 
+     * @param e Current element
+     * @param node Child node to search for
+     * @return Double contents, or 0 if not found
+     */
+    private static double getDouble(Element e, String node) throws ParseException
+    {
+        if (e.getElementsByTagName(node).getLength() == 1)
+        {
+            String t = e.getElementsByTagName(node).item(0).getTextContent();
+            NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);
+            return nf.parse(t).doubleValue();
+        }
+        return 0;
     }
 }

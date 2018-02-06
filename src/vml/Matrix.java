@@ -8,7 +8,7 @@ import java.util.stream.*;
 /**
  * Representation of a matrix.
  * 
- * @author Johan Hagelbäck (johan.hagelback@gmail.com)
+ * @author Johan Hagelbäck, Linnaeus University  (johan.hagelback@lnu.se)
  */
 public class Matrix 
 {

@@ -4,7 +4,7 @@ package vml;
 /**
  * Hidden layer using ReLU.
  * 
- * @author Johan Hagelbäck (johan.hagelback@gmail.com)
+ * @author Johan Hagelbäck, Linnaeus University  (johan.hagelback@lnu.se)
  */
 public class HiddenLayer
 {
@@ -119,7 +119,7 @@ public class HiddenLayer
         //The weight matrix scaled by Lambda*0.5 is added
         if (settings.use_regularization)
         {
-            dW.add(w, settings.hidden_lambda * 0.5);
+            dW.add(w, settings.lambda * 0.5);
         }
     }
     
@@ -144,7 +144,7 @@ public class HiddenLayer
         
         if (settings.use_regularization)
         {
-            RW = w.L2_norm() * settings.output_lambda;
+            RW = w.L2_norm() * settings.lambda;
         }
     }
 }

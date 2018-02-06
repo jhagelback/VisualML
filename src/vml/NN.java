@@ -6,7 +6,7 @@ import java.text.DecimalFormat;
 /**
  * Neural Network Softmax classifier.
  * 
- * @author Johan Hagelbäck (johan.hagelback@gmail.com)
+ * @author Johan Hagelbäck, Linnaeus University  (johan.hagelback@lnu.se)
  */
 public class NN extends Classifier
 {
