@@ -46,7 +46,6 @@ public class ClassifierFactory
         if (dataset_name == null) return null;
         String fname = dataset_name;
         if (!fname.endsWith(".csv")) fname += ".csv";
-        if (!fname.startsWith("data/")) fname = "data/" + fname;
         File f = new File(fname);
         if (!f.exists()) return null;
         
