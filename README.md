@@ -5,4 +5,4 @@ The following classifiers are available in the library:
 - k-Nearest Neighbor
 - Softmax Linear classifier
 - Neural Network
-- Simple Deep Neural Network (2 or more hidden layers)
+- Deep Neural Network (2 or more hidden layers)
