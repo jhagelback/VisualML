@@ -3,6 +3,6 @@ Visual ML is a small machine learning library with a GUI to visualize the decisi
 
 The following classifiers are available in the library:
 - k-Nearest Neighbor
-- Softmax linear classifier
+- Softmax Linear classifier
 - Neural Network
-- Simple Deep Neural Network (2 hidden layers)
+- Simple Deep Neural Network (2 or more hidden layers)
