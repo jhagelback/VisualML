@@ -19,5 +19,6 @@ java -jar VisualML.jar -exp [id]
 where [id] is the identifier for an experiment in the experiments.xml file.
 Example:
 ```
-java -jar VisualML.jar -exp iris_test
+java -jar VisualML.jar -exp nn_iris_test
 ```
+This trains a Neural Network classifier on the iris_train dataset and evaluates accuracy on both the training and test datasets.
