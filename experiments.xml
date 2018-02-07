@@ -165,12 +165,13 @@
     </Experiment>
     <Experiment id="nn_diabetes">
         <Classifier>NN</Classifier>
-        <TrainingData>data/diabetes.csv</TrainingData> <!-- 82.29% -->
-        <Iterations>6000</Iterations>
+        <TrainingData>data/diabetes.csv</TrainingData> <!-- 87.11% -->
+        <Iterations>12000</Iterations>
         <LearningRate>1.0</LearningRate>
-        <UseRegularization>true</UseRegularization>
-        <HiddenLayers>8</HiddenLayers>
+        <UseRegularization>false</UseRegularization>
+        <HiddenLayers>32</HiddenLayers>
         <Normalization>-1:1</Normalization>
+        <BatchSize>100</BatchSize>
     </Experiment>
     <Experiment id="nn_circle">
         <Classifier>NN</Classifier>
@@ -253,12 +254,13 @@
     </Experiment>
     <Experiment id="dnn_diabetes">
         <Classifier>NN</Classifier>
-        <TrainingData>data/diabetes.csv</TrainingData> <!-- 92.45% -->
-        <Iterations>8000</Iterations>
+        <TrainingData>data/diabetes.csv</TrainingData> <!-- 95.05% -->
+        <Iterations>10000</Iterations>
         <LearningRate>1.0</LearningRate>
         <UseRegularization>false</UseRegularization>
         <HiddenLayers>24,12</HiddenLayers>
         <Normalization>-1:1</Normalization>
+        <BatchSize>200</BatchSize>
     </Experiment>
     <Experiment id="dnn_circle">
         <Classifier>NN</Classifier>
