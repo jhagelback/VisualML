@@ -27,7 +27,7 @@ A range of common datasets are available in the data folder. The MNIST hand-writ
 
 ## Use as API
 To use the library from other Java code you first need to add a new experiment for your classification task in the experiments.xml file.
-Example
+Example:
 ```
 <Experiment id="nn_iris_test">
     <Classifier>NN</Classifier>
