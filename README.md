@@ -9,7 +9,7 @@ The following classifiers are available in the library:
 - Neural Network
 - Deep Neural Network (2 or more hidden layers)
 
-## Usage
+## Use as stand-alone application
 To run the GUI, run the VisualML.jar file without any parameters
 
 To run a classification task, run the VisualML.jar file with the following parameters:
@@ -24,3 +24,32 @@ java -jar VisualML.jar -exp nn_iris_test
 This trains a Neural Network classifier on the iris_train.csv dataset and evaluates accuracy on both the training and test datasets.
 
 A range of common datasets are available in the data folder. The MNIST hand-written characters dataset in CSV format is available in the data_mnist folder. You need to unzip the files before using them.
+
+## Use as API
+To use the library from other Java code you first need to add a new experiment for your classification task in the experiments.xml file.
+Example
+```
+<Experiment id="nn_iris_test">
+    <Classifier>NN</Classifier>
+    <TrainingData>data/iris_training.csv</TrainingData>
+    <TestData>data/iris_test.csv</TestData>
+    <Iterations>500</Iterations>
+    <LearningRate>1.0</LearningRate>
+    <UseRegularization>false</UseRegularization>
+    <HiddenLayers>2</HiddenLayers>
+    <Normalization>-1:1</Normalization>
+</Experiment>
+```
+After that you build the classifier using the ClassifierFactory class:
+```
+Classifier c = ClassifierFactory.build("nn_iris_test");
+```
+Now you can train and evaluate the accuracy on the dataset:
+```
+c.train();
+c.evaluate();
+```
+You can classify a new instance with:
+```
+String pred_label = c.classify(Instance);
+```
