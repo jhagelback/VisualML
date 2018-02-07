@@ -23,8 +23,6 @@ public class Main extends Application
     private VizCanvas p;
     //The classifier
     private Classifier c;
-    //Training dataset
-    private Dataset data;
     //Number of iterations per step for the classifier
     private int it_steps;
     //Current iteration
@@ -174,12 +172,6 @@ public class Main extends Application
         //Linear tasks
         MenuItem mitem = new MenuItem("Demo");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("l_demo"), 1);
-        }); 
-        lmenu.getItems().add(mitem);
-        
-        mitem = new MenuItem("Demo fixed");
-        mitem.setOnAction((ActionEvent t) -> {
             initClassifier(new Linear(), 1);
         }); 
         lmenu.getItems().add(mitem);
@@ -205,7 +197,7 @@ public class Main extends Application
         //NN tasks
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("nn_spiral"), 100);
+            initClassifier(ClassifierFactory.build("nn_spiral"), 50);
         }); 
         nmenu.getItems().add(mitem);
         
@@ -318,7 +310,7 @@ public class Main extends Application
         //Update panel
         p.update();
         
-        acc = c.evaluate();
+        acc = c.train_accuracy();
     }
     
     /**
@@ -335,7 +327,7 @@ public class Main extends Application
                 loss = c.iterate();
             }
             //Current classifier accuracy
-            acc = c.evaluate();
+            acc = c.train_accuracy();
             
             //No errors occured, generate frame
             p.build_frame();
@@ -398,7 +390,7 @@ public class Main extends Application
         else
         {
             System.err.println("Wrong arguments: [-experiment|-gui] [args]");
-            System.exit(0);
+            System.exit(1);
         }
     }      
 }
