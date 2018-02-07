@@ -63,7 +63,7 @@ public class ClassifierFactory
      * @param id Experiment id
      * @return Classifier for this experiment, or null if experiment was not found
      */
-    public static Classifier readSettings(String id)
+    private static Classifier readSettings(String id)
     {
         Classifier c = null;
         
@@ -119,7 +119,6 @@ public class ClassifierFactory
         catch (Exception ex)
         {
             System.err.println("Experiments XML file is invalid");
-            ex.printStackTrace();
             System.exit(1);
         }
         
@@ -132,7 +131,7 @@ public class ClassifierFactory
      * @param e Experiment xml node
      * @return The classifier
      */
-    public static Classifier readLinear(Element e)
+    private static Classifier readLinear(Element e)
     {
         Classifier c = null;
         
@@ -194,7 +193,7 @@ public class ClassifierFactory
      * @param e Experiment xml node
      * @return The classifier
      */
-    public static Classifier readNN(Element e)
+    private static Classifier readNN(Element e)
     {
         Classifier c = null;
         
@@ -265,7 +264,7 @@ public class ClassifierFactory
      * @param e Experiment xml node
      * @return The classifier
      */
-    public static Classifier readKNN(Element e)
+    private static Classifier readKNN(Element e)
     {
         Classifier c = null;
         
