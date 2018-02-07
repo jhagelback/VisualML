@@ -23,7 +23,7 @@ public class VizCanvas extends Canvas
     public static int cell_w = 7;
     //True of panels is rendering, false otherwise
     public boolean updating;
-    
+    //Predicted class values
     private int[][] frame;
     
     /**
@@ -69,8 +69,6 @@ public class VizCanvas extends Canvas
         //Shift factor of the data
         shift = 0;
         if (min < 0) shift = -min / 2.0;
-        
-        System.out.println("Using scale " + scale + " and shift " + shift);
         
         //Generate frame
         build_frame();
