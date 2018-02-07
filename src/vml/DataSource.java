@@ -91,30 +91,21 @@ public class DataSource
             }
             
             //Label
-            int label = 0;
-            try
+            String slab = t[t.length - 1];
+            //Convert category string to integer
+            if (!catToInt.containsKey(slab))
             {
-                //Category is already integer
-                label = Integer.parseInt(t[t.length - 1]);
+                //Add new conversion
+                catToInt.put(slab, catToInt.size());
             }
-            catch (Exception ex)
+            //Get category as integer
+            int label = catToInt.get(slab);
+
+            //Mapping from category int to string
+            if (!intToCat.containsKey(label))
             {
-                String slab = t[t.length - 1];
-                //Convert category string to integer
-                if (!catToInt.containsKey(slab))
-                {
-                    //Add new conversion
-                    catToInt.put(slab, catToInt.size());
-                }
-                //Get category as integer
-                label = catToInt.get(slab);
-                
-                //Mapping from category int to string
-                if (!intToCat.containsKey(label))
-                {
-                    //Add new mapping
-                    intToCat.put(label, slab);
-                }
+                //Add new mapping
+                intToCat.put(label, slab);
             }
             
             //Create instance
