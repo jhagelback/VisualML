@@ -8,11 +8,12 @@
         <Classifier>Linear</Classifier>                         Linear
         <TrainingData>data/demo.csv</TrainingData>              Path
         <TestData></TestData>                                   Path (or empty if no test data is used)
-        <Iterations>10</Iterations>                             Integer
-        <LearningRate>1.0</LearningRate>                        Decimal value 0 ... 1
-        <UseRegularization>true</UseRegularization>             True or False
-        <RegularizationStrength>0.01</RegularizationStrength>   Decimal value
-        <NormalizationType>None</NormalizationType>             Can be None, NegPos or Pos
+        <Iterations>10</Iterations>                             Integer (default is 200)
+        <LearningRate>1.0</LearningRate>                        Decimal value 0 ... 1 (default is 1.0)
+        <UseRegularization>true</UseRegularization>             True or False (default is true)
+        <RegularizationStrength>0.01</RegularizationStrength>   Decimal value (default is 0.01)
+        <NormalizationType>None</NormalizationType>             Can be None, NegPos or Pos (default is None)
+        <BatchSize>100</BatchSize>                              Size of batches for batch training. If not set, batch training isn't used
     -->
     <Experiment id="l_demo">
         <Classifier>Linear</Classifier>
@@ -68,11 +69,13 @@
     </Experiment>
     <Experiment id="l_mnist">
         <Classifier>Linear</Classifier>
-        <TrainingData>data_mnist/mnist_train.csv</TrainingData> <!-- 0.00% -->
-        <TestData>data_mnist/mnist_test.csv</TestData> <!-- 0.00% -->
-        <Iterations>200</Iterations>
-        <LearningRate>1.0</LearningRate>
+        <TrainingData>data_mnist/mnist_train.csv</TrainingData> <!-- 91.52% -->
+        <TestData>data_mnist/mnist_test.csv</TestData> <!-- 91.72% -->
+        <Iterations>1000</Iterations>
+        <LearningRate>0.4</LearningRate>
+        <UseRegularization>false</UseRegularization>
         <NormalizationType>Pos</NormalizationType>
+        <BatchSize>100</BatchSize>
     </Experiment>
     <!--
         Neural Network Classifiers
@@ -82,13 +85,14 @@
         <Classifier>NN</Classifier>                             NN
         <TrainingData>data/demo.csv</TrainingData>              Path
         <TestData></TestData>                                   Path (or empty if no test data is used)
-        <Iterations>10</Iterations>                             Integer
-        <LearningRate>1.0</LearningRate>                        Decimal value 0 ... 1
-        <UseRegularization>true</UseRegularization>             True or False
-        <RegularizationStrength>0.01</RegularizationStrength>   Decimal value
-        <UseMomentum>true</UseMomentum>                         True or False
-        <HiddenLayers>16</HiddenLayers>                         Number of units in the hidden layer
-        <NormalizationType>None</NormalizationType>             Can be None, NegPos or Pos
+        <Iterations>10</Iterations>                             Integer (default is 1000)
+        <LearningRate>1.0</LearningRate>                        Decimal value 0 ... 1 (default is 0.3)
+        <UseRegularization>true</UseRegularization>             True or False (default is true)
+        <RegularizationStrength>0.001</RegularizationStrength>   Decimal value (default is 0.001)
+        <UseMomentum>true</UseMomentum>                         True or False (default is true)
+        <HiddenLayers>16</HiddenLayers>                         Number of units in the hidden layer (default is 16)
+        <NormalizationType>None</NormalizationType>             None, NegPos or Pos (default is None)
+        <BatchSize>100</BatchSize>                              Size of batches for batch training. If not set, batch training isn't used
     -->
     <Experiment id="nn_demo">
         <Classifier>NN</Classifier>
@@ -186,13 +190,14 @@
     </Experiment>
     <Experiment id="nn_mnist">
         <Classifier>NN</Classifier>
-        <TrainingData>data_mnist/mnist_train.csv</TrainingData> <!-- 0.00% -->
-        <TestData>data_mnist/mnist_test.csv</TestData> <!-- 0.00% -->
-        <Iterations>200</Iterations>
+        <TrainingData>data_mnist/mnist_train.csv</TrainingData> <!-- 94.69% -->
+        <TestData>data_mnist/mnist_test.csv</TestData> <!-- 94.44% -->
+        <Iterations>2000</Iterations>
         <LearningRate>0.2</LearningRate>
         <UseRegularization>false</UseRegularization>
-        <HiddenLayers>8</HiddenLayers>
+        <HiddenLayers>16</HiddenLayers>
         <NormalizationType>Pos</NormalizationType>
+        <BatchSize>200</BatchSize>
     </Experiment>
     <!--
         Deep Neural Network Classifiers
@@ -202,13 +207,13 @@
         <Classifier>NN</Classifier>                             NN
         <TrainingData>data/demo.csv</TrainingData>              Path
         <TestData></TestData>                                   Path (or empty if no test data is used)
-        <Iterations>10</Iterations>                             Integer
-        <LearningRate>1.0</LearningRate>                        Decimal value 0 ... 1
-        <UseRegularization>true</UseRegularization>             True or False
-        <RegularizationStrength>0.01</RegularizationStrength>   Decimal value
-        <UseMomentum>true</UseMomentum>                         True or False
-        <HiddenLayers>16,8</HiddenLayers>                       Number of units in the hidden layers
-        <NormalizationType>None</NormalizationType>             Can be None, NegPos or Pos
+        <Iterations>10</Iterations>                             Integer (default is 1000)
+        <LearningRate>1.0</LearningRate>                        Decimal value 0 ... 1 (default is 0.3)
+        <UseRegularization>true</UseRegularization>             True or False (default is true)
+        <RegularizationStrength>0.001</RegularizationStrength>   Decimal value (default is 0.001)
+        <UseMomentum>true</UseMomentum>                         True or False (default is true)
+        <HiddenLayers>16,8</HiddenLayers>                       Number of units in the hidden layers (default is 16)
+        <NormalizationType>None</NormalizationType>             None, NegPos or Pos (default is None)
     -->
     <Experiment id="dnn_demo">
         <Classifier>NN</Classifier>
@@ -280,8 +285,9 @@
         <Classifier>KNN</Classifier>                            KNN
         <TrainingData>data/demo.csv</TrainingData>              Path
         <TestData></TestData>                                   Path (or empty if no test data is used)
-        <K>3</K>                                                Integer
-        <NormalizationType>None</NormalizationType>             Can be None, NegPos or Pos
+        <K>3</K>                                                Integer (default is 3)
+        <DistanceMeasure>L2</DistanceMeasure>                   L1 or L2 (default is L2)
+        <NormalizationType>None</NormalizationType>             None, NegPos or Pos (default is None)
     -->
     <Experiment id="knn_demo">
         <Classifier>KNN</Classifier>
@@ -321,7 +327,8 @@
     </Experiment>
     <Experiment id="knn_glass">
         <Classifier>KNN</Classifier>
-        <TrainingData>data/glass.csv</TrainingData> <!-- 86.45% -->
+        <TrainingData>data/glass.csv</TrainingData> <!-- 88.32% -->
+        <DistanceMeasure>L1</DistanceMeasure>
         <K>3</K>
     </Experiment>
     <Experiment id="knn_gaussian">
