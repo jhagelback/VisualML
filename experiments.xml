@@ -12,7 +12,7 @@
         <LearningRate>1.0</LearningRate>                        Decimal value 0 ... 1 (default is 1.0)
         <UseRegularization>true</UseRegularization>             True or False (default is true)
         <RegularizationStrength>0.01</RegularizationStrength>   Decimal value (default is 0.01)
-        <NormalizationType>None</NormalizationType>             Can be None, NegPos or Pos (default is None)
+        <Normalization>0:1</Normalization>                      Lower and upper bound for normalized values
         <BatchSize>100</BatchSize>                              Size of batches for batch training. If not set, batch training isn't used
     -->
     <Experiment id="l_demo">
@@ -32,7 +32,7 @@
         <TrainingData>data/iris.2d.csv</TrainingData> <!-- 96.00% -->
         <Iterations>50</Iterations>
         <LearningRate>1.0</LearningRate>
-        <NormalizationType>NegPos</NormalizationType>
+        <Normalization>-1:1</Normalization>
     </Experiment>
     <Experiment id="l_iris_test">
         <Classifier>Linear</Classifier>
@@ -52,7 +52,7 @@
         <TrainingData>data/diabetes.csv</TrainingData> <!-- 77.21% -->
         <Iterations>40</Iterations>
         <LearningRate>1.0</LearningRate>
-        <NormalizationType>NegPos</NormalizationType>
+        <Normalization>-1:1</Normalization>
     </Experiment>
     <Experiment id="l_circle">
         <Classifier>Linear</Classifier>
@@ -62,19 +62,20 @@
     </Experiment>
     <Experiment id="l_glass">
         <Classifier>Linear</Classifier>
-        <TrainingData>data/glass.csv</TrainingData> <!-- 58.88% -->
-        <Iterations>50</Iterations>
-        <LearningRate>1.0</LearningRate>
-        <NormalizationType>NegPos</NormalizationType>
+        <TrainingData>data/glass.csv</TrainingData> <!-- 56.54% -->
+        <Iterations>100</Iterations>
+        <LearningRate>0.4</LearningRate>
+        <Normalization>0:2</Normalization>
+        <BatchSize>20</BatchSize>
     </Experiment>
     <Experiment id="l_mnist">
         <Classifier>Linear</Classifier>
         <TrainingData>data_mnist/mnist_train.csv</TrainingData> <!-- 91.52% -->
-        <TestData>data_mnist/mnist_test.csv</TestData> <!-- 91.72% -->
+        <TestData>data_mnist/mnist_test.csv</TestData> <!-- 91.73% -->
         <Iterations>1000</Iterations>
         <LearningRate>0.4</LearningRate>
         <UseRegularization>false</UseRegularization>
-        <NormalizationType>Pos</NormalizationType>
+        <Normalization>0:1</Normalization>
         <BatchSize>100</BatchSize>
     </Experiment>
     <!--
@@ -91,7 +92,7 @@
         <RegularizationStrength>0.001</RegularizationStrength>   Decimal value (default is 0.001)
         <UseMomentum>true</UseMomentum>                         True or False (default is true)
         <HiddenLayers>16</HiddenLayers>                         Number of units in the hidden layer (default is 16)
-        <NormalizationType>None</NormalizationType>             None, NegPos or Pos (default is None)
+        <Normalization>0:1</Normalization>                      Lower and upper bound for normalized values
         <BatchSize>100</BatchSize>                              Size of batches for batch training. If not set, batch training isn't used
     -->
     <Experiment id="nn_demo">
@@ -108,7 +109,7 @@
         <LearningRate>1.0</LearningRate>
         <UseRegularization>false</UseRegularization>
         <HiddenLayers>2</HiddenLayers>
-        <NormalizationType>NegPos</NormalizationType>
+        <Normalization>-1:1</Normalization>
     </Experiment>
     <Experiment id="nn_iris_2d">
         <Classifier>NN</Classifier>
@@ -117,7 +118,7 @@
         <LearningRate>1.0</LearningRate>
         <UseRegularization>false</UseRegularization>
         <HiddenLayers>2</HiddenLayers>
-        <NormalizationType>NegPos</NormalizationType>
+        <Normalization>-1:1</Normalization>
     </Experiment>
     <Experiment id="nn_iris_test">
         <Classifier>NN</Classifier>
@@ -127,7 +128,7 @@
         <LearningRate>1.0</LearningRate>
         <UseRegularization>false</UseRegularization>
         <HiddenLayers>2</HiddenLayers>
-        <NormalizationType>NegPos</NormalizationType>
+        <Normalization>-1:1</Normalization>
     </Experiment>
     <Experiment id="nn_spiral">
         <Classifier>NN</Classifier>
@@ -144,7 +145,7 @@
         <LearningRate>1.0</LearningRate>
         <UseRegularization>false</UseRegularization>
         <HiddenLayers>8</HiddenLayers>
-        <NormalizationType>NegPos</NormalizationType>
+        <Normalization>-1:1</Normalization>
     </Experiment>
     <Experiment id="nn_flame">
         <Classifier>NN</Classifier>
@@ -169,7 +170,7 @@
         <LearningRate>1.0</LearningRate>
         <UseRegularization>true</UseRegularization>
         <HiddenLayers>8</HiddenLayers>
-        <NormalizationType>NegPos</NormalizationType>
+        <Normalization>-1:1</Normalization>
     </Experiment>
     <Experiment id="nn_circle">
         <Classifier>NN</Classifier>
@@ -181,22 +182,22 @@
     </Experiment>
     <Experiment id="nn_glass">
         <Classifier>NN</Classifier>
-        <TrainingData>data/glass.csv</TrainingData> <!-- 90.65% -->
+        <TrainingData>data/glass.csv</TrainingData> <!-- 94.39% -->
         <Iterations>4000</Iterations>
         <LearningRate>1.0</LearningRate>
         <UseRegularization>false</UseRegularization>
         <HiddenLayers>72</HiddenLayers>
-        <NormalizationType>NegPos</NormalizationType>
+        <Normalization>0:2</Normalization>
     </Experiment>
     <Experiment id="nn_mnist">
         <Classifier>NN</Classifier>
-        <TrainingData>data_mnist/mnist_train.csv</TrainingData> <!-- 94.69% -->
-        <TestData>data_mnist/mnist_test.csv</TestData> <!-- 94.44% -->
+        <TrainingData>data_mnist/mnist_train.csv</TrainingData> <!-- 94.51% -->
+        <TestData>data_mnist/mnist_test.csv</TestData> <!-- 94.46% -->
         <Iterations>2000</Iterations>
         <LearningRate>0.2</LearningRate>
         <UseRegularization>false</UseRegularization>
         <HiddenLayers>16</HiddenLayers>
-        <NormalizationType>Pos</NormalizationType>
+        <Normalization>0:1</Normalization>
         <BatchSize>200</BatchSize>
     </Experiment>
     <!--
@@ -213,7 +214,7 @@
         <RegularizationStrength>0.001</RegularizationStrength>   Decimal value (default is 0.001)
         <UseMomentum>true</UseMomentum>                         True or False (default is true)
         <HiddenLayers>16,8</HiddenLayers>                       Number of units in the hidden layers (default is 16)
-        <NormalizationType>None</NormalizationType>             None, NegPos or Pos (default is None)
+        <Normalization>0:1</Normalization>                      Lower and upper bound for normalized values
     -->
     <Experiment id="dnn_demo">
         <Classifier>NN</Classifier>
@@ -230,7 +231,7 @@
         <LearningRate>0.8</LearningRate>
         <UseRegularization>false</UseRegularization>
         <HiddenLayers>8,4</HiddenLayers>
-        <NormalizationType>NegPos</NormalizationType>
+        <Normalization>-1:1</Normalization>
     </Experiment>
     <Experiment id="dnn_iris_test">
         <Classifier>NN</Classifier>
@@ -240,7 +241,7 @@
         <LearningRate>0.8</LearningRate>
         <UseRegularization>false</UseRegularization>
         <HiddenLayers>8,4</HiddenLayers>
-        <NormalizationType>NegPos</NormalizationType>
+        <Normalization>-1:1</Normalization>
     </Experiment>
     <Experiment id="dnn_spiral">
         <Classifier>NN</Classifier>
@@ -257,7 +258,7 @@
         <LearningRate>1.0</LearningRate>
         <UseRegularization>false</UseRegularization>
         <HiddenLayers>24,12</HiddenLayers>
-        <NormalizationType>NegPos</NormalizationType>
+        <Normalization>-1:1</Normalization>
     </Experiment>
     <Experiment id="dnn_circle">
         <Classifier>NN</Classifier>
@@ -266,7 +267,7 @@
         <LearningRate>1.0</LearningRate>
         <UseRegularization>false</UseRegularization>
         <HiddenLayers>12,8</HiddenLayers>
-        <NormalizationType>NegPos</NormalizationType>
+        <Normalization>-1:1</Normalization>
     </Experiment>
     <Experiment id="dnn_glass">
         <Classifier>NN</Classifier>
@@ -275,7 +276,18 @@
         <LearningRate>0.8</LearningRate>
         <UseRegularization>false</UseRegularization>
         <HiddenLayers>64,32</HiddenLayers>
-        <NormalizationType>NegPos</NormalizationType>
+        <Normalization>-1:1</Normalization>
+    </Experiment>
+    <Experiment id="dnn_mnist">
+        <Classifier>NN</Classifier>
+        <TrainingData>data_mnist/mnist_train.csv</TrainingData> <!-- 93.25% -->
+        <TestData>data_mnist/mnist_test.csv</TestData> <!-- 93.01% -->
+        <Iterations>2000</Iterations>
+        <LearningRate>0.2</LearningRate>
+        <UseRegularization>false</UseRegularization>
+        <HiddenLayers>8,48</HiddenLayers>
+        <Normalization>0:1</Normalization>
+        <BatchSize>200</BatchSize>
     </Experiment>
     <!--
         k-Nearest Neighbor Classifiers
@@ -287,7 +299,7 @@
         <TestData></TestData>                                   Path (or empty if no test data is used)
         <K>3</K>                                                Integer (default is 3)
         <DistanceMeasure>L2</DistanceMeasure>                   L1 or L2 (default is L2)
-        <NormalizationType>None</NormalizationType>             None, NegPos or Pos (default is None)
+        <Normalization>0:1</Normalization>                      Lower and upper bound for normalized values
     -->
     <Experiment id="knn_demo">
         <Classifier>KNN</Classifier>
@@ -335,7 +347,7 @@
         <Classifier>KNN</Classifier>
         <TrainingData>data/gaussian.csv</TrainingData> <!-- 99.51% -->
         <K>3</K>
-        <NormalizationType>NegPos</NormalizationType>
+        <Normalization>-1:1</Normalization>
     </Experiment>
     <Experiment id="knn_flame">
         <Classifier>KNN</Classifier>
