@@ -10,3 +10,14 @@ The following classifiers are available in the library:
 - Deep Neural Network (2 or more hidden layers)
 
 ## Usage
+To run the GUI, run the VisualML.jar file without any parameters
+
+To run a classification task, run the VisualML.jar file with the following parameters:
+```
+java -jar VisualML.jar -exp [id]
+```
+where [id] is the identifier for an experiment in the experiments.xml file.
+Example:
+```
+java -jar VisualML.jar -exp iris_test
+```
