@@ -147,6 +147,7 @@ public class ClassifierFactory
             if (exists(e, "RegularizationStrength")) settings.lambda = getDouble(e, "RegularizationStrength");
             if (exists(e, "UseRegularization")) settings.use_regularization = getBoolean(e, "UseRegularization");
             if (exists(e, "NormalizationType")) settings.normalization_type = getNormType(e, "NormalizationType");
+            if (exists(e, "BatchSize")) settings.batch_size = getInt(e, "BatchSize");
             
             //Read training dataset
             Dataset data = ClassifierFactory.readDataset(dataset_name);
@@ -200,6 +201,7 @@ public class ClassifierFactory
             if (exists(e, "UseRegularization")) settings.use_regularization = getBoolean(e, "UseRegularization");
             if (exists(e, "NormalizationType")) settings.normalization_type = getNormType(e, "NormalizationType");
             if (exists(e, "UseMomentum")) settings.use_momentum = getBoolean(e, "UseMomentum");
+            if (exists(e, "BatchSize")) settings.batch_size = getInt(e, "BatchSize");
             if (exists(e, "HiddenLayers"))
             {
                 String[] t = get(e, "HiddenLayers").split(",");

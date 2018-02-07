@@ -44,6 +44,11 @@ public class NNSettings
     int normalization_type = Dataset.Norm_NONE;
     
     /**
+     * Size of batches for batch training.
+     */
+    int batch_size = 0;
+    
+    /**
      * Creates default settings.
      */
     public NNSettings()
@@ -55,5 +60,6 @@ public class NNSettings
         normalization_type = Dataset.Norm_NONE;
         layers = new int[]{16};
         iterations = 1000;
+        batch_size = 0;
     }
 }

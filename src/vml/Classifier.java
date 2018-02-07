@@ -20,6 +20,31 @@ public abstract class Classifier
     //Test dataset
     protected Dataset test;
     
+    protected int batch_size = 100;
+    protected int batch_no = 0;
+    
+    public Dataset getNextBatch()
+    {
+        Dataset b = new Dataset();
+        
+        //Start and end indexes
+        int start = batch_no * batch_size;
+        if (start != 0) start++;
+        int end = (batch_no + 1) * batch_size;
+        
+        for (int i = start; i < end; i++)
+        {
+            if (i < data.size())
+            {
+                b.add(data.get(i));
+            }
+        }
+        batch_no++;
+        if (end >= data.size()) batch_no = 0;
+        
+        return b;
+    }
+    
     /**
      * Trains the classifier on a dataset.
      */

@@ -45,6 +45,7 @@ public class NN extends Classifier
         
         //Settings
         this.settings = settings;
+        batch_size = settings.batch_size;
         
         hidden = new HiddenLayer[settings.layers.length];
         hidden[0] = new HiddenLayer(noInputs, settings.layers[0], settings);
@@ -131,6 +132,13 @@ public class NN extends Classifier
     @Override
     public double iterate()
     {
+        if (batch_size > 0)
+        {
+            Dataset b = getNextBatch();
+            X = b.input_matrix();
+            y = b.label_vector();
+        }
+        
         forward();
         double loss = backward();
         return loss;
@@ -196,11 +204,13 @@ public class NN extends Classifier
         }
         
         //Set best weights
-        out = bOut;
-        hidden = bHidden;
-        
-        forward();
-        //loss = iterate();
-        System.out.println("  Best loss " + df.format(best_loss) + " at iteration " + best_iteration);
+        //Don't use in batch training since loss heavily depends on which batch is trained on
+        if (batch_size == 0)
+        {
+            out = bOut;
+            hidden = bHidden;
+            forward();
+            System.out.println("  Best loss " + df.format(best_loss) + " at iteration " + best_iteration);
+        }
     }
 }

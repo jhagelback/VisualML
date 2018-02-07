@@ -34,6 +34,11 @@ public class LSettings
     int normalization_type = Dataset.Norm_NONE;
     
     /**
+     * Size of batches for batch training.
+     */
+    int batch_size = 0;
+    
+    /**
      * Creates default settings.
      */
     public LSettings()
@@ -43,5 +48,6 @@ public class LSettings
         lambda = 0.01;
         normalization_type = Dataset.Norm_NONE;
         iterations = 200;
+        batch_size = 0;
     }
 }

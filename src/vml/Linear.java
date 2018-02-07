@@ -59,6 +59,7 @@ public class Linear extends Classifier
         
         //Settings
         this.settings = settings;
+        batch_size = settings.batch_size;
         
         System.out.println("Linear Softmax classifier");
     }
@@ -136,11 +137,14 @@ public class Linear extends Classifier
         }
         
         //Set best weights
-        w = bestW;
-        b = bestB;
-        
-        loss = iterate();
-        System.out.println("  Best loss " + df.format(loss) + " at iteration " + best_iteration);
+        //Don't use in batch training since loss heavily depends on which batch is trained on
+        if (batch_size == 0)
+        {
+            w = bestW;
+            b = bestB;
+            activation();   
+            System.out.println("  Best loss " + df.format(best_loss) + " at iteration " + best_iteration);
+        }
     }
     
     /**
@@ -151,6 +155,13 @@ public class Linear extends Classifier
     @Override
     public double iterate()
     {
+        if (batch_size > 0)
+        {
+            Dataset b = getNextBatch();
+            X = b.input_matrix();
+            y = b.label_vector();
+        }
+
         //Forward pass (activation)
         activation();
         //Calculate loss and evaluate gradients
