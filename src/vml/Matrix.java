@@ -188,17 +188,6 @@ public class Matrix
             nv[r] += b.get(r);
         });
         
-        /*for (int r = 0; r < w.rows(); r++)
-        {
-            //Multiply the row in weight matrix with the input vector
-            for (int c = 0; c < w.columns(); c++)
-            {
-                nv[r] += w.get(r, c) * x.get(c);
-            }
-            //Add bias
-            nv[r] += b.get(r);
-        }*/
-        
         return new Vector(nv);
     }
     
@@ -592,10 +581,7 @@ public class Matrix
         double[][] nv = new double[rows()][columns()];
         for (int r = 0; r < rows(); r++)
         {
-            for (int c = 0; c < columns(); c++)
-            {
-                nv[r][c] = v[r][c];
-            }
+            System.arraycopy(v[r], 0, nv[r], 0, columns());
         }
         return new Matrix(nv);
     }

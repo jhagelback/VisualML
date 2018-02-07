@@ -207,10 +207,7 @@ public class Vector
     public Vector copy()
     {
         double[] nv = new double[size()];
-        for (int i = 0; i < size(); i++)
-        {
-            nv[i] = v[i];
-        }
+        System.arraycopy(v, 0, nv, 0, size());
         return new Vector(nv);
     }
     
