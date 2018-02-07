@@ -21,4 +21,6 @@ Example:
 ```
 java -jar VisualML.jar -exp nn_iris_test
 ```
-This trains a Neural Network classifier on the iris_train dataset and evaluates accuracy on both the training and test datasets.
+This trains a Neural Network classifier on the iris_train.csv dataset and evaluates accuracy on both the training and test datasets.
+
+A range of common datasets are available in the data folder. The MNIST hand-written characters dataset in CSV format is available in the data_mnist folder. You need to unzip the files before using them.
