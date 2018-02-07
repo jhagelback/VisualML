@@ -152,6 +152,30 @@ public abstract class Classifier
     }
     
     /**
+     * Calculates the accuracy on the training dataset.
+     * 
+     * @return Accuracy (in %)
+     */
+    public double train_accuracy()
+    {
+        //Activation for the dataset
+        activation(data);
+        int correct = 0;
+        
+        for (int i = 0; i < data.size(); i++)
+        {
+            int pred_class = classify(i);
+            if (pred_class == data.get(i).label)
+            {
+                correct++;
+            }
+        }
+        double perc = (double)correct / (double)data.size() * 100.0;
+        
+        return perc;
+    }
+    
+    /**
      * Returns the step size of outputs (since we don't want every iteration loss to
      * be printed to console if we have many iterations).
      * 

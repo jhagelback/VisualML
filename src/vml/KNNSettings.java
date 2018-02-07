@@ -14,9 +14,14 @@ public class KNNSettings
     int K = 3;
     
     /**
-     * Normalization type to use for the data.
+     * Sets if data shall be normalized.
      */
-    int normalization_type = Dataset.Norm_NONE;
+    boolean use_normalization = false;
+    
+    /**
+     * Sets lower and upper bounds for normalized values.
+     */
+    int[] normalization_bounds = new int[2];
     
     /**
      * Distance measure L1 (Manhattan distance)
@@ -40,6 +45,7 @@ public class KNNSettings
     {
         K = 3;
         distance_measure = L2;
-        normalization_type = Dataset.Norm_NONE;
+        use_normalization = false;
+        normalization_bounds = new int[2];
     }
 }

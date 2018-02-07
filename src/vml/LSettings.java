@@ -29,9 +29,14 @@ public class LSettings
     int iterations = 200;
     
     /**
-     * Normalization type to use for the data.
+     * Sets if data shall be normalized.
      */
-    int normalization_type = Dataset.Norm_NONE;
+    boolean use_normalization = false;
+    
+    /**
+     * Sets lower and upper bounds for normalized values.
+     */
+    int[] normalization_bounds = new int[2];
     
     /**
      * Size of batches for batch training.
@@ -46,7 +51,8 @@ public class LSettings
         learningrate = 1.0;
         use_regularization = true;
         lambda = 0.01;
-        normalization_type = Dataset.Norm_NONE;
+        use_normalization = false;
+        normalization_bounds = new int[2];
         iterations = 200;
         batch_size = 0;
     }

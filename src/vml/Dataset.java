@@ -20,15 +20,10 @@ public class Dataset
     private HashMap<Integer,Integer> cats;
     //Mapping from int label to string label
     private HashMap<Integer,String> intToCat;
-    //Type of normalization used
-    private int norm_type = 0;
-    
-    /** No normalization */
-    public static int Norm_NONE = 0;
-    /** Normalize between 0 ... 1 */
-    public static int Norm_POS = 1;
-    /** Normalize between -1 ... 1 */
-    public static int Norm_NEGPOS = 2;
+    //Lower bound for normalized values
+    private int norm_min = 0;
+    //Upper bound for normalized values
+    private int norm_max = 1;
     
     /**
      * Creates a new, empty dataset.
@@ -151,34 +146,20 @@ public class Dataset
     }
     
     /**
-     * Normalizes all attributes to a value between 0 and 1.
+     * Normalizes all attributes.
      * 
-     * @param type Type of normalization (None, Pos, NegPos)
+     * @param min_value Lower bound for normalized values
+     * @param max_value Upper bound for normalized values
      */
-    public void normalizeAttributes(int type)
+    public void normalizeAttributes(int min_value, int max_value)
     {
-        norm_type = type;
+        norm_min = min_value;
+        norm_max = max_value;
         
-        if (type == Norm_NONE) return;
-        else if (type == Norm_POS) normalizePos();
-        else if (type == Norm_NEGPOS) normalizeNegPos();
-    }
-    
-    /**
-     * Returns the normalization type (None, Pos, NegPos) used on this dataset.
-     * 
-     * @return Type of normalization
-     */
-    public int getNormalizationType()
-    {
-        return norm_type;
-    }
-    
-    /**
-     * Normalizes all attributes to a value between 0 and 1.
-     */
-    public void normalizePos()
-    {
+        //Calculate range and shift
+        int range = Math.abs(max_value - min_value);
+        int shift = min_value;
+        
         //Iterate over all training instances
         for (Instance inst : data)
         {
@@ -187,25 +168,8 @@ public class Dataset
             for (int i = 0; i < nv.length; i++)
             {
                 nv[i] = (inst.x.get(i) - min[i]) / (max[i] - min[i]); // 0 ... 1
-            }
-            //Set new instance vector
-            inst.x = new Vector(nv);
-        }
-    }
-    
-    /**
-     * Normalizes all attributes to a value between -1 and 1.
-     */
-    public void normalizeNegPos()
-    {
-        //Iterate over all training instances
-        for (Instance inst : data)
-        {
-            //Create new scaled attributed vector
-            double[] nv = new double[inst.x.size()];
-            for (int i = 0; i < nv.length; i++)
-            {
-                nv[i] = (inst.x.get(i) - min[i]) / (max[i] - min[i]) * 2.0 - 1.0; // -1 ... 1
+                nv[i] *= range;
+                nv[i] += shift;
             }
             //Set new instance vector
             inst.x = new Vector(nv);

@@ -147,7 +147,11 @@ public class ClassifierFactory
             if (exists(e, "LearningRate")) settings.learningrate = getDouble(e, "LearningRate");
             if (exists(e, "RegularizationStrength")) settings.lambda = getDouble(e, "RegularizationStrength");
             if (exists(e, "UseRegularization")) settings.use_regularization = getBoolean(e, "UseRegularization");
-            if (exists(e, "NormalizationType")) settings.normalization_type = getNormType(e, "NormalizationType");
+            if (exists(e, "Normalization")) 
+            {
+                settings.use_normalization = true;
+                settings.normalization_bounds = getNormalization(e, "Normalization");
+            }
             if (exists(e, "BatchSize")) settings.batch_size = getInt(e, "BatchSize");
             
             //Read training dataset
@@ -162,10 +166,13 @@ public class ClassifierFactory
             Dataset test = ClassifierFactory.readDataset(testset_name, reader);
 
             //Normalize attributes
-            data.normalizeAttributes(settings.normalization_type);
-            if (test != null)
+            if (settings.use_normalization)
             {
-                test.normalizeAttributes(settings.normalization_type);
+                data.normalizeAttributes(settings.normalization_bounds[0], settings.normalization_bounds[1]);
+                if (test != null)
+                {
+                    test.normalizeAttributes(settings.normalization_bounds[0], settings.normalization_bounds[1]);
+                }
             }
 
             //Init classifier
@@ -202,7 +209,11 @@ public class ClassifierFactory
             if (exists(e, "LearningRate")) settings.learningrate = getDouble(e, "LearningRate");
             if (exists(e, "RegularizationStrength")) settings.lambda = getDouble(e, "RegularizationStrength");
             if (exists(e, "UseRegularization")) settings.use_regularization = getBoolean(e, "UseRegularization");
-            if (exists(e, "NormalizationType")) settings.normalization_type = getNormType(e, "NormalizationType");
+            if (exists(e, "Normalization")) 
+            {
+                settings.use_normalization = true;
+                settings.normalization_bounds = getNormalization(e, "Normalization");
+            }
             if (exists(e, "UseMomentum")) settings.use_momentum = getBoolean(e, "UseMomentum");
             if (exists(e, "BatchSize")) settings.batch_size = getInt(e, "BatchSize");
             if (exists(e, "HiddenLayers"))
@@ -227,10 +238,13 @@ public class ClassifierFactory
             Dataset test = ClassifierFactory.readDataset(testset_name, reader);
 
             //Normalize attributes
-            data.normalizeAttributes(settings.normalization_type);
-            if (test != null)
+            if (settings.use_normalization)
             {
-                test.normalizeAttributes(settings.normalization_type);
+                data.normalizeAttributes(settings.normalization_bounds[0], settings.normalization_bounds[1]);
+                if (test != null)
+                {
+                    test.normalizeAttributes(settings.normalization_bounds[0], settings.normalization_bounds[1]);
+                }
             }
 
             //Init classifier
@@ -263,7 +277,11 @@ public class ClassifierFactory
             //Read settings
             KNNSettings settings = new KNNSettings();
             if (exists(e, "K")) settings.K = getInt(e, "K");
-            if (exists(e, "NormalizationType")) settings.normalization_type = getNormType(e, "NormalizationType");
+            if (exists(e, "Normalization")) 
+            {
+                settings.use_normalization = true;
+                settings.normalization_bounds = getNormalization(e, "Normalization");
+            }
             if (exists(e, "DistanceMeasure"))
             {
                 String t = get(e, "DistanceMeasure");
@@ -283,10 +301,13 @@ public class ClassifierFactory
             Dataset test = ClassifierFactory.readDataset(testset_name, reader);
 
             //Normalize attributes
-            data.normalizeAttributes(settings.normalization_type);
-            if (test != null)
+            if (settings.use_normalization)
             {
-                test.normalizeAttributes(settings.normalization_type);
+                data.normalizeAttributes(settings.normalization_bounds[0], settings.normalization_bounds[1]);
+                if (test != null)
+                {
+                    test.normalizeAttributes(settings.normalization_bounds[0], settings.normalization_bounds[1]);
+                }
             }
 
             //Init classifier
@@ -330,22 +351,33 @@ public class ClassifierFactory
     }
     
     /**
-     * Returns the normalization type for a child node in this element.
+     * Returns the normalization bounds for a child node in this element.
      * 
      * @param e Current element
      * @param node Child node to search for (NormalizationType)
-     * @return Normalization type (None, NegPos or Pos)
+     * @return Normalization bounds (min and max value)
      */
-    private static int getNormType(Element e, String node)
+    private static int[] getNormalization(Element e, String node)
     {
-        if (e.getElementsByTagName(node).getLength() == 1)
+        int[] bounds = new int[2];
+        
+        try
         {
-            String t = e.getElementsByTagName(node).item(0).getTextContent();
-            if (t.equalsIgnoreCase("none")) return Dataset.Norm_NONE;
-            if (t.equalsIgnoreCase("NegPos")) return Dataset.Norm_NEGPOS;
-            if (t.equalsIgnoreCase("Pos")) return Dataset.Norm_POS;
+            if (e.getElementsByTagName(node).getLength() == 1)
+            {
+                String str = e.getElementsByTagName(node).item(0).getTextContent();
+                String[] t = str.split(":");
+                bounds[0] = Integer.parseInt(t[0]);
+                bounds[1] = Integer.parseInt(t[1]);
+            }
         }
-        return Dataset.Norm_NONE;
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            bounds = new int[2];
+        }
+        
+        return bounds;
     }
     
     /**
