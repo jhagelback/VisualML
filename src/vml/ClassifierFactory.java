@@ -38,9 +38,10 @@ public class ClassifierFactory
      * the data folder. The application exits if the dataset cannot be found.
      * 
      * @param dataset_name Name of the training dataset
+     * @param reader Data reader instance
      * @return The dataset
      */
-    public static Dataset readDataset(String dataset_name)
+    public static Dataset readDataset(String dataset_name, DataSource reader)
     {
         //Check if dataset is found
         if (dataset_name == null) return null;
@@ -50,8 +51,7 @@ public class ClassifierFactory
         if (!f.exists()) return null;
         
         //Read data
-        DataSource reader = new DataSource(fname);
-        Dataset data = reader.read();
+        Dataset data = reader.read(fname);
         
         return data;
     }
@@ -119,6 +119,7 @@ public class ClassifierFactory
         catch (Exception ex)
         {
             System.err.println("Experiments XML file is invalid");
+            ex.printStackTrace();
             System.exit(1);
         }
         
@@ -150,14 +151,15 @@ public class ClassifierFactory
             if (exists(e, "BatchSize")) settings.batch_size = getInt(e, "BatchSize");
             
             //Read training dataset
-            Dataset data = ClassifierFactory.readDataset(dataset_name);
+            DataSource reader = new DataSource();
+            Dataset data = ClassifierFactory.readDataset(dataset_name, reader);
             if (data == null)
             {
                 System.out.println("Unable to find training dataset '" + dataset_name + "'");
                 System.exit(1);
             }
             //Read test dataset
-            Dataset test = ClassifierFactory.readDataset(testset_name);
+            Dataset test = ClassifierFactory.readDataset(testset_name, reader);
 
             //Normalize attributes
             data.normalizeAttributes(settings.normalization_type);
@@ -172,6 +174,7 @@ public class ClassifierFactory
         catch (Exception ex)
         {
             System.err.println("Experiments XML file is invalid");
+            ex.printStackTrace();
             System.exit(1);
         }
         
@@ -213,14 +216,15 @@ public class ClassifierFactory
             }
             
             //Read training dataset
-            Dataset data = ClassifierFactory.readDataset(dataset_name);
+            DataSource reader = new DataSource();
+            Dataset data = ClassifierFactory.readDataset(dataset_name, reader);
             if (data == null)
             {
                 System.out.println("Unable to find training dataset '" + dataset_name + "'");
                 System.exit(1);
             }
             //Read test dataset
-            Dataset test = ClassifierFactory.readDataset(testset_name);
+            Dataset test = ClassifierFactory.readDataset(testset_name, reader);
 
             //Normalize attributes
             data.normalizeAttributes(settings.normalization_type);
@@ -268,14 +272,15 @@ public class ClassifierFactory
             }
             
             //Read training dataset
-            Dataset data = ClassifierFactory.readDataset(dataset_name);
+            DataSource reader = new DataSource();
+            Dataset data = ClassifierFactory.readDataset(dataset_name, reader);
             if (data == null)
             {
                 System.out.println("Unable to find training dataset '" + dataset_name + "'");
                 System.exit(1);
             }
             //Read test dataset
-            Dataset test = ClassifierFactory.readDataset(testset_name);
+            Dataset test = ClassifierFactory.readDataset(testset_name, reader);
 
             //Normalize attributes
             data.normalizeAttributes(settings.normalization_type);

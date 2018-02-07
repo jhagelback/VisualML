@@ -20,12 +20,9 @@ public class DataSource
     
     /**
      * Creates a new data reader.
-     * 
-     * @param filename Filename for the data file
      */
-    public DataSource(String filename)
+    public DataSource()
     {
-        this.filename = filename;
         catToInt = new HashMap<>();
         intToCat = new HashMap<>();
     }
@@ -33,10 +30,12 @@ public class DataSource
     /**
      * Reads the dataset and returns a dataset container.
      * 
+     * @param filename Filename for the data file
      * @return Dataset container
      */
-    public Dataset read()
+    public Dataset read(String filename)
     {
+        this.filename = filename;
         Dataset dset = new Dataset();
         
         try

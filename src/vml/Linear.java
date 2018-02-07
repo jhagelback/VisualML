@@ -88,8 +88,7 @@ public class Linear extends Classifier
         settings.iterations = 20;
         
         //Read data
-        DataSource reader = new DataSource("data/datademo.csv");
-        data = reader.read();
+        data = ClassifierFactory.readDataset("data/demo.csv", new DataSource());
         X = data.input_matrix();
         y = data.label_vector();
     }
