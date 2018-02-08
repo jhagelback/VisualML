@@ -66,12 +66,11 @@
         <Iterations>100</Iterations>
         <LearningRate>0.4</LearningRate>
         <Normalization>0:2</Normalization>
-        <BatchSize>20</BatchSize>
     </Experiment>
     <Experiment id="l_mnist">
         <Classifier>Linear</Classifier>
         <TrainingData>data_mnist/mnist_train.csv</TrainingData> <!-- 91.52% -->
-        <TestData>data_mnist/mnist_test.csv</TestData> <!-- 91.73% -->
+        <TestData>data_mnist/mnist_test.csv</TestData> <!-- 91.70% -->
         <Iterations>1000</Iterations>
         <LearningRate>0.4</LearningRate>
         <UseRegularization>false</UseRegularization>
@@ -192,8 +191,8 @@
     </Experiment>
     <Experiment id="nn_mnist">
         <Classifier>NN</Classifier>
-        <TrainingData>data_mnist/mnist_train.csv</TrainingData> <!-- 94.51% -->
-        <TestData>data_mnist/mnist_test.csv</TestData> <!-- 94.46% -->
+        <TrainingData>data_mnist/mnist_train.csv</TrainingData> <!-- 94.49% -->
+        <TestData>data_mnist/mnist_test.csv</TestData> <!-- 94.43% -->
         <Iterations>2000</Iterations>
         <LearningRate>0.2</LearningRate>
         <UseRegularization>false</UseRegularization>
@@ -282,8 +281,8 @@
     </Experiment>
     <Experiment id="dnn_mnist">
         <Classifier>NN</Classifier>
-        <TrainingData>data_mnist/mnist_train.csv</TrainingData> <!-- 93.25% -->
-        <TestData>data_mnist/mnist_test.csv</TestData> <!-- 93.01% -->
+        <TrainingData>data_mnist/mnist_train.csv</TrainingData> <!-- 93.26% -->
+        <TestData>data_mnist/mnist_test.csv</TestData> <!-- 92.83% -->
         <Iterations>2000</Iterations>
         <LearningRate>0.2</LearningRate>
         <UseRegularization>false</UseRegularization>
