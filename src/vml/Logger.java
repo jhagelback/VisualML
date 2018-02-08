@@ -30,7 +30,7 @@ public class Logger
     /**
      * Creates a new GUI logger.
      * 
-     * @return 
+     * @return GUI logger
      */
     public static Logger getGUILogger()
     {

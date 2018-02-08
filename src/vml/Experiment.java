@@ -91,7 +91,7 @@ public class Experiment
             //Evaluate accuracy
             acc[f] = c.test_accuracy();
             sum += acc[f];
-            out.appendText("    Fold " + f + ": " + df.format(acc[f]) + "%");
+            out.appendText("    Fold " + (f + 1) + ": " + df.format(acc[f]) + "%");
         }
         sum /= 10.0;
         
