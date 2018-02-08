@@ -14,14 +14,16 @@ To run the GUI, run the VisualML.jar file without any parameters
 
 To run a classification task, run the VisualML.jar file with the following parameters:
 ```
-java -jar VisualML.jar -exp [id]
+java -jar VisualML.jar -exp [id] train|test|cv
 ```
-where [id] is the identifier for an experiment in the experiments.xml file.
+where [id] is the identifier for an experiment in the experiments.xml file. The next parameter is evaluation options (evaluate on training and/or test datasets and/or cross-validation).
 Example:
 ```
-java -jar VisualML.jar -exp nn_iris_test
+java -jar VisualML.jar -exp nn_iris_test train|test
 ```
 This trains a Neural Network classifier on the iris_train.csv dataset and evaluates accuracy on both the training and test datasets.
+
+Experiments can also be run in the right panel in the GUI window.
 
 A range of common datasets are available in the data folder. The MNIST hand-written characters dataset in CSV format is available in the data_mnist folder. You need to unzip the files before using them.
 
@@ -46,9 +48,12 @@ Classifier c = ClassifierFactory.build("nn_iris_test");
 ```
 Now you can train and evaluate the accuracy on the dataset:
 ```
-c.train();
-c.evaluate();
+Logger out = Logger.getConsoleLogger();
+c.train(out);
+c.evaluate(true, true, out);
 ```
+The first two parameters in the evaluate method is if the classifier shall be evaluated on the training dataset and test dataset.
+
 You can classify a new instance with:
 ```
 String pred_label = c.classify(Instance);
