@@ -82,16 +82,23 @@ public class KNN extends Classifier
             KInstance ki = new KInstance(inst.x, inst.label);
             d.add(ki);
         }
-        
-        System.out.println("k-Nearest Neighbor classifier");
     }
     
     /**
      * Trains the classifier.
+     * 
+     * @param o Logger for log info
      */
     @Override
-    public void train()
+    public void train(Logger o)
     {
+        o.appendText("k-Nearest Neightbor Classifier");
+        o.appendText("Training data: " + data.getName());
+        if (test != null)
+        {
+            o.appendText("Test data: " + test.getName());
+        }
+        
         //Do nothing here
     }
     

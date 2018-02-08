@@ -12,26 +12,30 @@ import java.util.Random;
 public abstract class Classifier 
 {
     //Output formatting
-    private DecimalFormat df = new DecimalFormat("0.00"); 
+    private static DecimalFormat df = new DecimalFormat("0.00"); 
     //Randomizer
     public static Random rnd = new Random(2);
     //Training dataset
     protected Dataset data;
     //Test dataset
     protected Dataset test;
-    
-    protected int batch_size = 100;
+    //Batch size for batch training. Set to 0 to disable batch training.
+    protected int batch_size = 0;
+    //Current batch number
     protected int batch_no = 0;
     
+    /**
+     * Get next batch for batch training
+     * 
+     * @return Next batch of training instances
+     */
     public Dataset getNextBatch()
     {
         Dataset b = new Dataset();
         
         //Start and end indexes
         int start = batch_no * batch_size;
-        if (start != 0) start++;
         int end = (batch_no + 1) * batch_size;
-        
         for (int i = start; i < end; i++)
         {
             if (i < data.size())
@@ -46,9 +50,35 @@ public abstract class Classifier
     }
     
     /**
-     * Trains the classifier on a dataset.
+     * Formats elapes time to a suitable string.
+     * 
+     * @param ms Elapsed time in milliseconds
+     * @return Time string
      */
-    public abstract void train();
+    public static String time_string(long ms)
+    {
+        String s = ms + " ms";
+        if (ms >= 1000 && ms < 60000)
+        {
+            double sec = (double)ms / 1000.0;
+            s = df.format(sec) + " sec";
+        }
+        if (ms >= 60000)
+        {
+            int mins = (int)(ms / 60000);
+            int secs = (int)(ms % 60000);
+            double sec = (double)secs / 1000.0;
+            s = mins + " min " + df.format(sec) + " sec";
+        }
+        return s;
+    }
+    
+    /**
+     * Trains the classifier on a dataset.
+     * 
+     * @param out Logger for log info
+     */
+    public abstract void train(Logger out);
         
     /**
      * Returns the training dataset.
@@ -103,35 +133,41 @@ public abstract class Classifier
     /**
      * Evaluates the accuracy on the training dataset and, if specified, test dataset.
      * 
-     * @return Accuracy
+     * @param eval_train Sets if accuracy shall be evaluated on the training dataset
+     * @param eval_test Sets if accuracy shall be evaluated on the test dataset
+     * @param out Logger for log info
      */
-    public double evaluate()
+    public void evaluate(boolean eval_train, boolean eval_test, Logger out)
     {
-        System.out.println("\nTraining dataset");
-        long st = System.currentTimeMillis();
-        double acc = evaluate(data);
-        long el = System.currentTimeMillis() - st;
-        System.out.println("Evaluation time: " + el + " ms");
+        long st,el;
         
-        if (test != null)
+        if (eval_train)
         {
-            System.out.println("\nTest dataset");
+            out.appendText("\nTraining dataset");
             st = System.currentTimeMillis();
-            acc = evaluate(test);
+            evaluate(data, out);
             el = System.currentTimeMillis() - st;
-            System.out.println("Evaluation time: " + el + " ms");
+            out.appendText("Evaluation time: " + time_string(el));
         }
         
-        return acc;
+        if (test != null && eval_test)
+        {
+            out.appendText("\nTest dataset");
+            st = System.currentTimeMillis();
+            evaluate(test, out);
+            el = System.currentTimeMillis() - st;
+            out.appendText("Evaluation time: " + time_string(el));
+        }
     }
     
     /**
      * Evaluates the accuracy on a dataset.
      * 
      * @param d The dataset
+     * @param out Logger for log info
      * @return Accuracy on the dataset
      */
-    private double evaluate(Dataset d)
+    private double evaluate(Dataset d, Logger out)
     {
         //Activation for the dataset
         activation(d);
@@ -147,7 +183,7 @@ public abstract class Classifier
         }
         double perc = (double)correct / (double)d.size() * 100.0;
         
-        System.out.println("Accuracy: " + correct + "/" + d.size() + "  " + df.format(perc) + "%");
+        out.appendText("Accuracy: " + correct + "/" + d.size() + "  " + df.format(perc) + "%");
         return perc;
     }
     
@@ -176,11 +212,38 @@ public abstract class Classifier
     }
     
     /**
+     * Calculates the accuracy on the test dataset.
+     * 
+     * @return Accuracy (in %)
+     */
+    public double test_accuracy()
+    {
+        //Error check
+        if (test == null) return 0;
+        
+        //Activation for the dataset
+        activation(test);
+        int correct = 0;
+        
+        for (int i = 0; i < test.size(); i++)
+        {
+            int pred_class = classify(i);
+            if (pred_class == test.get(i).label)
+            {
+                correct++;
+            }
+        }
+        double perc = (double)correct / (double)test.size() * 100.0;
+        
+        return perc;
+    }
+    
+    /**
      * Returns the step size of outputs (since we don't want every iteration loss to
      * be printed to console if we have many iterations).
      * 
      * @param iterations Number of iterations
-     * @return Output step size
+     * @return Logger step size
      */
     public int getOutputStep(int iterations)
     {

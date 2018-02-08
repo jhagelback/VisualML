@@ -4,7 +4,7 @@ package vml;
 import java.io.File;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.Locale;
+import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
@@ -21,6 +21,8 @@ public class ClassifierFactory
 {
     //experiments.xml root node
     private static Element root;
+    //Last modified time for xml file
+    private static long last_mod;
     
     /**
      * Builds the classifier with the specified experiment id.
@@ -30,6 +32,7 @@ public class ClassifierFactory
      */
     public static Classifier build(String id)
     {
+        Classifier.rnd = new Random(2);
         return readSettings(id);
     }
     
@@ -69,20 +72,7 @@ public class ClassifierFactory
         
         try
         {
-            //Read xml file, if not already read into memory
-            if (root == null)
-            {
-                File xml = new File("experiments.xml");
-                if (!xml.exists())
-                {
-                    System.err.println("Experiments XML file does not exist");
-                    System.exit(1);
-                }
-                DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-                Document doc = dBuilder.parse(xml);
-                root = doc.getDocumentElement();
-            }
+            openXML();
             
             //Search for experiment nodes
             NodeList nodes = root.getElementsByTagName("Experiment");
@@ -319,6 +309,81 @@ public class ClassifierFactory
         }
         
         return c;
+    }
+    
+    /**
+     * Returns a list of all experiment IDs in the experiments.xml file.
+     * 
+     * @return List of experiment IDs
+     */
+    public static ArrayList<String> findAvailableExperiments()
+    {
+        ArrayList<String> exp = new ArrayList<>();
+        
+        try
+        {
+            openXML();
+            
+            //Search for experiment nodes
+            NodeList nodes = root.getElementsByTagName("Experiment");
+            for (int n = 0; n < nodes.getLength(); n++)
+            {
+                Node node = nodes.item(n);
+                //Convert from Node to Element
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    Element e = (Element) node;
+                    //Find experiment id
+                    String cid = e.getAttribute("id");
+                    exp.add(cid);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            System.err.println("Experiments XML file is invalid");
+            System.exit(1);
+        }
+        
+        return exp;
+    }
+    
+    /**
+     * Reads the settings.xml file into memory.
+     */
+    private static void openXML()
+    {
+        //Read xml file, if not already read into memory
+        try
+        {
+            //Check if file exists and if it has been modified
+            File xml = new File("experiments.xml");
+            if (!xml.exists())
+            {
+                System.err.println("Experiments XML file does not exist");
+                System.exit(1);
+            }
+            //Last modified
+            long lm = xml.lastModified();
+            if (lm > last_mod)
+            {
+                //File has been modified. Reload xml
+                last_mod = lm;
+                root = null;
+            }
+            
+            if (root == null)
+            {
+                DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+                Document doc = dBuilder.parse(xml);
+                root = doc.getDocumentElement();
+            }
+        }
+        catch (Exception ex)
+        {
+            System.err.println("Experiments XML file is invalid");
+            System.exit(1);
+        }
     }
     
     /**

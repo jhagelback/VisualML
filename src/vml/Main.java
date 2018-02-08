@@ -1,11 +1,13 @@
 
 package vml;
 
+import java.util.ArrayList;
 import java.text.DecimalFormat;
 import javafx.application.Application;
 import javafx.event.*;
 import javafx.geometry.*;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -19,6 +21,9 @@ import javafx.stage.WindowEvent;
  */
 public class Main extends Application
 {
+    //Application version
+    private String version = "3.0";
+    
     //Panel to render stuff on
     private VizCanvas p;
     //The classifier
@@ -37,6 +42,18 @@ public class Main extends Application
     private Label label_loss;
     //Accuracy label
     private Label label_acc;
+    //Run visualization button
+    private Button bt2;
+    //Experiments dropdown
+    private ComboBox dd;
+    //Evaluation checkboxes
+    private CheckBox ecb1,ecb2,ecb3;
+    //Run experiment button
+    private Button rt;
+    //Output textarea
+    private TextArea output;
+    //Output log info
+    private Logger out;
     //Thread run status
     private boolean running = false;
     
@@ -54,8 +71,11 @@ public class Main extends Application
     {
         //Init labels
         label_it = new Label("Iteration: ");
+        label_it.setPrefWidth(100);
         label_loss = new Label("Loss: ");
+        label_loss.setPrefWidth(120);
         label_acc = new Label("Accuracy: ");
+        label_acc.setPrefWidth(120);
         
         //Init buttons
         Button bt1 = new Button();
@@ -66,7 +86,7 @@ public class Main extends Application
         });
         bt1.setText("Iterate");
         bt1.setPrefWidth(90);
-        Button bt2 = new Button();
+        bt2 = new Button();
         bt2.setOnAction((ActionEvent e) -> {
             //Error check
             if (c == null) return;
@@ -76,6 +96,8 @@ public class Main extends Application
             if (!running) 
             {
                 running = true;
+                bt1.setDisable(true);
+                rt.setDisable(true);
                 bt2.setText("Stop");
                 
                 //Thread run
@@ -94,26 +116,88 @@ public class Main extends Application
             {
                 running = false;
                 bt2.setText("Start");
+                bt1.setDisable(false);
+                rt.setDisable(false);
             }
         });
         bt2.setText("Run");
         bt2.setPrefWidth(90);
         
-        //Right panel (buttons and labels)
-        VBox rp = new VBox();
-        rp.setPrefSize(220, 100 * VizCanvas.cell_w);
-        rp.setPadding(new Insets(10));
-        rp.setSpacing(8);
-        rp.getChildren().addAll(bt1, bt2, label_it, label_loss, label_acc);
-        rp.setPadding(new Insets(10));
+        //Bottom panel (buttons and labels)
+        HBox bp = new HBox();
+        bp.setAlignment(Pos.CENTER);
+        bp.setPrefSize(700, 60);
+        bp.setPadding(new Insets(10));
+        bp.setSpacing(10);
+        bp.getChildren().addAll(bt1, bt2, label_it, label_loss, label_acc);
+        bp.setPadding(new Insets(10));
         
         //Main layout panel
         GridPane pane = new GridPane(); 
-        GridPane.setHalignment(rp, HPos.LEFT);
-        GridPane.setValignment(rp, VPos.TOP);
+        GridPane.setHalignment(bp, HPos.LEFT);
+        GridPane.setValignment(bp, VPos.TOP);
         pane.setHgap(0);
         pane.setVgap(0);
         pane.setPadding(new Insets(10));
+        
+        //Right panel (experiments)
+        Label lexp = new Label("Select Experiment");
+        lexp.setTextFill(Color.web("#0076a3"));
+        Label leval = new Label("Evaluation Options");
+        leval.setTextFill(Color.web("#0076a3"));
+        
+        VBox rp = new VBox();
+        rp.setAlignment(Pos.TOP_LEFT);
+        rp.setPrefSize(370, 700);
+        rp.setPadding(new Insets(10));
+        rp.setSpacing(8);
+        //Button
+        rt = new Button();
+        rt.setOnAction((ActionEvent e) -> {
+            //Find selected experiment
+            String sel_exp = (String)dd.getValue();
+            if (sel_exp != null && !running)
+            {
+                boolean eval_train = ecb1.isSelected();
+                boolean eval_test = ecb2.isSelected();
+                boolean eval_cv = ecb3.isSelected();
+                output.setText("");
+                new Thread() {
+                    @Override
+                    public void run() {
+                        rt.setDisable(true);
+                        bt1.setDisable(true);
+                        bt2.setDisable(true);
+                        running = true;
+                        Experiment.run(sel_exp, eval_train, eval_test, eval_cv, out);
+                        running = false;
+                        rt.setDisable(false);
+                        bt1.setDisable(false);
+                        bt2.setDisable(false);
+                    }
+                }.start();
+            }
+        });
+        rt.setText("Run Experiment");
+        rt.setPrefWidth(120);
+        //Experiments dropdown
+        dd = new ComboBox();
+        dd.setPrefWidth(220);
+        ArrayList<String> exp = ClassifierFactory.findAvailableExperiments();
+        dd.getItems().addAll(exp);
+        //Evaluation checkbox
+        ecb1 = new CheckBox("Training dataset");
+        ecb1.setSelected(true);
+        ecb2 = new CheckBox("Test dataset (if specified)");
+        ecb2.setSelected(true);
+        ecb3 = new CheckBox("Cross Validation");
+        ecb3.setSelected(false);
+        //Text field
+        output = new TextArea("");
+        output.setEditable(false);
+        out = Logger.getGUILogger();
+        output.setPrefRowCount(29);
+        rp.getChildren().addAll(lexp, dd, leval, ecb1, ecb2, ecb3, rt, output);
         
         //Add menu
         pane.add(buildMenu(), 0, 0);
@@ -121,16 +205,19 @@ public class Main extends Application
         //Add right panel
         pane.add(rp, 1, 1);
         
+        //Add bottom panel
+        pane.add(bp, 0, 2);
+        
         //Visualization canvas
         p = new VizCanvas();
         p.update();
         pane.add(p, 0, 1);
         
         //Create scene
-        Scene scene = new Scene(pane, 100 * VizCanvas.cell_w + 160, 100 * VizCanvas.cell_w + 55);
+        Scene scene = new Scene(pane, 1100, 810);
         
         //Start JavaFX stage
-        primaryStage.setTitle("Visual ML");
+        primaryStage.setTitle("VisualML " + version);
         primaryStage.setScene(scene);
         primaryStage.show();
         
@@ -152,6 +239,22 @@ public class Main extends Application
                     label_it.setText("Iteration: " + iteration);
                     label_loss.setText("Loss: " + df3.format(loss));
                     label_acc.setText("Accuracy: " + df1.format(acc) + "%");
+                }
+            }
+        }.start();
+        
+        //Timer for updating output textarea
+        new AnimationTimer() {
+            private long lastUpdate = 0 ;
+            @Override
+            public void handle(long now) {
+                if (now - lastUpdate >= 10_000_000) {
+                    lastUpdate = now;
+                    while (!out.queue.isEmpty())
+                    {
+                        String text = out.queue.remove(0);
+                        output.appendText(text);
+                    }
                 }
             }
         }.start();
@@ -377,19 +480,35 @@ public class Main extends Application
         }
         else if (args[0].equalsIgnoreCase("-exp"))
         {
-            if (args.length == 2)
+            if (args.length >= 2)
             {
-                Experiment.run(args[1]);
+                boolean eval_train = true;
+                boolean eval_test = true;
+                boolean eval_cv = false;
+                
+                if (args.length == 3)
+                {
+                    if (args[2].contains("train")) eval_train = true;
+                    else eval_train = false;
+                    
+                    if (args[2].contains("test")) eval_test = true;
+                    else eval_test = false;
+                    
+                    if (args[2].contains("cv")) eval_cv = true;
+                    else eval_cv = false;
+                }
+                
+                Experiment.run(args[1], eval_train, eval_test, eval_cv, Logger.getConsoleLogger());
             }
             else
             {
-                System.err.println("Wrong arguments: -exp [id]");
+                System.err.println("Wrong arguments: -exp [id] train|test|cv");
             }
             System.exit(0);
         }
         else
         {
-            System.err.println("Wrong arguments: [-experiment|-gui] [args]");
+            System.err.println("Wrong arguments: [-exp|-gui] [args]");
             System.exit(1);
         }
     }      

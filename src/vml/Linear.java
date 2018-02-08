@@ -45,8 +45,6 @@ public class Linear extends Classifier
         //Set dataset
         this.data = data;
         this.test = test;
-        X = data.input_matrix();
-        y = data.label_vector();
         
         //Size of dataset
         int noCategories = data.noCategories();
@@ -60,8 +58,6 @@ public class Linear extends Classifier
         //Settings
         this.settings = settings;
         batch_size = settings.batch_size;
-        
-        System.out.println("Linear Softmax classifier");
     }
     
     /**
@@ -89,16 +85,24 @@ public class Linear extends Classifier
         
         //Read data
         data = ClassifierFactory.readDataset("data/demo.csv", new DataSource());
-        X = data.input_matrix();
-        y = data.label_vector();
     }
     
     /**
      * Trains the classifier.
+     * 
+     * @param o Logger for log info
      */
     @Override
-    public void train()
+    public void train(Logger o)
     {
+        o.appendText("Linear Softmax classifier");
+        o.appendText("Training data: " + data.getName());
+        if (test != null)
+        {
+            o.appendText("Test data: " + test.getName());
+        }
+        o.appendText("\nTraining classifier");
+        
         //For output
         int out_step = getOutputStep(settings.iterations);
         
@@ -113,14 +117,6 @@ public class Linear extends Classifier
         {
             loss = iterate();
             
-            //Error check
-            if (Double.isNaN(loss) || Double.isInfinite(loss))
-            {
-                //Weights have exploded. Stop training
-                System.err.println("Warning: weights overflow. Training is stopped.");
-                break;
-            }
-            
             //Check if we have a new best loss
             if (loss < best_loss)
             {
@@ -132,7 +128,7 @@ public class Linear extends Classifier
             }
             
             //Output result
-            if (i % out_step == 0 || i == settings.iterations || i == 1) System.out.println("  iteration " + i + ":  loss " + df.format(loss));
+            if (i % out_step == 0 || i == settings.iterations || i == 1) o.appendText("    iteration " + i + ":  loss " + df.format(loss));
         }
         
         //Set best weights
@@ -141,8 +137,8 @@ public class Linear extends Classifier
         {
             w = bestW;
             b = bestB;
-            activation();   
-            System.out.println("  Best loss " + df.format(best_loss) + " at iteration " + best_iteration);
+            activation();
+            o.appendText("  Best loss " + df.format(best_loss) + " at iteration " + best_iteration);
         }
     }
     
@@ -159,6 +155,11 @@ public class Linear extends Classifier
             Dataset b = getNextBatch();
             X = b.input_matrix();
             y = b.label_vector();
+        }
+        else
+        {
+            X = data.input_matrix();
+            y = data.label_vector();
         }
 
         //Forward pass (activation)

@@ -36,8 +36,6 @@ public class NN extends Classifier
         //Set dataset
         this.data = data;
         this.test = test;
-        X = data.input_matrix();
-        y = data.label_vector();
         
         //Size of dataset
         int noCategories = data.noCategories();
@@ -59,8 +57,6 @@ public class NN extends Classifier
         
         //Create layers
         out = new OutLayer(settings.layers[settings.layers.length - 1], noCategories, settings);
-        
-        System.out.println("Neural Network classifier (" + hidden.length + " hidden layers)");
     }
     
     /**
@@ -138,6 +134,11 @@ public class NN extends Classifier
             X = b.input_matrix();
             y = b.label_vector();
         }
+        else
+        {
+            X = data.input_matrix();
+            y = data.label_vector();
+        }
         
         forward();
         double loss = backward();
@@ -159,10 +160,20 @@ public class NN extends Classifier
     
     /**
      * Trains the classifier.
+     * 
+     * @param o Logger for log info
      */
     @Override
-    public void train()
+    public void train(Logger o)
     {
+        o.appendText("Neural Network classifier (" + hidden.length + " hidden layers)");
+        o.appendText("Training data: " + data.getName());
+        if (test != null)
+        {
+            o.appendText("Test data: " + test.getName());
+        }
+        o.appendText("\nTraining classifier");
+        
         //For output
         int out_step = getOutputStep(settings.iterations);
         
@@ -178,14 +189,6 @@ public class NN extends Classifier
         {
             loss = iterate();
             
-            //Error check
-            if (Double.isNaN(loss))
-            {
-                //Weights have exploded. Stop training
-                System.err.println("Warning: weights overflow. Training is stopped.");
-                break;
-            }
-            
             //Check if we have a new best loss
             if (loss < best_loss)
             {
@@ -200,7 +203,7 @@ public class NN extends Classifier
             }
             
             //Output result
-            if (i % out_step == 0 || i == settings.iterations || i == 1) System.out.println("  iteration " + i + ":  loss " + df.format(loss));
+            if (i % out_step == 0 || i == settings.iterations || i == 1) o.appendText("    iteration " + i + ":  loss " + df.format(loss));
         }
         
         //Set best weights
@@ -210,7 +213,7 @@ public class NN extends Classifier
             out = bOut;
             hidden = bHidden;
             forward();
-            System.out.println("  Best loss " + df.format(best_loss) + " at iteration " + best_iteration);
+            o.appendText("  Best loss " + df.format(best_loss) + " at iteration " + best_iteration);
         }
     }
 }

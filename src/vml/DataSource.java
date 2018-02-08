@@ -36,7 +36,8 @@ public class DataSource
     public Dataset read(String filename)
     {
         this.filename = filename;
-        Dataset dset = new Dataset();
+        File f = new File(filename);
+        Dataset dset = new Dataset(f.getName());
         
         try
         {

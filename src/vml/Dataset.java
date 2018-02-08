@@ -20,10 +20,8 @@ public class Dataset
     private HashMap<Integer,Integer> cats;
     //Mapping from int label to string label
     private HashMap<Integer,String> intToCat;
-    //Lower bound for normalized values
-    private int norm_min = 0;
-    //Upper bound for normalized values
-    private int norm_max = 1;
+    //Private string name
+    private String name;
     
     /**
      * Creates a new, empty dataset.
@@ -32,6 +30,29 @@ public class Dataset
     {
         data = new ArrayList<>();
         cats = new HashMap<>();
+        this.name = "";
+    }
+    
+    /**
+     * Creates a new, empty dataset.
+     * 
+     * @param name Name of dataset
+     */
+    public Dataset(String name)
+    {
+        data = new ArrayList<>();
+        cats = new HashMap<>();
+        this.name = name;
+    }
+    
+    /**
+     * Get the filename for this dataset.
+     * 
+     * @return Filename
+     */
+    public String getName()
+    {
+        return name;
     }
     
     /**
@@ -136,6 +157,53 @@ public class Dataset
     }
     
     /**
+     * Returns a subset containing all instances within the specified range.
+     * 
+     * @param start Start index
+     * @param end End index
+     * @return Subset of this dataset
+     */
+    public Dataset getSubset(int start, int end)
+    {
+        Dataset sub = new Dataset();
+        for (int i = start; i < end; i++)
+        {
+            sub.add(data.get(i));
+        }
+        sub.cats = cats;
+        sub.intToCat = intToCat;
+        sub.max = max;
+        sub.min = min;
+        
+        return sub;
+    }
+    
+    /**
+     * Returns a subset containing all instances not within the specified range.
+     * 
+     * @param start Start index
+     * @param end End index
+     * @return Subset of this dataset
+     */
+    public Dataset getInverseSubset(int start, int end)
+    {
+        Dataset sub = new Dataset();
+        for (int i = 0; i < data.size(); i++)
+        {
+            if (i < start || i >= end)
+            {
+                sub.add(data.get(i));
+            }
+        }
+        sub.cats = cats;
+        sub.intToCat = intToCat;
+        sub.max = max;
+        sub.min = min;
+        
+        return sub;
+    }
+    
+    /**
      * Returns the size of the dataset.
      * 
      * @return Size of dataset
@@ -153,9 +221,6 @@ public class Dataset
      */
     public void normalizeAttributes(int min_value, int max_value)
     {
-        norm_min = min_value;
-        norm_max = max_value;
-        
         //Calculate range and shift
         int range = Math.abs(max_value - min_value);
         int shift = min_value;

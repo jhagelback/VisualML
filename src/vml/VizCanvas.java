@@ -20,7 +20,7 @@ public class VizCanvas extends Canvas
     //Data attribute shift
     private double shift;
     //Width of cells in the rendered panel
-    public static int cell_w = 7;
+    private final int cell_w = 7;
     //True of panels is rendering, false otherwise
     public boolean updating;
     //Predicted class values
@@ -31,7 +31,7 @@ public class VizCanvas extends Canvas
      */
     public VizCanvas()
     {
-        super(101 * cell_w, 101 * cell_w);
+        super(707, 707);
     }
     
     /**
