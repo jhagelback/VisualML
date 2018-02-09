@@ -72,16 +72,6 @@ public class KNN extends Classifier
         
         //Settings
         this.settings = settings;
-        
-        //Init internal data array
-        d = new ArrayList<>(data.size());
-        //Iterate over all training instances
-        for (Instance inst : data.data)
-        {
-            //Create internal instance
-            KInstance ki = new KInstance(inst.x, inst.label);
-            d.add(ki);
-        }
     }
     
     /**
@@ -99,7 +89,15 @@ public class KNN extends Classifier
             o.appendText("Test data: " + test.getName());
         }
         
-        //Do nothing here
+         //Init internal data array
+        d = new ArrayList<>(data.size());
+        //Iterate over all training instances
+        for (Instance inst : data.data)
+        {
+            //Create internal instance
+            KInstance ki = new KInstance(inst.x, inst.label);
+            d.add(ki);
+        }
     }
     
     /**

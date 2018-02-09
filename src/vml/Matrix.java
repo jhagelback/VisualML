@@ -56,15 +56,32 @@ public class Matrix
      */
     public static Matrix random(int r, int c, double scale, Random rnd)
     {
+        //Generate random double values between 0: ... 1
+        double min = 1000;
+        double max = -1000;
         double[][] v = new double[r][c];
         for (int a = 0; a < r; a++)
         {
             for (int b = 0; b < c; b++)
             {
-                v[a][b] = rnd.nextDouble() * scale;
+                v[a][b] = rnd.nextDouble();
+                if (v[a][b] < min) min = v[a][b];
+                if (v[a][b] > max) max = v[a][b];
             }
         }
-        return new Matrix(v);
+        
+        //Normalize values between: -scale ... scale
+        double[][] sv = new double[r][c];
+        for (int a = 0; a < r; a++)
+        {
+            for (int b = 0; b < c; b++)
+            {
+                sv[a][b] = (v[a][b] - min) / (max - min) * scale * 2 - scale;
+            }
+        }
+        
+        //Return normalized matrix
+        return new Matrix(sv);
     }
     
     /**

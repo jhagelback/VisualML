@@ -50,12 +50,26 @@ public class Vector
      */
     public static Vector random(int s, double scale, Random rnd)
     {
+        //Generate random double values between 0: ... 1
+        double min = 1000;
+        double max = -1000;
         double[] v = new double[s];
         for (int a = 0; a < s; a++)
         {
             v[a] = rnd.nextDouble() * scale;
+            if (v[a] < min) min = v[a];
+            if (v[a] > max) max = v[a];
         }
-        return new Vector(v);
+        
+        //Normalize values between: -scale ... scale
+        double[] sv = new double[s];
+        for (int a = 0; a < s; a++)
+        {
+            sv[a] = (v[a] - min) / (max - min) * scale * 2 - scale;
+        }
+        
+        //Return normalized vector
+        return new Vector(sv);
     }
     
     /**
