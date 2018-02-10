@@ -11,37 +11,37 @@ public class LSettings
     /**
      * Learning rate.
      */
-    double learningrate = 1.0;
+    public double learningrate = 1.0;
     
     /**
      * Sets if regularization shall be used or not.
      */
-    boolean use_regularization = true;
+    public boolean use_regularization = true;
     
     /**
      * L2 regularization strength.
      */
-    double lambda = 0.01;
+    public double lambda = 0.01;
     
     /**
      * Number of training iterations.
      */
-    int iterations = 200;
+    public int iterations = 200;
     
     /**
      * Sets if data shall be normalized.
      */
-    boolean use_normalization = false;
+    public boolean use_normalization = false;
     
     /**
      * Sets lower and upper bounds for normalized values.
      */
-    int[] normalization_bounds = new int[2];
+    public int[] normalization_bounds = new int[2];
     
     /**
      * Size of batches for batch training.
      */
-    int batch_size = 0;
+    public int batch_size = 0;
     
     /**
      * Creates default settings.

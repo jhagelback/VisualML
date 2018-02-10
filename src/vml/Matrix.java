@@ -56,7 +56,7 @@ public class Matrix
      */
     public static Matrix random(int r, int c, double scale, Random rnd)
     {
-        //Generate random double values between 0: ... 1
+        //Generate random double values between: 0 ... 1
         double min = 1000;
         double max = -1000;
         double[][] v = new double[r][c];

@@ -9,9 +9,9 @@ package vml;
 public class HiddenLayer
 {
     //Weights matrix
-    public Matrix w;
+    protected Matrix w;
     //Bias vector
-    public Vector b;
+    protected Vector b;
     //Gradients for gradient descent optimization
     private Matrix dW;
     private Vector dB;
@@ -44,6 +44,11 @@ public class HiddenLayer
         this.settings = settings;
     }
     
+    /**
+     * Creates a copy of this layer.
+     * 
+     * @return Layer
+     */
     public HiddenLayer copy()
     {
         HiddenLayer nh = new HiddenLayer(1, 1, settings);

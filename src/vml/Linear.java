@@ -11,9 +11,9 @@ import java.text.DecimalFormat;
 public class Linear extends Classifier
 {
     //Weights matrix
-    public Matrix w;
+    protected Matrix w;
     //Bias vector
-    public Vector b;
+    protected Vector b;
     //Gradients for gradient descent optimization
     private Matrix dW;
     private Vector dB;
@@ -167,35 +167,12 @@ public class Linear extends Classifier
         //Calculate loss and evaluate gradients
         //double loss = grad_svm();
         double loss = grad_softmax();
-        //debug(loss);
         //Update weights
         updateWeights();
         
         return loss;
     }
-    
-    /**
-     * For debugging output.
-     * 
-     * @param loss Current loss
-     */
-    private void debug(double loss)
-    {
-        System.out.println("Loss: " + loss);
         
-        System.out.println("\nWeights:");
-        System.out.println(w);
-        System.out.println(b);
-        
-        System.out.println("\nGradients: ");
-        System.out.println(dW);
-        System.out.println(dB);
-        
-        java.util.Scanner s = new java.util.Scanner(System.in);
-        String i = s.next();
-        if (i.equals("q")) System.exit(0);
-    }
-    
     /**
      * Performs activation for the specified dataset.
      * 

@@ -9,9 +9,9 @@ package vml;
 public class OutLayer
 {
     //Weights matrix
-    public Matrix w;
+    protected Matrix w;
     //Bias vector
-    public Vector b;
+    protected Vector b;
     //Gradients for gradient descent optimization
     private Matrix dW;
     private Vector dB;
@@ -46,6 +46,11 @@ public class OutLayer
         this.settings = settings;
     }
     
+    /**
+     * Creates a copy of this layer.
+     * 
+     * @return Layer
+     */
     public OutLayer copy()
     {
         OutLayer no = new OutLayer(1, 1, settings);

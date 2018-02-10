@@ -11,7 +11,7 @@ import java.util.*;
 public class Dataset 
 {
     //List of instances
-    ArrayList<Instance> data;
+    public ArrayList<Instance> data;
     //Min value for each attribute (used for normalizing attributes)
     private double[] min;
     //Max value for each attribute (used for normalizing attributes)

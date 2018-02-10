@@ -15,7 +15,7 @@ public class Logger
     //Sets if console or GUI shall be used
     private boolean console = true;
     //Queue for GUI logging
-    ArrayList<String> queue;
+    protected ArrayList<String> queue;
     
     /**
      * Creates a new console logger.
