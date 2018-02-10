@@ -18,9 +18,9 @@ public class HiddenLayer
     //Training dataset
     private Matrix X;
     //Scores matrix = X*W
-    public Matrix scores;
+    protected Matrix scores;
     //ReLU gradients matrix
-    public Matrix dhidden;
+    protected Matrix dhidden;
     //L2 regularization
     private double RW;
     //Configuration settings

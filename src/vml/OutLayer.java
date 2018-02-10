@@ -20,9 +20,9 @@ public class OutLayer
     //Class values vector
     private Vector y;
     //Scores matrix = X*W+b
-    public Matrix scores;
+    protected Matrix scores;
     //Softmax gradients matrix
-    public Matrix dscores;
+    protected Matrix dscores;
     //L2 regularization
     private double RW;
     //Configuration settings
