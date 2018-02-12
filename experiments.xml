@@ -375,10 +375,11 @@
         <K>3</K>
     </Experiment>
     <Experiment id="knn_iris_2d">
-        <!-- Training set: 98.67% -->
-        <!-- Cross-validation: 95.33% -->
+        <!-- Training set: 98.00% -->
+        <!-- Cross-validation: 98.00% -->
         <Classifier>KNN</Classifier>
         <TrainingData>data/iris.2D.csv</TrainingData>
+        <Normalization>-1:1</Normalization>
         <K>3</K>
     </Experiment>
     <Experiment id="knn_iris_test">
