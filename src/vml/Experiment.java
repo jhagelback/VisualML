@@ -44,7 +44,7 @@ public class Experiment
         //Evaluate accuracy on training and test datasets
         c.evaluate(eval_train, eval_test, out);
         //Evaluate accuracy using 10-fold cross validation
-        if (eval_cv)
+        if (eval_cv && c.data.size() >= 10)
         {
             run_cv(c, out);
         }
