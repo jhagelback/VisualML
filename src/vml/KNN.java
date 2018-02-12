@@ -89,15 +89,7 @@ public class KNN extends Classifier
             o.appendText("Test data: " + test.getName());
         }
         
-         //Init internal data array
-        d = new ArrayList<>(data.size());
-        //Iterate over all training instances
-        for (Instance inst : data.data)
-        {
-            //Create internal instance
-            KInstance ki = new KInstance(inst.x, inst.label);
-            d.add(ki);
-        }
+        iterate();
     }
     
     /**
@@ -108,6 +100,18 @@ public class KNN extends Classifier
     @Override
     public double iterate()
     {
+        //Init internal data array (if not already done)
+        if (d == null)
+        {
+            d = new ArrayList<>(data.size());
+            //Iterate over all training instances
+            for (Instance inst : data.data)
+            {
+                //Create internal instance
+                KInstance ki = new KInstance(inst.x, inst.label);
+                d.add(ki);
+            }
+        }
         //Nothing is done here
         return 0;
     }

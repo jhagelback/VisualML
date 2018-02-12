@@ -15,7 +15,7 @@ import javafx.animation.AnimationTimer;
 import javafx.stage.WindowEvent;
 
 /**
- * Main class for the Visual ML application.
+ * Main class for the VisualML application.
  * 
  * @author Johan Hagelbäck, Linnaeus University  (johan.hagelback@lnu.se)
  */
@@ -91,7 +91,10 @@ public class Main extends Application
             //Error check
             if (c == null) return;
             //Don't run for KNN classifier
-            if (c instanceof KNN) return;
+            if (c instanceof KNN) 
+            {
+                return;
+            }
             
             if (!running) 
             {
@@ -403,6 +406,12 @@ public class Main extends Application
      */
     private void initClassifier(Classifier c, int it_steps)
     {
+        //Special case for KNN
+        if (c instanceof KNN)
+        {
+            c.iterate();
+        }
+        
         //Init stuff
         this.c = c;
         this.it_steps = it_steps;
