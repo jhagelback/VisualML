@@ -175,7 +175,7 @@ public class NN extends Classifier
         o.appendText("\nTraining classifier");
         
         //For output
-        int out_step = getOutputStep(settings.iterations);
+        int out_step = settings.iterations / 10;
         
         //Optimization Gradient Descent
         OutLayer bOut = null;
