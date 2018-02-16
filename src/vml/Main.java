@@ -22,7 +22,7 @@ import javafx.stage.WindowEvent;
 public class Main extends Application
 {
     //Application version
-    private String version = "3.0";
+    private String version = "3.1";
     
     //Panel to render stuff on
     private VizCanvas p;
@@ -92,6 +92,10 @@ public class Main extends Application
             if (c == null) return;
             //Don't run for KNN classifier
             if (c instanceof KNN) 
+            {
+                return;
+            }
+            if (c instanceof Kernel) 
             {
                 return;
             }
@@ -274,6 +278,7 @@ public class Main extends Application
         Menu nmenu = new Menu("NN");
         Menu dmenu = new Menu("DeepNN");
         Menu kmenu = new Menu("kNN");
+        Menu kemenu = new Menu("RBF");
         
         //Linear tasks
         MenuItem mitem = new MenuItem("Demo");
@@ -288,19 +293,25 @@ public class Main extends Application
         }); 
         lmenu.getItems().add(mitem);
         
-        mitem = new MenuItem("Iris.2D");
-        mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("l_iris_2d"), 1);
-        }); 
-        lmenu.getItems().add(mitem);
-        
         mitem = new MenuItem("Circle");
         mitem.setOnAction((ActionEvent t) -> {
             initClassifier(ClassifierFactory.build("l_circle"), 1);
         }); 
         lmenu.getItems().add(mitem);
         
+        mitem = new MenuItem("Iris.2D");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("l_iris_2d"), 1);
+        }); 
+        lmenu.getItems().add(mitem);
+        
         //NN tasks
+        mitem = new MenuItem("Demo");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("nn_demo"), 1);
+        }); 
+        nmenu.getItems().add(mitem);
+        
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
             initClassifier(ClassifierFactory.build("nn_spiral"), 50);
@@ -319,12 +330,6 @@ public class Main extends Application
         }); 
         nmenu.getItems().add(mitem);
         
-        mitem = new MenuItem("Gaussian");
-        mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("nn_gaussian"), 5);
-        }); 
-        nmenu.getItems().add(mitem);
-        
         mitem = new MenuItem("Flame");
         mitem.setOnAction((ActionEvent t) -> {
             initClassifier(ClassifierFactory.build("nn_flame"), 30);
@@ -338,6 +343,12 @@ public class Main extends Application
         nmenu.getItems().add(mitem);
         
         //Deep NN tasks
+        mitem = new MenuItem("Demo");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("dnn_demo"), 1);
+        }); 
+        dmenu.getItems().add(mitem);
+        
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
             initClassifier(ClassifierFactory.build("dnn_spiral"), 100);
@@ -347,6 +358,24 @@ public class Main extends Application
         mitem = new MenuItem("Circle");
         mitem.setOnAction((ActionEvent t) -> {
             initClassifier(ClassifierFactory.build("dnn_circle"), 10);
+        }); 
+        dmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Iris.2D");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("dnn_iris_2d"), 10);
+        }); 
+        dmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Flame");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("dnn_flame"), 30);
+        }); 
+        dmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Jain's toy problem");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("dnn_jain"), 10);
         }); 
         dmenu.getItems().add(mitem);
         
@@ -363,21 +392,15 @@ public class Main extends Application
         }); 
         kmenu.getItems().add(mitem);
         
-        mitem = new MenuItem("Iris.2D");
-        mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("knn_iris_2d"), 1);
-        }); 
-        kmenu.getItems().add(mitem);
-        
         mitem = new MenuItem("Circle");
         mitem.setOnAction((ActionEvent t) -> {
             initClassifier(ClassifierFactory.build("knn_circle"), 1);
         }); 
         kmenu.getItems().add(mitem);
         
-        mitem = new MenuItem("Gaussian");
+        mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("knn_gaussian"), 1);
+            initClassifier(ClassifierFactory.build("knn_iris_2d"), 1);
         }); 
         kmenu.getItems().add(mitem);
         
@@ -393,8 +416,45 @@ public class Main extends Application
         }); 
         kmenu.getItems().add(mitem);
         
+        //RBF kernel tasks
+        mitem = new MenuItem("Demo");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("rbf_demo"), 1);
+        }); 
+        kemenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Spiral");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("rbf_spiral"), 1);
+        }); 
+        kemenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Circle");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("rbf_circle"), 1);
+        }); 
+        kemenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Iris.2D");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("rbf_iris_2d"), 1);
+        }); 
+        kemenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Flame");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("rbf_flame"), 1);
+        }); 
+        kemenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Jain's toy problem");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("rbf_jain"), 1);
+        }); 
+        kemenu.getItems().add(mitem);
+        
         //Add menus to frame
-        menubar.getMenus().addAll(lmenu, nmenu, dmenu, kmenu);
+        menubar.getMenus().addAll(lmenu, nmenu, dmenu, kmenu, kemenu);
         return menubar;
     }
     
@@ -408,6 +468,10 @@ public class Main extends Application
     {
         //Special case for KNN
         if (c instanceof KNN)
+        {
+            c.iterate();
+        }
+        if (c instanceof Kernel)
         {
             c.iterate();
         }

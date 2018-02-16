@@ -101,6 +101,10 @@ public class ClassifierFactory
                         {
                             c = readKNN(e);
                         }
+                        if (ctype.equalsIgnoreCase("RBF"))
+                        {
+                            c = readRBF(e);
+                        }
                     }      
                 }
             }
@@ -301,6 +305,63 @@ public class ClassifierFactory
 
             //Init classifier
             c = new KNN(data, test, settings);
+        }
+        catch (Exception ex)
+        {
+            System.err.println("Experiments XML file is invalid");
+            System.exit(1);
+        }
+        
+        return c;
+    }
+    
+    /**
+     * Read settings and creates a RBF Kernel classifier.
+     * 
+     * @param e Experiment xml node
+     * @return The classifier
+     */
+    private static Classifier readRBF(Element e)
+    {
+        Classifier c = null;
+        
+        try
+        {
+            String dataset_name = get(e, "TrainingData");
+            String testset_name = get(e, "TestData");
+            
+            //Read settings
+            KernelSettings settings = new KernelSettings();
+            if (exists(e, "Gamma")) settings.gamma = getDouble(e, "Gamma");
+            if (exists(e, "Normalization")) 
+            {
+                settings.use_normalization = true;
+                settings.normalization_bounds = getNormalization(e, "Normalization");
+            }
+            
+            //Read training dataset
+            DataSource reader = new DataSource();
+            Dataset data = ClassifierFactory.readDataset(dataset_name, reader);
+            if (data == null)
+            {
+                System.out.println("Unable to find training dataset '" + dataset_name + "'");
+                System.exit(1);
+            }
+            //Read test dataset
+            Dataset test = ClassifierFactory.readDataset(testset_name, reader);
+
+            //Normalize attributes
+            if (settings.use_normalization)
+            {
+                data.normalizeAttributes(settings.normalization_bounds[0], settings.normalization_bounds[1]);
+                if (test != null)
+                {
+                    test.normalizeAttributes(settings.normalization_bounds[0], settings.normalization_bounds[1]);
+                }
+            }
+
+            //Init classifier
+            c = new Kernel(data, test, settings);
         }
         catch (Exception ex)
         {

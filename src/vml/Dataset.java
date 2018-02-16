@@ -157,6 +157,24 @@ public class Dataset
     }
     
     /**
+     * Creates a clone of this dataset without any instances added. All settings
+     * are copied to the clone.
+     * 
+     * @return Empty clone of this dataset
+     */
+    public Dataset clone_empty()
+    {
+        Dataset d = new Dataset();
+        d.cats = cats;
+        d.intToCat = intToCat;
+        d.max = max;
+        d.min = min;
+        d.name = name;
+        
+        return d;
+    }
+    
+    /**
      * Returns a subset containing all instances within the specified range.
      * 
      * @param start Start index
@@ -165,15 +183,11 @@ public class Dataset
      */
     public Dataset getSubset(int start, int end)
     {
-        Dataset sub = new Dataset();
+        Dataset sub = clone_empty();
         for (int i = start; i < end; i++)
         {
-            sub.add(data.get(i));
+            sub.data.add(data.get(i));
         }
-        sub.cats = cats;
-        sub.intToCat = intToCat;
-        sub.max = max;
-        sub.min = min;
         
         return sub;
     }
@@ -187,18 +201,14 @@ public class Dataset
      */
     public Dataset getInverseSubset(int start, int end)
     {
-        Dataset sub = new Dataset();
+        Dataset sub = clone_empty();
         for (int i = 0; i < data.size(); i++)
         {
             if (i < start || i >= end)
             {
-                sub.add(data.get(i));
+                sub.data.add(data.get(i));
             }
         }
-        sub.cats = cats;
-        sub.intToCat = intToCat;
-        sub.max = max;
-        sub.min = min;
         
         return sub;
     }

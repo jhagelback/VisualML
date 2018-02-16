@@ -141,6 +141,50 @@ public class Vector
     }
     
     /**
+     * Calculates the dot product between this vector and another vector.
+     * 
+     * @param v2 The other vector
+     * @return Dot product
+     * @throws ArithmeticException If unable to calculate the dot product
+     */
+    public double dot(Vector v2) throws ArithmeticException
+    {
+        if (size() != v2.size())
+        {
+            throw new ArithmeticException("Size of both vectors must be the same");
+        }
+        
+        double dot = 0;
+        for (int i = 0; i < size(); i++)
+        {
+            dot += v[i] * v2.v[i];
+        }
+        return dot;
+    }
+    
+    /**
+     * Returns the index of the highest value in the vector.
+     * 
+     * @return Index of highest value
+     */
+    public int argmax()
+    {
+        double mV = v[0];
+        int mI = 0;
+        
+        for (int i = 1; i < size(); i++)
+        {
+            if (v[i] > mV)
+            {
+                mV = v[i];
+                mI = i;
+            }
+        }
+        
+        return mI;
+    }
+    
+    /**
      * Updates the weights, assuming this is a bias vector.
      * 
      * @param dB Gradients vector
