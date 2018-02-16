@@ -101,18 +101,15 @@ public class KNN extends Classifier
     public double iterate()
     {
         //Init internal data array (if not already done)
-        if (d == null)
+        d = new ArrayList<>(data.size());
+        //Iterate over all training instances
+        for (Instance inst : data.data)
         {
-            d = new ArrayList<>(data.size());
-            //Iterate over all training instances
-            for (Instance inst : data.data)
-            {
-                //Create internal instance
-                KInstance ki = new KInstance(inst.x, inst.label);
-                d.add(ki);
-            }
+            //Create internal instance
+            KInstance ki = new KInstance(inst.x, inst.label);
+            d.add(ki);
         }
-        //Nothing is done here
+        
         return 0;
     }
     
@@ -156,7 +153,7 @@ public class KNN extends Classifier
         }
         
         //Sort list based on distance
-        Collections.sort(d);
+        d.sort((i1, i2) -> i1.compareTo(i2));
         
         //Create result array with number of
         //occurences for each label, plus distances
