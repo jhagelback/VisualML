@@ -224,8 +224,8 @@
         <!-- Test set: 93.88% -->
         <!-- Cross-validation: 96.06% -->
         <Classifier>NN</Classifier>
-        <TrainingData>data_mnist/mnist_train.csv</TrainingData> <!-- 94.49% -->
-        <TestData>data_mnist/mnist_test.csv</TestData> <!-- 94.43% -->
+        <TrainingData>data_mnist/mnist_train.csv</TrainingData>
+        <TestData>data_mnist/mnist_test.csv</TestData>
         <Iterations>2000</Iterations>
         <LearningRate>0.2</LearningRate>
         <UseRegularization>false</UseRegularization>
@@ -391,6 +391,7 @@
     </Experiment>
     <Experiment id="knn_spiral">
         <!-- Training set: 99.33% -->
+        <!-- Cross-validation: 73.33% -->
         <Classifier>KNN</Classifier>
         <TrainingData>data/spiral.csv</TrainingData>
         <K>3</K>
@@ -404,27 +405,27 @@
     </Experiment>
     <Experiment id="knn_iris">
         <!-- Training set: 96.00% -->
-        <!-- Cross-validation: 94.67% -->
+        <!-- Cross-validation: 95.33% -->
         <Classifier>KNN</Classifier>
         <TrainingData>data/iris.csv</TrainingData>
-        <K>3</K>
+        <K>4</K>
     </Experiment>
     <Experiment id="knn_iris_test">
-        <!-- Training set: 96.67% -->
+        <!-- Training set: 97.50% -->
         <!-- Test set: 96.67% -->
-        <!-- Cross-validation: 95.00% -->
+        <!-- Cross-validation: 96.67% -->
         <Classifier>KNN</Classifier>
         <TrainingData>data/iris_training.csv</TrainingData>
         <TestData>data/iris_test.csv</TestData>
-        <K>3</K>
+        <K>4</K>
     </Experiment>
     <Experiment id="knn_iris_2d">
         <!-- Training set: 98.00% -->
-        <!-- Cross-validation: 98.00% -->
+        <!-- Cross-validation: 95.33% -->
         <Classifier>KNN</Classifier>
         <TrainingData>data/iris.2D.csv</TrainingData>
         <Normalization>-1:1</Normalization>
-        <K>3</K>
+        <K>4</K>
     </Experiment>
     <Experiment id="knn_flame">
         <!-- Training set: 99.58% -->
@@ -456,9 +457,10 @@
         <K>2</K>
     </Experiment>
     <Experiment id="knn_mnist">
+        <!-- Test set: 97.17% -->
         <Classifier>KNN</Classifier>
-        <TrainingData>data_mnist/mnist_train.csv</TrainingData> <!-- 0.00% -->
-        <TestData>data_mnist/mnist_test.csv</TestData> <!-- 0.00% -->
+        <TrainingData>data_mnist/mnist_train.csv</TrainingData>
+        <TestData>data_mnist/mnist_test.csv</TestData>
         <K>3</K>
     </Experiment>
     <!--
