@@ -22,7 +22,7 @@ import javafx.stage.WindowEvent;
 public class Main extends Application
 {
     //Application version
-    private String version = "3.1";
+    public static String version = "3.1";
     
     //Panel to render stuff on
     private VizCanvas p;
@@ -205,6 +205,11 @@ public class Main extends Application
         out = Logger.getGUILogger();
         output.setPrefRowCount(29);
         rp.getChildren().addAll(lexp, dd, leval, ecb1, ecb2, ecb3, rt, output);
+        
+        out.appendText("\nWelcome to VisualML " + version);
+        out.appendText("Developed by Johan Hagelbäck");
+        out.appendText("Linnaeus University");
+        out.appendText("johan.hagelback@lnu.se");
         
         //Add menu
         pane.add(buildMenu(), 0, 0);

@@ -1,6 +1,9 @@
 
 package vml;
 
+import java.util.stream.IntStream;
+import java.util.concurrent.atomic.DoubleAdder;
+
 /**
  * RBF (Radial-Basis Function) kernel for two categories in the dataset.
  * 
@@ -9,11 +12,11 @@ package vml;
 public class RBF 
 {
     //Instances of class 0
-     Dataset d0;
+    private Dataset d0;
     //Label of class 0
     private int l0;
     //Instances of class 1
-     Dataset d1;
+    private Dataset d1;
     //Label of class 1
     private int l1;
     //Offset value
@@ -56,29 +59,25 @@ public class RBF
      */
     private void calc_offset()
     {
-        //Define variables
-        double sum0 = 0, sum1 = 0;     
-        
         //Calculate sum of RBF values for class 0
-        for (int i1 = 0; i1 < d0.size(); i1++)
-        {
-            for (int i2 = 0; i2 < d0.size(); i2++)
+        DoubleAdder s0 = new DoubleAdder();
+        IntStream.range(0, d0.size()).parallel().forEach(i1 -> {
+           for (int i2 = 0; i2 < d0.size(); i2++)
             {
-                sum0 += RBF(d0.get(i1).x, d0.get(i2).x);
-            }
-        }
-        
+                s0.add(RBF(d0.get(i1).x, d0.get(i2).x));
+            } 
+        });
         //Calculate sum of RBF values for class 1
-        for (int i1 = 0; i1 < d1.size(); i1++)
-        {
-            for (int i2 = 0; i2 < d1.size(); i2++)
+        DoubleAdder s1 = new DoubleAdder();
+        IntStream.range(0, d1.size()).parallel().forEach(i1 -> {
+           for (int i2 = 0; i2 < d1.size(); i2++)
             {
-                sum1 += RBF(d1.get(i1).x, d1.get(i2).x);
-            }
-        }
+                s1.add(RBF(d1.get(i1).x, d1.get(i2).x));
+            } 
+        });
         
         //Calculate offset
-        offset = (1.0 / Math.pow(d1.size(), 2)) * sum1 - (1.0 / Math.pow(d0.size(), 2)) * sum0;
+        offset = (1.0 / Math.pow(d1.size(), 2)) * s1.doubleValue() - (1.0 / Math.pow(d0.size(), 2)) * s0.doubleValue();
     }
     
     /**
@@ -91,7 +90,6 @@ public class RBF
     {
         //Calculate RBF value
         double y = calc_RBF(i);
-        //System.out.println("y = " + y);
         //Check sign of RBF to predict category
         if (y > 0) return l0;
         else return l1;
@@ -105,25 +103,21 @@ public class RBF
      */
     private double calc_RBF(Instance i)
     {
-        //Define variables
-        double sum0 = 0, sum1 = 0;
-        
         //Iterate over all training data instances
         //and calculate RBF values
-        for (Instance t : d0.data)
-        {
-            sum0 += RBF(i.x, t.x);
-        }
-        for (Instance t : d1.data)
-        {
-            sum1 += RBF(i.x, t.x);
-        }
+        DoubleAdder s0 = new DoubleAdder();
+        IntStream.range(0, d0.size()).parallel().forEach(d -> {
+            s0.add(RBF(i.x, d0.data.get(d).x));
+        });
+        DoubleAdder s1 = new DoubleAdder();
+        IntStream.range(0, d1.size()).parallel().forEach(d -> {
+            s1.add(RBF(i.x, d1.data.get(d).x));
+        });
         
-        //Calculate y-value
-        //double y = (1.0 / d0.size()) * sum0 - (1.0 / d1.size()) * sum1 + offset;
-        double y = sum0 / d0.size() - sum1 / d1.size() + offset;
+        //Calculate RBF value
+        double rbf = s0.doubleValue() / d0.size() - s1.doubleValue() / d1.size() + offset;
         
-        return y;
+        return rbf;
     }
     
     /**
