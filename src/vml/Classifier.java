@@ -2,7 +2,6 @@
 package vml;
 
 import java.text.DecimalFormat;
-import java.util.Random;
 
 /**
  * Base class for classifiers.
@@ -13,8 +12,10 @@ public abstract class Classifier
 {
     //Output formatting
     private static DecimalFormat df = new DecimalFormat("0.00"); 
-    //Randomizer
-    public static Random rnd = new Random(2);
+    /**
+     * Seed for classifier randomiser.
+     */
+    public static int seed = 7;
     //Training dataset
     protected Dataset data;
     //Test dataset
@@ -23,6 +24,10 @@ public abstract class Classifier
     protected int batch_size = 0;
     //Current batch number
     protected int batch_no = 0;
+    //Number of categories in dataset
+    protected int noCategories;
+    //Number of attributes in dataset
+    protected int noInputs;
     
     /**
      * Get next batch for batch training
@@ -79,7 +84,7 @@ public abstract class Classifier
      * @param out Logger for log info
      */
     public abstract void train(Logger out);
-        
+    
     /**
      * Returns the training dataset.
      * 

@@ -1,6 +1,8 @@
 
 package vml;
 
+import java.util.Random;
+
 /**
  * Output layer using Softmax.
  * 
@@ -34,13 +36,17 @@ public class OutLayer
      * @param noInputs Number of input values
      * @param noCategories Number of categories
      * @param settings Configuration settings for this classifier
+     * @param rnd Randomiser
      */
-    public OutLayer(int noInputs, int noCategories, NNSettings settings) 
+    public OutLayer(int noInputs, int noCategories, NNSettings settings, Random rnd) 
     {
-        //Init weight matrix
-        w = Matrix.random(noCategories, noInputs, 0.1, Classifier.rnd);
-        //Init bias vector to 0's
-        b = Vector.zeros(noCategories);
+        if (rnd != null)
+        {
+            //Init weight matrix
+            w = Matrix.random(noCategories, noInputs, 0.05, rnd);
+            //Init bias vector to 0's
+            b = Vector.zeros(noCategories);
+        }
         
         //Settings
         this.settings = settings;
@@ -53,7 +59,7 @@ public class OutLayer
      */
     public OutLayer copy()
     {
-        OutLayer no = new OutLayer(1, 1, settings);
+        OutLayer no = new OutLayer(1, 1, settings, null);
         no.w = w.copy();
         no.b = b.copy();
         return no;

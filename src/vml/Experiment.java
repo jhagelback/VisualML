@@ -25,6 +25,7 @@ public class Experiment
      */
     public static void run(String id, boolean eval_train, boolean eval_test, boolean eval_cv, Logger out)
     {
+        //Create classifier
         Classifier c = ClassifierFactory.build(id);
         if (c == null)
         {
@@ -73,7 +74,7 @@ public class Experiment
             int end = (f + 1) * fold_size;
             if (f == 9 && end < size)
             {
-                end = size - 1;
+                end = size;
             }
             
             //Create training and test sets

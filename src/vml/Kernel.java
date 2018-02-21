@@ -49,6 +49,8 @@ public class Kernel extends Classifier
             o.appendText("Test data: " + test.getName());
         }
         
+        //Reset kernels
+        kernels = null;
         iterate();
     }
     
@@ -60,18 +62,21 @@ public class Kernel extends Classifier
     @Override
     public double iterate()
     {
-        //Init new sets of kernels
-        kernels = new ArrayList<>();
-     
-        //Create one kernel for each combination of possible categories
-        for (int c0 = 0; c0 < data.noCategories(); c0++)
+        if (kernels == null)
         {
-            for (int c1 = 0; c1 < data.noCategories(); c1++)
+            //Init new sets of kernels
+            kernels = new ArrayList<>();
+
+            //Create one kernel for each combination of possible categories
+            for (int c0 = 0; c0 < data.noCategories(); c0++)
             {
-                if (c0 != c1 && c0 < c1)
+                for (int c1 = 0; c1 < data.noCategories(); c1++)
                 {
-                    //Create kernel
-                    kernels.add(new RBF(c0, c1, data, settings.gamma));
+                    if (c0 != c1 && c0 < c1)
+                    {
+                        //Create kernel
+                        kernels.add(new RBF(c0, c1, data, settings.gamma));
+                    }
                 }
             }
         }

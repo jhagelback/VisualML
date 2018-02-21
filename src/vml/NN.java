@@ -2,6 +2,7 @@
 package vml;
 
 import java.text.DecimalFormat;
+import java.util.Random;
 
 /**
  * Neural Network Softmax classifier.
@@ -38,25 +39,35 @@ public class NN extends Classifier
         this.test = test;
         
         //Size of dataset
-        int noCategories = data.noCategories();
-        int noInputs = data.noInputs();
+        noCategories = data.noCategories();
+        noInputs = data.noInputs();
         
         //Settings
         this.settings = settings;
         batch_size = settings.batch_size;
         
+        //Initalises layers
+        init();
+    }
+    
+    /**
+     * Initialises layers.
+     */
+    private void init()
+    {
+        Random rnd = new Random(seed);
+        //Hidden layers
         hidden = new HiddenLayer[settings.layers.length];
-        hidden[0] = new HiddenLayer(noInputs, settings.layers[0], settings);
+        hidden[0] = new HiddenLayer(noInputs, settings.layers[0], settings, rnd);
         if (hidden.length > 1)
         {
             for (int i = 1; i < hidden.length; i++)
             {
-                hidden[i] = new HiddenLayer(settings.layers[i-1], settings.layers[i], settings);
+                hidden[i] = new HiddenLayer(settings.layers[i-1], settings.layers[i], settings, rnd);
             }
         }
-        
-        //Create layers
-        out = new OutLayer(settings.layers[settings.layers.length - 1], noCategories, settings);
+        //Out layer
+        out = new OutLayer(settings.layers[settings.layers.length - 1], noCategories, settings, rnd);
     }
     
     /**
@@ -166,6 +177,9 @@ public class NN extends Classifier
     @Override
     public void train(Logger o)
     {
+        //Initalises layers
+        init();
+        
         o.appendText("Neural Network classifier (" + hidden.length + " hidden layers)");
         o.appendText("Training data: " + data.getName());
         if (test != null)
@@ -180,6 +194,8 @@ public class NN extends Classifier
         //Optimization Gradient Descent
         OutLayer bOut = null;
         HiddenLayer[] bHidden = new HiddenLayer[hidden.length];
+        OutLayer cOut = null;
+        HiddenLayer[] cHidden = new HiddenLayer[hidden.length];
         
         double loss = 0;
         double best_loss = Double.MAX_VALUE;
@@ -187,6 +203,15 @@ public class NN extends Classifier
         
         for (int i = 1; i <= settings.iterations; i++)
         {
+            //Copy current weights and biases
+            cOut = out.copy();
+            cHidden = new HiddenLayer[hidden.length];
+            for (int h = 0; h < hidden.length; h++)
+            {
+                cHidden[h] = hidden[h].copy();
+            }
+            
+            //Training iteration
             loss = iterate();
             
             //Check if we have a new best loss
@@ -194,12 +219,9 @@ public class NN extends Classifier
             {
                 best_loss = loss;
                 best_iteration = i;
-                //Copy best layers
-                bOut = out.copy();
-                for (int h = 0; h < hidden.length; h++)
-                {
-                    bHidden[h] = hidden[h].copy();
-                }
+                //Set best layers
+                bOut = cOut;
+                bHidden = cHidden;
             }
             
             //Output result

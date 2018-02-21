@@ -44,6 +44,11 @@ public class LSettings
     public int batch_size = 0;
     
     /**
+     * Sets if training dataset shall be shuffled or not.
+     */
+    public boolean shuffle = true;
+    
+    /**
      * Creates default settings.
      */
     public LSettings()
@@ -55,5 +60,6 @@ public class LSettings
         normalization_bounds = new int[2];
         iterations = 200;
         batch_size = 0;
+        shuffle = true;
     }
 }

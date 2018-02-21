@@ -11,8 +11,10 @@ import java.util.HashMap;
  */
 public class DataSource 
 {
-    //Filename for the data file
-    private String filename;
+    /**
+     * Seed for dataset shuffle randomiser.
+     */
+    public static int seed = 7;
     //Conversion from string label to int label
     private HashMap<String,Integer> catToInt;
     //Mapping from int label to string label
@@ -35,7 +37,6 @@ public class DataSource
      */
     public Dataset read(String filename)
     {
-        this.filename = filename;
         File f = new File(filename);
         Dataset dset = new Dataset(f.getName());
         

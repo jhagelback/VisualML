@@ -21,8 +21,10 @@ import javafx.stage.WindowEvent;
  */
 public class Main extends Application
 {
-    //Application version
-    public static String version = "3.1";
+    /**
+     * Application version.
+     */
+    public static String version = "3.2";
     
     //Panel to render stuff on
     private VizCanvas p;
@@ -307,6 +309,18 @@ public class Main extends Application
         mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
             initClassifier(ClassifierFactory.build("l_iris_2d"), 1);
+        }); 
+        lmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Flame");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("l_flame"), 5);
+        }); 
+        lmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Jain's toy problem");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("l_jain"), 5);
         }); 
         lmenu.getItems().add(mitem);
         

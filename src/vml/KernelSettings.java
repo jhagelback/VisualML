@@ -24,6 +24,11 @@ public class KernelSettings
     public int[] normalization_bounds = new int[2];
     
     /**
+     * Sets if training dataset shall be shuffled or not.
+     */
+    public boolean shuffle = true;
+    
+    /**
      * Creates default settings.
      */
     public KernelSettings()
@@ -31,5 +36,6 @@ public class KernelSettings
         gamma = 1.0;
         use_normalization = false;
         normalization_bounds = new int[2];
+        shuffle = true;
     }
 }

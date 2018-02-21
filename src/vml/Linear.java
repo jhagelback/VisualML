@@ -2,6 +2,7 @@
 package vml;
 
 import java.text.DecimalFormat;
+import java.util.Random;
 
 /**
  * Linear Softmax classifier.
@@ -47,17 +48,27 @@ public class Linear extends Classifier
         this.test = test;
         
         //Size of dataset
-        int noCategories = data.noCategories();
-        int noInputs = data.noInputs();
+        noCategories = data.noCategories();
+        noInputs = data.noInputs();
         
-        //Init weight matrix
-        w = Matrix.random(noCategories, noInputs, 0.1, Classifier.rnd);
-        //Init bias vector to 0's
-        b = Vector.zeros(noCategories);
+        //Initializes weights and biases
+        init();
         
         //Settings
         this.settings = settings;
         batch_size = settings.batch_size;
+    }
+    
+    /**
+     * Initializes weights and biases.
+     */
+    private void init()
+    {
+        Random rnd = new java.util.Random(seed);
+        //Init weight matrix
+        w = Matrix.random(noCategories, noInputs, 0.05, rnd);
+        //Init bias vector to 0's
+        b = Vector.zeros(noCategories);
     }
     
     /**
@@ -95,6 +106,9 @@ public class Linear extends Classifier
     @Override
     public void train(Logger o)
     {
+        //Initializes weights and biases
+        init();
+        
         o.appendText("Linear Softmax classifier");
         o.appendText("Training data: " + data.getName());
         if (test != null)
@@ -112,9 +126,16 @@ public class Linear extends Classifier
         double loss = 0;
         Matrix bestW = null;
         Vector bestB = null;
+        Matrix cW = null;
+        Vector cB = null;
         
         for (int i = 1; i <= settings.iterations; i++)
         {
+            //Copy current weights
+            cW = w.copy();
+            cB = b.copy();
+            
+            //Training iteration
             loss = iterate();
             
             //Check if we have a new best loss
@@ -122,9 +143,9 @@ public class Linear extends Classifier
             {
                 best_loss = loss;
                 best_iteration = i;
-                //Copy best weights
-                bestW = w.copy();
-                bestB = b.copy();
+                //Set best weights and biases
+                bestW = cW;
+                bestB = cB;
             }
             
             //Output result

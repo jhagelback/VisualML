@@ -1,6 +1,8 @@
 
 package vml;
 
+import java.util.Random;
+
 /**
  * Hidden layer using ReLU.
  * 
@@ -32,13 +34,17 @@ public class HiddenLayer
      * @param noInputs Number of input values
      * @param noOutputs Number of outut values
      * @param settings Configuration settings for this classifier
+     * @param rnd Randomiser
      */
-    public HiddenLayer(int noInputs, int noOutputs, NNSettings settings) 
+    public HiddenLayer(int noInputs, int noOutputs, NNSettings settings, Random rnd) 
     {
-        //Init weight matrix
-        w = Matrix.random(noOutputs, noInputs, 0.1, Classifier.rnd);
-        //Init bias vector to 0's
-        b = Vector.zeros(noOutputs);
+        if (rnd != null)
+        {
+            //Init weight matrix
+            w = Matrix.random(noOutputs, noInputs, 0.05, rnd);
+            //Init bias vector to 0's
+            b = Vector.zeros(noOutputs);
+        }
         
         //Settings
         this.settings = settings;
@@ -51,7 +57,7 @@ public class HiddenLayer
      */
     public HiddenLayer copy()
     {
-        HiddenLayer nh = new HiddenLayer(1, 1, settings);
+        HiddenLayer nh = new HiddenLayer(1, 1, settings, null);
         nh.w = w.copy();
         nh.b = b.copy();
         return nh;

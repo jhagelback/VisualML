@@ -39,6 +39,11 @@ public class KNNSettings
     public int distance_measure = L2;
     
     /**
+     * Sets if training dataset shall be shuffled or not.
+     */
+    public boolean shuffle = true;
+    
+    /**
      * Creates default settings.
      */
     public KNNSettings()
@@ -47,5 +52,6 @@ public class KNNSettings
         distance_measure = L2;
         use_normalization = false;
         normalization_bounds = new int[2];
+        shuffle = true;
     }
 }

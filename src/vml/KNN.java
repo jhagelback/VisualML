@@ -89,6 +89,8 @@ public class KNN extends Classifier
             o.appendText("Test data: " + test.getName());
         }
         
+        //Reset internal array
+        d = null;
         iterate();
     }
     
@@ -101,13 +103,16 @@ public class KNN extends Classifier
     public double iterate()
     {
         //Init internal data array (if not already done)
-        d = new ArrayList<>(data.size());
-        //Iterate over all training instances
-        for (Instance inst : data.data)
+        if (d == null)
         {
-            //Create internal instance
-            KInstance ki = new KInstance(inst.x, inst.label);
-            d.add(ki);
+            d = new ArrayList<>(data.size());
+            //Iterate over all training instances
+            for (Instance inst : data.data)
+            {
+                //Create internal instance
+                KInstance ki = new KInstance(inst.x, inst.label);
+                d.add(ki);
+            }
         }
         
         return 0;

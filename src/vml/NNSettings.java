@@ -54,6 +54,11 @@ public class NNSettings
     public int batch_size = 0;
     
     /**
+     * Sets if training dataset shall be shuffled or not.
+     */
+    public boolean shuffle = true;
+    
+    /**
      * Creates default settings.
      */
     public NNSettings()
@@ -67,5 +72,6 @@ public class NNSettings
         layers = new int[]{16};
         iterations = 1000;
         batch_size = 0;
+        shuffle = true;
     }
 }

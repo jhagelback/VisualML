@@ -32,7 +32,6 @@ public class ClassifierFactory
      */
     public static Classifier build(String id)
     {
-        Classifier.rnd = new Random(2);
         return readSettings(id);
     }
     
@@ -146,6 +145,7 @@ public class ClassifierFactory
                 settings.normalization_bounds = getNormalization(e, "Normalization");
             }
             if (exists(e, "BatchSize")) settings.batch_size = getInt(e, "BatchSize");
+            if (exists(e, "ShuffleData")) settings.shuffle = getBoolean(e, "ShuffleData");
             
             //Read training dataset
             DataSource reader = new DataSource();
@@ -155,9 +155,13 @@ public class ClassifierFactory
                 System.out.println("Unable to find training dataset '" + dataset_name + "'");
                 System.exit(1);
             }
+            if (settings.shuffle)
+            {
+                Collections.shuffle(data.data, new Random(DataSource.seed));
+            }
             //Read test dataset
             Dataset test = ClassifierFactory.readDataset(testset_name, reader);
-
+            
             //Normalize attributes
             if (settings.use_normalization)
             {
@@ -218,6 +222,7 @@ public class ClassifierFactory
                     settings.layers[i] = Integer.parseInt(t[i].trim());
                 }
             }
+            if (exists(e, "ShuffleData")) settings.shuffle = getBoolean(e, "ShuffleData");
             
             //Read training dataset
             DataSource reader = new DataSource();
@@ -226,6 +231,10 @@ public class ClassifierFactory
             {
                 System.out.println("Unable to find training dataset '" + dataset_name + "'");
                 System.exit(1);
+            }
+            if (settings.shuffle)
+            {
+                Collections.shuffle(data.data, new Random(DataSource.seed));
             }
             //Read test dataset
             Dataset test = ClassifierFactory.readDataset(testset_name, reader);
@@ -281,6 +290,7 @@ public class ClassifierFactory
                 if (t.equalsIgnoreCase("L1")) settings.distance_measure = KNNSettings.L1;
                 if (t.equalsIgnoreCase("L2")) settings.distance_measure = KNNSettings.L2;
             }
+            if (exists(e, "ShuffleData")) settings.shuffle = getBoolean(e, "ShuffleData");
             
             //Read training dataset
             DataSource reader = new DataSource();
@@ -289,6 +299,10 @@ public class ClassifierFactory
             {
                 System.out.println("Unable to find training dataset '" + dataset_name + "'");
                 System.exit(1);
+            }
+            if (settings.shuffle)
+            {
+                Collections.shuffle(data.data, new Random(DataSource.seed));
             }
             //Read test dataset
             Dataset test = ClassifierFactory.readDataset(testset_name, reader);
@@ -338,6 +352,7 @@ public class ClassifierFactory
                 settings.use_normalization = true;
                 settings.normalization_bounds = getNormalization(e, "Normalization");
             }
+            if (exists(e, "ShuffleData")) settings.shuffle = getBoolean(e, "ShuffleData");
             
             //Read training dataset
             DataSource reader = new DataSource();
@@ -346,6 +361,10 @@ public class ClassifierFactory
             {
                 System.out.println("Unable to find training dataset '" + dataset_name + "'");
                 System.exit(1);
+            }
+            if (settings.shuffle)
+            {
+                Collections.shuffle(data.data, new Random(DataSource.seed));
             }
             //Read test dataset
             Dataset test = ClassifierFactory.readDataset(testset_name, reader);
