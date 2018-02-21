@@ -6,14 +6,15 @@
         The following parameters are available:
         
         <Classifier>Linear</Classifier>                         Linear
-        <TrainingData>data/demo.csv</TrainingData>              Path
-        <TestData></TestData>                                   Path (or empty if no test data is used)
-        <Iterations>10</Iterations>                             Integer (default is 200)
-        <LearningRate>1.0</LearningRate>                        Decimal value 0 ... 1 (default is 1.0)
-        <UseRegularization>true</UseRegularization>             True or False (default is true)
-        <RegularizationStrength>0.01</RegularizationStrength>   Decimal value (default is 0.01)
+        <TrainingData>data/demo.csv</TrainingData>              Path to training dataset
+        <TestData></TestData>                                   Path to test dataset (or empty if no test data is used)
+        <Iterations>10</Iterations>                             Training iterations (default is 200)
+        <LearningRate>1.0</LearningRate>                        Learning rate (default is 1.0)
+        <UseRegularization>true</UseRegularization>             Sets if regularization shall be used (default is true)
+        <RegularizationStrength>0.01</RegularizationStrength>   Sets regularization strength (default is 0.01)
         <Normalization>0:1</Normalization>                      Lower and upper bound for normalized values
         <BatchSize>100</BatchSize>                              Size of batches for batch training. If not set, batch training isn't used
+        <ShuffleData>true</ShuffleData>                         Sets if dataset shall be shuffle (default is true)
     -->
     <Experiment id="l_demo">
         <!-- Training set: 100.00% -->
@@ -24,7 +25,7 @@
     </Experiment>
     <Experiment id="l_spiral">
         <!-- Training set: 49.00% -->
-        <!-- Cross-validation: 36.00% -->
+        <!-- Cross-validation: 49.33% -->
         <Classifier>Linear</Classifier>
         <TrainingData>data/spiral.csv</TrainingData>
         <Iterations>200</Iterations>
@@ -32,17 +33,18 @@
     </Experiment>
     <Experiment id="l_circle">
         <!-- Training set: 68.60% -->
+        <!-- Cross-validation: 68.67% -->
         <Classifier>Linear</Classifier>
         <TrainingData>data/circle.csv</TrainingData>
         <Iterations>20</Iterations>
         <LearningRate>1.0</LearningRate>
     </Experiment>
     <Experiment id="l_iris">
-        <!-- Training set: 97.33% -->
-        <!-- Cross-validation: 96.67% -->
+        <!-- Training set: 98.00% -->
+        <!-- Cross-validation: 98.00% -->
         <Classifier>Linear</Classifier>
         <TrainingData>data/iris.csv</TrainingData>
-        <Iterations>400</Iterations>
+        <Iterations>1000</Iterations>
         <LearningRate>0.2</LearningRate>
     </Experiment>
     <Experiment id="l_iris_test">
@@ -52,41 +54,57 @@
         <Classifier>Linear</Classifier>
         <TrainingData>data/iris_training.csv</TrainingData>
         <TestData>data/iris_test.csv</TestData>
-        <Iterations>300</Iterations>
+        <Iterations>500</Iterations>
         <LearningRate>0.1</LearningRate>
     </Experiment>
     <Experiment id="l_iris_2d">
-        <!-- Training set: 96.67% -->
+        <!-- Training set: 96.00% -->
         <!-- Cross-validation: 95.33% -->
         <Classifier>Linear</Classifier>
         <TrainingData>data/iris.2d.csv</TrainingData>
-        <Iterations>50</Iterations>
-        <LearningRate>0.4</LearningRate>
+        <Iterations>500</Iterations>
+        <LearningRate>0.1</LearningRate>
         <Normalization>-1:1</Normalization>
     </Experiment>
+    <Experiment id="l_flame">
+        <!-- Training set: 67.92% -->
+        <!-- Cross-validation: 68.33% -->
+        <Classifier>Linear</Classifier>
+        <TrainingData>data/flame.csv</TrainingData>
+        <Iterations>200</Iterations>
+        <LearningRate>0.5</LearningRate>
+    </Experiment>
+    <Experiment id="l_jain">
+        <!-- Training set: 85.79% -->
+        <!-- Cross-validation: 85.01% -->
+        <Classifier>Linear</Classifier>
+        <TrainingData>data/jain.csv</TrainingData>
+        <Iterations>200</Iterations>
+        <LearningRate>0.5</LearningRate>
+    </Experiment>
     <Experiment id="l_diabetes">
-        <!-- Training set: 77.21% -->
-        <!-- Cross-validation: 77.26% -->
+        <!-- Training set: 77.08% -->
+        <!-- Cross-validation: 76.64% -->
         <Classifier>Linear</Classifier>
         <TrainingData>data/diabetes.csv</TrainingData>
-        <Iterations>40</Iterations>
-        <LearningRate>1.0</LearningRate>
+        <Iterations>500</Iterations>
+        <LearningRate>0.1</LearningRate>
         <Normalization>-1:1</Normalization>
     </Experiment>
     
     <Experiment id="l_glass">
         <!-- Training set: 56.54% -->
-        <!-- Cross-validation: 58.87% -->
+        <!-- Cross-validation: 55.52% -->
         <Classifier>Linear</Classifier>
         <TrainingData>data/glass.csv</TrainingData>
-        <Iterations>100</Iterations>
-        <LearningRate>0.4</LearningRate>
+        <Iterations>500</Iterations>
+        <LearningRate>0.1</LearningRate>
         <Normalization>0:2</Normalization>
     </Experiment>
     <Experiment id="l_mnist">
-        <!-- Training set: 91.53% -->
-        <!-- Test set: 91.68% -->
-        <!-- Cross-validation: 92.26% -->
+        <!-- Training set: 91.52% -->
+        <!-- Test set: 91.65% -->
+        <!-- Cross-validation: 91.06% -->
         <Classifier>Linear</Classifier>
         <TrainingData>data_mnist/mnist_train.csv</TrainingData>
         <TestData>data_mnist/mnist_test.csv</TestData>
@@ -102,16 +120,17 @@
         The following parameters are available:
         
         <Classifier>NN</Classifier>                             NN
-        <TrainingData>data/demo.csv</TrainingData>              Path
-        <TestData></TestData>                                   Path (or empty if no test data is used)
-        <Iterations>10</Iterations>                             Integer (default is 1000)
-        <LearningRate>1.0</LearningRate>                        Decimal value 0 ... 1 (default is 0.3)
-        <UseRegularization>true</UseRegularization>             True or False (default is true)
-        <RegularizationStrength>0.001</RegularizationStrength>   Decimal value (default is 0.001)
-        <UseMomentum>true</UseMomentum>                         True or False (default is true)
+        <TrainingData>data/demo.csv</TrainingData>              Path to training dataset
+        <TestData></TestData>                                   Path to test dataset (or empty if no test data is used)
+        <Iterations>10</Iterations>                             Training iterations (default is 200)
+        <LearningRate>1.0</LearningRate>                        Learning rate (default is 1.0)
+        <UseRegularization>true</UseRegularization>             Sets if regularization shall be used (default is true)
+        <RegularizationStrength>0.001</RegularizationStrength>  Sets regularization strength (default is 0.001)
+        <UseMomentum>true</UseMomentum>                         Sets if momentum shall be used (default is true)
         <HiddenLayers>16</HiddenLayers>                         Number of units in the hidden layer (default is 16)
         <Normalization>0:1</Normalization>                      Lower and upper bound for normalized values
         <BatchSize>100</BatchSize>                              Size of batches for batch training. If not set, batch training isn't used
+        <ShuffleData>true</ShuffleData>                         Sets if dataset shall be shuffle (default is true)
     -->
     <Experiment id="nn_demo">
         <!-- Training set: 100.00% -->
@@ -123,7 +142,7 @@
     </Experiment>
     <Experiment id="nn_spiral">
         <!-- Training set: 99.33% -->
-        <!-- Cross-validation: 91.33% -->
+        <!-- Cross-validation: 98.00% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/spiral.csv</TrainingData>
         <Iterations>8000</Iterations>
@@ -142,14 +161,14 @@
         <HiddenLayers>16</HiddenLayers>
     </Experiment>
     <Experiment id="nn_iris">
-        <!-- Training set: 97.33% -->
-        <!-- Cross-validation: 97.33% -->
+        <!-- Training set: 98.67% -->
+        <!-- Cross-validation: 98.00% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/iris.csv</TrainingData>
-        <Iterations>150</Iterations> <!-- 150 -->
-        <LearningRate>0.5</LearningRate> <!-- 0.4 -->
+        <Iterations>1000</Iterations>
+        <LearningRate>0.4</LearningRate>
         <UseRegularization>false</UseRegularization>
-        <HiddenLayers>8</HiddenLayers> <!-- 2 -->
+        <HiddenLayers>8</HiddenLayers>
         <Normalization>-1:1</Normalization>
     </Experiment>
     <Experiment id="nn_iris_test">
@@ -166,20 +185,19 @@
         <Normalization>-1:1</Normalization>
     </Experiment>
     <Experiment id="nn_iris_2d">
-        <!-- Training set: 98.00% -->
-        <!-- Cross-validation: 96.67% -->
+        <!-- Training set: 96.00% -->
+        <!-- Cross-validation: 96.00% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/iris.2D.csv</TrainingData>
-        <Iterations>400</Iterations>
+        <Iterations>1000</Iterations>
         <LearningRate>0.3</LearningRate>
         <UseRegularization>false</UseRegularization>
         <HiddenLayers>6</HiddenLayers>
         <Normalization>-1:1</Normalization>
-        <BatchSize>100</BatchSize>
     </Experiment>
     <Experiment id="nn_flame">
         <!-- Training set: 99.17% -->
-        <!-- Cross-validation: 97.92% -->
+        <!-- Cross-validation: 98.33% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/flame.csv</TrainingData>
         <Iterations>1200</Iterations>
@@ -188,8 +206,8 @@
         <HiddenLayers>16</HiddenLayers>
     </Experiment>
     <Experiment id="nn_jain">
-        <!-- Training set: 95.17% -->
-        <!-- Cross-validation: 89.58% -->
+        <!-- Training set: 95.44% -->
+        <!-- Cross-validation: 95.20% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/jain.csv</TrainingData>
         <Iterations>300</Iterations>
@@ -198,32 +216,32 @@
         <HiddenLayers>16</HiddenLayers>
     </Experiment>
     <Experiment id="nn_diabetes">
-        <!-- Training set: 88.80% -->
-        <!-- Cross-validation: 78.96% -->
+        <!-- Training set: 83.07% -->
+        <!-- Cross-validation: 77.02% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/diabetes.csv</TrainingData>
-        <Iterations>12000</Iterations>
-        <LearningRate>1.0</LearningRate>
+        <Iterations>2500</Iterations>
+        <LearningRate>0.9</LearningRate>
         <UseRegularization>false</UseRegularization>
         <HiddenLayers>32</HiddenLayers>
         <Normalization>-1:1</Normalization>
-        <BatchSize>100</BatchSize>
+        <ShuffleData>false</ShuffleData>       
     </Experiment>
     <Experiment id="nn_glass">
-        <!-- Training set: 94.39% -->
-        <!-- Cross-validation: 86.01% -->
+        <!-- Training set: 98.13% -->
+        <!-- Cross-validation: 71.26% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/glass.csv</TrainingData>
-        <Iterations>4000</Iterations>
-        <LearningRate>1.0</LearningRate>
+        <Iterations>6000</Iterations> <!-- 6000 -->
+        <LearningRate>0.9</LearningRate> <!-- 1.0 -->
         <UseRegularization>false</UseRegularization>
-        <HiddenLayers>72</HiddenLayers>
-        <Normalization>0:2</Normalization>
+        <HiddenLayers>72</HiddenLayers> <!-- 72 -->
+        <Normalization>0:2</Normalization> <!-- 0:2 -->
     </Experiment>
     <Experiment id="nn_mnist">
-        <!-- Training set: 96.66% -->
-        <!-- Test set: 96.10% -->
-        <!-- Cross-validation: .% -->
+        <!-- Training set: 96.50% -->
+        <!-- Test set: 95.96% -->
+        <!-- Cross-validation: 95.74% -->
         <Classifier>NN</Classifier>
         <TrainingData>data_mnist/mnist_train.csv</TrainingData>
         <TestData>data_mnist/mnist_test.csv</TestData>
@@ -240,28 +258,30 @@
         The following parameters are available:
         
         <Classifier>NN</Classifier>                             NN
-        <TrainingData>data/demo.csv</TrainingData>              Path
-        <TestData></TestData>                                   Path (or empty if no test data is used)
-        <Iterations>10</Iterations>                             Integer (default is 1000)
-        <LearningRate>1.0</LearningRate>                        Decimal value 0 ... 1 (default is 0.3)
-        <UseRegularization>true</UseRegularization>             True or False (default is true)
-        <RegularizationStrength>0.001</RegularizationStrength>   Decimal value (default is 0.001)
-        <UseMomentum>true</UseMomentum>                         True or False (default is true)
+        <TrainingData>data/demo.csv</TrainingData>              Path to training dataset
+        <TestData></TestData>                                   Path to test dataset (or empty if no test data is used)
+        <Iterations>10</Iterations>                             Training iterations (default is 200)
+        <LearningRate>1.0</LearningRate>                        Learning rate (default is 1.0)
+        <UseRegularization>true</UseRegularization>             Sets if regularization shall be used (default is true)
+        <RegularizationStrength>0.001</RegularizationStrength>  Sets regularization strength (default is 0.001)
+        <UseMomentum>true</UseMomentum>                         Sets if momentum shall be used (default is true)
         <HiddenLayers>16,8</HiddenLayers>                       Number of units in the hidden layers (default is 16)
         <Normalization>0:1</Normalization>                      Lower and upper bound for normalized values
+        <BatchSize>100</BatchSize>                              Size of batches for batch training. If not set, batch training isn't used
+        <ShuffleData>true</ShuffleData>                         Sets if dataset shall be shuffle (default is true)
     -->
     <Experiment id="dnn_demo">
         <!-- Training set: 100.00% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/demo.csv</TrainingData>
         <Iterations>100</Iterations>
-        <LearningRate>0.4</LearningRate>
+        <LearningRate>1.0</LearningRate>
         <UseRegularization>false</UseRegularization>
         <HiddenLayers>12,8</HiddenLayers>
     </Experiment>
     <Experiment id="dnn_spiral">
         <!-- Training set: 99.33% -->
-        <!-- Cross-validation: 95.33% -->
+        <!-- Cross-validation: 98.33% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/spiral.csv</TrainingData>
         <Iterations>8000</Iterations>
@@ -274,7 +294,7 @@
         <!-- Cross-validation: 100.00% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/circle.csv</TrainingData>
-        <Iterations>200</Iterations>
+        <Iterations>1000</Iterations>
         <LearningRate>1.0</LearningRate>
         <UseRegularization>false</UseRegularization>
         <HiddenLayers>12,8</HiddenLayers>
@@ -285,84 +305,84 @@
         <!-- Cross-validation: 98.00% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/iris.csv</TrainingData>
-        <Iterations>800</Iterations>
+        <Iterations>500</Iterations>
         <LearningRate>0.4</LearningRate>
         <UseRegularization>false</UseRegularization>
-        <HiddenLayers>32,16</HiddenLayers>
+        <HiddenLayers>8,4</HiddenLayers>
         <Normalization>-1:1</Normalization>
     </Experiment>
     <Experiment id="dnn_iris_test">
         <!-- Training set: 99.17% -->
         <!-- Test set: 96.67% -->
-        <!-- Cross-validation: 99.17% -->
+        <!-- Cross-validation: 98.33% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/iris_training.csv</TrainingData>
         <TestData>data/iris_test.csv</TestData>
-        <Iterations>2000</Iterations>
-        <LearningRate>0.8</LearningRate>
+        <Iterations>1000</Iterations>
+        <LearningRate>0.6</LearningRate>
         <UseRegularization>false</UseRegularization>
         <HiddenLayers>8,4</HiddenLayers>
         <Normalization>-1:1</Normalization>
     </Experiment>
     <Experiment id="dnn_iris_2d">
-        <!-- Training set: 96.00% -->
-        <!-- Cross-validation: 98.00% -->
+        <!-- Training set: 96.67% -->
+        <!-- Cross-validation: 96.67% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/iris.2D.csv</TrainingData>
-        <Iterations>1000</Iterations>
-        <LearningRate>0.5</LearningRate>
+        <Iterations>400</Iterations>
+        <LearningRate>0.6</LearningRate>
         <UseRegularization>false</UseRegularization>
-        <HiddenLayers>64,32</HiddenLayers>
+        <HiddenLayers>16,8</HiddenLayers>
         <Normalization>-1:1</Normalization>
         <BatchSize>100</BatchSize>
     </Experiment>
     <Experiment id="dnn_flame">
-        <!-- Training set: 99.17% -->
-        <!-- Cross-validation: 100.00% -->
+        <!-- Training set: 100.00% -->
+        <!-- Cross-validation: 99.17% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/flame.csv</TrainingData>
-        <Iterations>1200</Iterations>
+        <Iterations>2000</Iterations>
         <LearningRate>0.4</LearningRate>
         <UseRegularization>false</UseRegularization>
         <HiddenLayers>12,8</HiddenLayers>
     </Experiment>
     <Experiment id="dnn_jain">
-        <!-- Training set: 95.17% -->
-        <!-- Cross-validation: 92.70% -->
+        <!-- Training set: 100.00% -->
+        <!-- Cross-validation: 97.32% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/jain.csv</TrainingData>
-        <Iterations>300</Iterations>
+        <Iterations>2500</Iterations>
         <LearningRate>0.7</LearningRate>
         <UseRegularization>false</UseRegularization>
-        <HiddenLayers>12,8</HiddenLayers>
+        <HiddenLayers>16,12</HiddenLayers>
     </Experiment>
     <Experiment id="dnn_diabetes">
-        <!-- Training set: 98.05% -->
-        <!-- Cross-validation: 80.91% -->
+        <!-- Training set: 98.31% -->
+        <!-- Cross-validation: 71.54% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/diabetes.csv</TrainingData>
-        <Iterations>10000</Iterations>
+        <Iterations>4000</Iterations>
         <LearningRate>1.0</LearningRate>
         <UseRegularization>false</UseRegularization>
-        <HiddenLayers>24,12</HiddenLayers>
+        <HiddenLayers>64,32</HiddenLayers>
         <Normalization>-1:1</Normalization>
-        <BatchSize>200</BatchSize>
+        <ShuffleData>false</ShuffleData>
     </Experiment>
     <Experiment id="dnn_glass">
-        <!-- Training set: 100.00% -->
-        <!-- Cross-validation: 87.38% -->
+        <!-- Training set: 98.13% -->
+        <!-- Cross-validation: 69.26% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/glass.csv</TrainingData>
-        <Iterations>6000</Iterations>
-        <LearningRate>0.8</LearningRate>
+        <Iterations>3000</Iterations>
+        <LearningRate>1.0</LearningRate>
         <UseRegularization>false</UseRegularization>
         <HiddenLayers>64,32</HiddenLayers>
         <Normalization>-1:1</Normalization>
     </Experiment>
     <Experiment id="dnn_mnist">
-        <!-- Training set: 97.49% -->
-        <!-- Test set: 96.59% -->
-        <!-- Cross-validation: 97.47% -->
+        <!-- Training set: 97.32% -->
+        <!-- Test set: 96.17% -->
+        <!-- Cross-validation: 96.13% -->
         <Classifier>NN</Classifier>
         <TrainingData>data_mnist/mnist_train.csv</TrainingData>
         <TestData>data_mnist/mnist_test.csv</TestData>
@@ -393,20 +413,20 @@
     </Experiment>
     <Experiment id="knn_spiral">
         <!-- Training set: 99.33% -->
-        <!-- Cross-validation: 73.33% -->
+        <!-- Cross-validation: 98.33% -->
         <Classifier>KNN</Classifier>
         <TrainingData>data/spiral.csv</TrainingData>
         <K>3</K>
     </Experiment>
     <Experiment id="knn_circle">
         <!-- Training set: 100.00% -->
-        <!-- Cross-validation: 99.06% -->
+        <!-- Cross-validation: 100.00% -->
         <Classifier>KNN</Classifier>
         <TrainingData>data/circle.csv</TrainingData>
         <K>3</K>
     </Experiment>
     <Experiment id="knn_iris">
-        <!-- Training set: 96.00% -->
+        <!-- Training set: 96.67% -->
         <!-- Cross-validation: 95.33% -->
         <Classifier>KNN</Classifier>
         <TrainingData>data/iris.csv</TrainingData>
@@ -415,15 +435,15 @@
     <Experiment id="knn_iris_test">
         <!-- Training set: 97.50% -->
         <!-- Test set: 96.67% -->
-        <!-- Cross-validation: 96.67% -->
+        <!-- Cross-validation: 95.83% -->
         <Classifier>KNN</Classifier>
         <TrainingData>data/iris_training.csv</TrainingData>
         <TestData>data/iris_test.csv</TestData>
         <K>4</K>
     </Experiment>
     <Experiment id="knn_iris_2d">
-        <!-- Training set: 98.00% -->
-        <!-- Cross-validation: 95.33% -->
+        <!-- Training set: 98.67% -->
+        <!-- Cross-validation: 96.00% -->
         <Classifier>KNN</Classifier>
         <TrainingData>data/iris.2D.csv</TrainingData>
         <Normalization>-1:1</Normalization>
@@ -438,14 +458,14 @@
     </Experiment>
     <Experiment id="knn_jain">
         <!-- Training set: 100.00% -->
-        <!-- Cross-validation: 97.30% -->
+        <!-- Cross-validation: 100.00% -->
         <Classifier>KNN</Classifier>
         <TrainingData>data/jain.csv</TrainingData>
         <K>3</K>
     </Experiment>
     <Experiment id="knn_diabetes">
         <!-- Training set: 85.81% -->
-        <!-- Cross-validation: 74.56% -->
+        <!-- Cross-validation: 73.00% -->
         <Classifier>KNN</Classifier>
         <TrainingData>data/diabetes.csv</TrainingData>
         <Normalization>-1:1</Normalization>
@@ -453,7 +473,7 @@
     </Experiment>
     <Experiment id="knn_glass">
         <!-- Training set: 100.00% -->
-        <!-- Cross-validation: 72.74% -->
+        <!-- Cross-validation: 72.44% -->
         <Classifier>KNN</Classifier>
         <TrainingData>data/glass.csv</TrainingData>
         <K>2</K>
@@ -485,21 +505,21 @@
     </Experiment>
     <Experiment id="rbf_spiral">
         <!-- Training set: 99.33% -->
-        <!-- Cross-validation: 36.67% -->
+        <!-- Cross-validation: 97.00% -->
         <Classifier>RBF</Classifier>
         <TrainingData>data/spiral.csv</TrainingData>
         <Gamma>40.0</Gamma>
     </Experiment>
     <Experiment id="rbf_circle">
-        <!-- Training set: 99.33% -->
-        <!-- Cross-validation: 36.67% -->
+        <!-- Training set: 100.00% -->
+        <!-- Cross-validation: 84.28% -->
         <Classifier>RBF</Classifier>
         <TrainingData>data/circle.csv</TrainingData>
         <Gamma>130.0</Gamma>
     </Experiment>
     <Experiment id="rbf_iris">
         <!-- Training set: 96.67% -->
-        <!-- Cross-validation: 95.33% -->
+        <!-- Cross-validation: 94.00% -->
         <Classifier>RBF</Classifier>
         <TrainingData>data/iris.csv</TrainingData>
         <Gamma>0.7</Gamma>
@@ -507,7 +527,7 @@
     <Experiment id="rbf_iris_test">
         <!-- Training set: 95.00% -->
         <!-- Test set: 100.00% -->
-        <!-- Cross-validation: 94.17% -->
+        <!-- Cross-validation: 92.50% -->
         <Classifier>RBF</Classifier>
         <TrainingData>data/iris_training.csv</TrainingData>
         <TestData>data/iris_test.csv</TestData>
@@ -522,21 +542,21 @@
     </Experiment>
     <Experiment id="rbf_flame">
         <!-- Training set: 98.75% -->
-        <!-- Cross-validation: 68.33% -->
+        <!-- Cross-validation: 89.17% -->
         <Classifier>RBF</Classifier>
         <TrainingData>data/flame.csv</TrainingData>
         <Gamma>1000.0</Gamma>
     </Experiment>
     <Experiment id="rbf_jain">
         <!-- Training set: 98.12% -->
-        <!-- Cross-validation: 84.32% -->
+        <!-- Cross-validation: 97.84% -->
         <Classifier>RBF</Classifier>
         <TrainingData>data/jain.csv</TrainingData>
         <Gamma>55.0</Gamma>
     </Experiment>
     <Experiment id="rbf_diabetes">
         <!-- Training set: 100.00% -->
-        <!-- Cross-validation: 65.09% -->
+        <!-- Cross-validation: 65.13% -->
         <Classifier>RBF</Classifier>
         <TrainingData>data/diabetes.csv</TrainingData>
         <Normalization>0:2</Normalization>
@@ -544,7 +564,7 @@
     </Experiment>
     <Experiment id="rbf_glass">
         <!-- Training set: 100.00% -->
-        <!-- Cross-validation: 47.44% -->
+        <!-- Cross-validation: 46.46% -->
         <Classifier>RBF</Classifier>
         <TrainingData>data/glass.csv</TrainingData>
         <Normalization>0:2</Normalization>
