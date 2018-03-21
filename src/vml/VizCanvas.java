@@ -2,11 +2,11 @@
 package vml;
 
 import javafx.scene.paint.*;
-import javafx.scene.shape.*;
 import javafx.scene.canvas.*;
 
 /**
- *
+ * Canvas for drawing decision boundaries and training data.
+ * 
  * @author Johan Hagelbäck, Linnaeus University  (johan.hagelback@lnu.se)
  */
 public class VizCanvas extends Canvas
@@ -68,22 +68,29 @@ public class VizCanvas extends Canvas
         scale = max - min;
         //Shift factor of the data
         shift = 0;
-        if (min < 0) shift = -min / 2.0;
+        if (min < 0) shift = -min;
         
         //Generate frame
         build_frame();
     }
     
+    /**
+     * Updates the canvas.
+     */
     public void update()
     {
         draw(this.getGraphicsContext2D());
     }
     
+    /**
+     * Draw canvas.
+     * 
+     * @param gc Graphics context
+     */
     public void draw(GraphicsContext gc)
     {
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, getWidth(), getHeight());
-        Rectangle r = new Rectangle(this.getWidth(), this.getHeight(), Color.RED);
         
         //Error check
         if (c == null) return;
@@ -114,8 +121,13 @@ public class VizCanvas extends Canvas
             //Iterate over each instance
             Instance inst = data.get(i);
             //Calculate cell (x,y) values
-            double x = (inst.x.get(0) / scale + shift) * 100.0;
-            double y = (inst.x.get(1) / scale + shift) * 100.0;
+            //double x = (inst.x.get(0) / scale + shift) * 100.0;
+            //double y = (inst.x.get(1) / scale + shift) * 100.0;
+            double x = ( (inst.x.get(0)+shift) / scale) * 100.0;
+            double y = ( (inst.x.get(1)+shift) / scale) * 100.0;
+            
+            //System.out.println("(" + inst.x.get(0) + "," + inst.x.get(1) + ") -> (" + x + "," + y + ")");
+            
             //Draw outer border
             gc.setFill(Color.BLACK);
             gc.fillOval(x * cell_w, y * cell_w, cell_w, cell_w);
@@ -147,8 +159,10 @@ public class VizCanvas extends Canvas
                 {
                     //Calculate instance values for this cell
                     double[] vals = new double[2];
-                    vals[0] = (x / 100.0 - shift) * scale;
-                    vals[1] = (y / 100.0 - shift) * scale;
+                    //vals[0] = (x / 100.0 - shift) * scale;
+                    //vals[1] = (y / 100.0 - shift) * scale;
+                    vals[0] = (x / 100.0) * scale - shift;
+                    vals[1] = (y / 100.0) * scale - shift;
                     //Create dataset for the instance
                     Dataset d = new Dataset();
                     Instance inst = new Instance(vals, 0);
