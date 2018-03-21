@@ -141,9 +141,9 @@ public class NN extends Classifier
     {
         if (batch_size > 0)
         {
-            Dataset b = getNextBatch();
-            X = b.input_matrix();
-            y = b.label_vector();
+            Dataset batch = getNextBatch();
+            X = batch.input_matrix();
+            y = batch.label_vector();
         }
         else
         {

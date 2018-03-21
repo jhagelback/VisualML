@@ -75,7 +75,7 @@ public class OutLayer
         this.X = X;
         
         //Activation
-        scores = Matrix.activation(w, X, b);
+        scores = Matrix.activation(w, X, b);        
     }
     
     /**
