@@ -24,7 +24,7 @@ public class Main extends Application
     /**
      * Application version.
      */
-    public static String version = "3.2";
+    public static String version = "3.3";
     
     //Panel to render stuff on
     private VizCanvas p;
@@ -309,6 +309,12 @@ public class Main extends Application
         mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
             initClassifier(ClassifierFactory.build("l_iris_2d"), 1);
+        }); 
+        lmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Iris PCA");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("l_iris_pca"), 5);
         }); 
         lmenu.getItems().add(mitem);
         
