@@ -598,6 +598,17 @@ public class Main extends Application
             }
             System.exit(0);
         }
+        else if (args[0].equalsIgnoreCase("-dr"))
+        {
+            if (args.length >= 3)
+            {
+                String filename = args[1];
+                int columns = Integer.parseInt(args[2]);
+                DimensionalityReduction dr = new DimensionalityReduction(filename, columns);
+                dr.reduceAndSave();
+            }
+            System.exit(0);
+        }
         else
         {
             System.err.println("Wrong arguments: [-exp|-gui] [args]");

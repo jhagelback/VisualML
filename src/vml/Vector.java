@@ -73,6 +73,37 @@ public class Vector
     }
     
     /**
+     * Creates a random, normalized unit vector.
+     * 
+     * @param s Size of vector
+     * @return Random normalized unit vector
+     */
+    public static Vector random_norm(int s)
+    {
+        Random rnd = new Random();
+        //Generate random double values between: 0 ... 1
+        double[] v = new double[s];
+        double abs = 0;
+        for (int a = 0; a < s; a++)
+        {
+            v[a] = rnd.nextDouble();
+            abs += Math.pow(v[a], 2);
+        }
+        abs = Math.sqrt(abs);
+        
+        //Normalize values
+        double[] sv = new double[s];
+        for (int a = 0; a < s; a++)
+        {
+            sv[a] = v[a] / abs;
+        }
+        sv = v;
+        
+        //Return normalized vector
+        return new Vector(sv);
+    }
+    
+    /**
      * Creates a new vector.
      * 
      * @param v Values
@@ -80,6 +111,19 @@ public class Vector
     public Vector(double[] v)
     {
         this.v = v;
+    }
+    
+    /**
+     * Fills the vector with the specified value.
+     * 
+     * @param val The value to fill the vector with
+     */
+    public void fill(double val)
+    {
+        for (int a = 0; a < v.length; a++)
+        {
+            v[a] = val;
+        }
     }
     
     /**
@@ -163,6 +207,32 @@ public class Vector
     }
     
     /**
+     * Multiplies a row vector with a column vector.
+     * 
+     * @param v1 Row vector
+     * @param v2 Column vector
+     * @return Result matrix
+     * @throws ArithmeticException If unable to calculate the product
+     */
+    public static Matrix mul(Vector v1, Vector v2) throws ArithmeticException
+    {
+        if (v1.size() != v2.size())
+        {
+            throw new ArithmeticException("Size of both vectors must be the same");
+        }
+        
+        double[][] nv = new double[v1.size()][v1.size()];
+        for (int r = 0; r < v1.size(); r++)
+        {
+            for (int c = 0; c < v1.size(); c++)
+            {
+                nv[r][c] = v1.v[r] * v2.v[c];
+            }
+        }
+        return new Matrix(nv);
+    }
+    
+    /**
      * Returns the index of the highest value in the vector.
      * 
      * @return Index of highest value
@@ -218,7 +288,7 @@ public class Vector
      * @param v2 Second vector
      * @return Squared L1 dist
      */
-    public static double L1_dist(Vector v1, Vector v2)
+    public static double L1_dist(Vector v1, Vector v2) throws ArithmeticException
     {
         if (v1.size() != v2.size())
         {
@@ -241,7 +311,7 @@ public class Vector
      * @param v2 Second vector
      * @return Squared L2 dist
      */
-    public static double L2_dist(Vector v1, Vector v2)
+    public static double L2_dist(Vector v1, Vector v2) throws ArithmeticException
     {
         if (v1.size() != v2.size())
         {
@@ -255,6 +325,48 @@ public class Vector
         }
         
         return d;
+    }
+    
+    /**
+     * Calculates the Frobenius norm (square root of the squared sums) for this vector.
+     * 
+     * @return The Frobenious norm
+     */
+    public double frobenius_norm()
+    {
+        double s = 0;
+        for (int i = 0; i < v.length; i++)
+        {
+            s += Math.pow(v[i], 2);
+        }
+        
+        return Math.sqrt(s);
+    }
+    
+    /**
+     * Calculates the square root of the squared sum of differences between the components in 
+     * two vectors.
+     * 
+     * @param v1 First vector
+     * @param v2 Second vector
+     * @return Different between vectors
+     * @throws ArithmeticException If unable to calculate the difference
+     */
+    public static double diff(Vector v1, Vector v2) throws ArithmeticException
+    {
+        if (v1.size() != v2.size())
+        {
+            throw new ArithmeticException("Size of vectors must be equal");
+        }
+        
+        double d = 0;
+        for (int i = 0; i < v1.size(); i++)
+        {
+            //d += Math.abs(v1.v[i] - v2.v[i]);
+            d += Math.pow(v1.v[i] - v2.v[i], 2);
+        }
+        
+        return Math.sqrt(d);
     }
     
     /**

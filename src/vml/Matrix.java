@@ -249,6 +249,14 @@ public class Matrix
         return new Matrix(nv);
     }
     
+    /**
+     * Calculates the product of the transpose of w and d.
+     * 
+     * @param w The matrix to transpose
+     * @param d The other matrix
+     * @return Result matrix
+     * @throws ArithmeticException If unable to calculate the product
+     */
     public static Matrix transpose_mul(Matrix w, Matrix d) throws ArithmeticException
     {
         //Error checks
@@ -279,8 +287,9 @@ public class Matrix
      * @param d First matrix
      * @param x Second matrix
      * @return Result matrix
+     * @throws ArithmeticException If unable to calculate the product
      */
-    public static Matrix mul_transpose(Matrix d, Matrix x)
+    public static Matrix mul_transpose(Matrix d, Matrix x) throws ArithmeticException
     {
         //Error checks
         if (d.columns() != x.columns())
@@ -302,6 +311,120 @@ public class Matrix
         });
         
         return new Matrix(nv);
+    }
+    
+    /**
+     * Multiplies two matrices.
+     * Input matrices and vector are not modified.
+     * 
+     * @param m1 First matrix
+     * @param m2 Second matrix
+     * @return Result matrix
+     * @throws ArithmeticException If unable to calculate the product 
+     */
+    public static Matrix mul(Matrix m1, Matrix m2) throws ArithmeticException
+    {
+        //Error checks
+        if (m1.columns() != m2.rows())
+        {
+            throw new ArithmeticException("Number of columns in first matrix does not match rows of second matrix");
+        }
+        
+        //Result matrix
+        double[][] nv = new double[m1.rows()][m2.columns()];
+        
+        IntStream.range(0, m2.columns()).parallel().forEach(nc -> {
+            for (int r = 0; r < m1.rows(); r++)
+            {
+                //Multiply the row in weight matrix with the input vector
+                for (int c = 0; c < m1.columns(); c++)
+                {
+                    nv[r][nc] += m1.v[r][c] * m2.v[c][nc];
+                }
+            }
+        });
+        
+        return new Matrix(nv);
+    }
+    
+    /**
+     * Multiplies a matrix with a vector.
+     * 
+     * @param w The matrix
+     * @param x The vector
+     * @return Result vector
+     * @throws ArithmeticException If unable to calculate the product
+     */
+    public static Vector mul(Matrix w, Vector x) throws ArithmeticException
+    {
+        //Error checks
+        if (w.columns() != x.size())
+        {
+            throw new ArithmeticException("Number of columns in matrix does not match size of vector");
+        }
+        
+        //Activation vector
+        double[] nv = new double[w.rows()];
+        
+        IntStream.range(0, w.rows()).parallel().forEach(r -> {
+            //Multiply the row in the matrix with the vector
+            for (int c = 0; c < w.columns(); c++)
+            {
+                nv[r] += w.get(r, c) * x.get(c);
+            }
+        });
+        
+        return new Vector(nv);
+    }
+    
+    /**
+     * Multiplies a transposed vector with a matrix.
+     * 
+     * @param x The vector to transpose
+     * @param w The matrix
+     * @return Result vector
+     * @throws ArithmeticException If unable to calculate the product
+     */
+    public static Vector transpose_mul(Vector x, Matrix w) throws ArithmeticException
+    {
+        //Error checks
+        if (w.rows() != x.size())
+        {
+            throw new ArithmeticException("Number of rows in matrix does not match size of vector");
+        }
+        
+        //Activation vector
+        double[] nv = new double[w.rows()];
+        
+        IntStream.range(0, w.rows()).parallel().forEach(r -> {
+            //Multiply the row vector with each column in the vector
+            for (int c = 0; c < w.columns(); c++)
+            {
+                nv[r] += w.get(r, c) * x.get(c);
+            }
+        });
+        
+        return new Vector(nv);
+    }
+    
+    /**
+     * Calculates the transpose of a matrix.
+     * 
+     * @param m The matrix
+     * @return Transpose of the matrix
+     */
+    public static Matrix transpose(Matrix m)
+    {
+        double[][] v = new double[m.columns()][m.rows()];
+        for (int r = 0; r < m.rows(); r++)
+        {
+            for (int c = 0; c < m.columns(); c++)
+            {
+                v[c][r] = m.v[r][c];
+            }
+        }
+        
+        return new Matrix(v);
     }
     
     /**
@@ -532,6 +655,59 @@ public class Matrix
             {
                 v[r][c] /= cons;
             }
+        }
+    }
+    
+    /**
+     * Multiplies all values in the matrix by a constant.
+     * 
+     * @param cons The constant
+     */
+    public void multiply(double cons)
+    {
+        for (int r = 0; r < rows(); r++)
+        {
+            for (int c = 0; c < columns(); c++)
+            {
+                v[r][c] *= cons;
+            }
+        }
+    }
+    
+    /**
+     * Piece-wise subtraction of all values in the matrix by another matrix.
+     * 
+     * @param m The matrix to subtract
+     */
+    public void subtract(Matrix m)
+    {
+        for (int r = 0; r < rows(); r++)
+        {
+            for (int c = 0; c < columns(); c++)
+            {
+                v[r][c] -= m.v[r][c];
+            }
+        }
+    }
+    
+    /**
+     * Inserts a column vector at the specified column in this matrix.
+     * 
+     * @param x The column vector
+     * @param c Column to insert at
+     */
+    public void insert(Vector x, int c) throws ArithmeticException
+    {
+        //Error check
+        if (columns() != x.size())
+        {
+            throw new ArithmeticException("Number of columns in the matrix does not match size of vector");
+        }
+        
+        //Copy values from the vector to a column in the matrix
+        for (int r = 0; r < rows(); r++)
+        {
+            v[r][c] = x.v[r];
         }
     }
     
