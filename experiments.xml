@@ -46,6 +46,15 @@
         <TrainingData>data/iris.csv</TrainingData>
         <Iterations>1000</Iterations>
         <LearningRate>0.2</LearningRate>
+        <ShuffleData>false</ShuffleData>
+    </Experiment>
+    <Experiment id="l_iris_pca">
+        <!-- Training set: 98.00% -->
+        <!-- Cross-validation: 98.00% -->
+        <Classifier>Linear</Classifier>
+        <TrainingData>data/iris_pca.csv</TrainingData>
+        <Iterations>400</Iterations>
+        <LearningRate>0.05</LearningRate>
     </Experiment>
     <Experiment id="l_iris_test">
         <!-- Training set: 97.50% -->
@@ -277,7 +286,7 @@
         <Iterations>100</Iterations>
         <LearningRate>1.0</LearningRate>
         <UseRegularization>false</UseRegularization>
-        <HiddenLayers>12,8</HiddenLayers>
+        <HiddenLayers>8,8</HiddenLayers>
     </Experiment>
     <Experiment id="dnn_spiral">
         <!-- Training set: 99.33% -->
@@ -357,27 +366,27 @@
         <HiddenLayers>16,12</HiddenLayers>
     </Experiment>
     <Experiment id="dnn_diabetes">
-        <!-- Training set: 98.31% -->
-        <!-- Cross-validation: 71.54% -->
+        <!-- Training set: 79.04% -->
+        <!-- Cross-validation: 77.99% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/diabetes.csv</TrainingData>
-        <Iterations>4000</Iterations>
-        <LearningRate>1.0</LearningRate>
+        <Iterations>1000</Iterations>
+        <LearningRate>0.6</LearningRate>
         <UseRegularization>false</UseRegularization>
-        <HiddenLayers>64,32</HiddenLayers>
+        <HiddenLayers>12,8</HiddenLayers>
         <Normalization>-1:1</Normalization>
         <ShuffleData>false</ShuffleData>
     </Experiment>
     <Experiment id="dnn_glass">
-        <!-- Training set: 98.13% -->
-        <!-- Cross-validation: 69.26% -->
+        <!-- Training set: 97.20% -->
+        <!-- Cross-validation: 69.03% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/glass.csv</TrainingData>
         <Iterations>3000</Iterations>
-        <LearningRate>1.0</LearningRate>
+        <LearningRate>0.2</LearningRate>
         <UseRegularization>false</UseRegularization>
         <HiddenLayers>64,32</HiddenLayers>
-        <Normalization>-1:1</Normalization>
+        <Normalization>-2:2</Normalization>
     </Experiment>
     <Experiment id="dnn_mnist">
         <!-- Training set: 97.32% -->
