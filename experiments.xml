@@ -56,6 +56,14 @@
         <Iterations>400</Iterations>
         <LearningRate>0.05</LearningRate>
     </Experiment>
+    <Experiment id="l_iris_svd">
+        <!-- Training set: 98.00% -->
+        <!-- Cross-validation: 98.00% -->
+        <Classifier>Linear</Classifier>
+        <TrainingData>data/iris_svd.csv</TrainingData>
+        <Iterations>400</Iterations>
+        <LearningRate>0.05</LearningRate>
+    </Experiment>
     <Experiment id="l_iris_test">
         <!-- Training set: 97.50% -->
         <!-- Test set: 93.33% -->
@@ -92,15 +100,35 @@
         <LearningRate>0.5</LearningRate>
     </Experiment>
     <Experiment id="l_diabetes">
-        <!-- Training set: 77.08% -->
-        <!-- Cross-validation: 76.64% -->
+        <!-- Training set: 77.34% -->
+        <!-- Cross-validation: 77.15% -->
         <Classifier>Linear</Classifier>
         <TrainingData>data/diabetes.csv</TrainingData>
-        <Iterations>500</Iterations>
+        <Iterations>2000</Iterations>
         <LearningRate>0.1</LearningRate>
         <Normalization>-1:1</Normalization>
+        <BatchSize>50</BatchSize>
     </Experiment>
-    
+    <Experiment id="l_diabetes_pca">
+        <!-- Training set: 75.26% -->
+        <!-- Cross-validation: 74.67% -->
+        <Classifier>Linear</Classifier>
+        <TrainingData>data/diabetes_pca.csv</TrainingData>
+        <Iterations>2000</Iterations>
+        <LearningRate>0.2</LearningRate>
+        <Normalization>-2:2</Normalization>
+        <BatchSize>50</BatchSize>
+    </Experiment>
+    <Experiment id="l_diabetes_svd">
+        <!-- Training set: 75.26% -->
+        <!-- Cross-validation: 74.81% -->
+        <Classifier>Linear</Classifier>
+        <TrainingData>data/diabetes_svd.csv</TrainingData>
+        <Iterations>2000</Iterations>
+        <LearningRate>0.1</LearningRate>
+        <Normalization>-2:2</Normalization>
+        <BatchSize>50</BatchSize>
+    </Experiment>
     <Experiment id="l_glass">
         <!-- Training set: 56.54% -->
         <!-- Cross-validation: 55.52% -->
@@ -234,18 +262,51 @@
         <UseRegularization>false</UseRegularization>
         <HiddenLayers>32</HiddenLayers>
         <Normalization>-1:1</Normalization>
-        <ShuffleData>false</ShuffleData>       
+        <ShuffleData>false</ShuffleData>
+    </Experiment>
+    <Experiment id="nn_diabetes_pca">
+        <!-- Training set: 75.78% -->
+        <!-- Cross-validation: 74.42% -->
+        <Classifier>NN</Classifier>
+        <TrainingData>data/diabetes_pca.csv</TrainingData>
+        <Iterations>4000</Iterations>
+        <LearningRate>0.4</LearningRate>
+        <UseRegularization>false</UseRegularization>
+        <HiddenLayers>8</HiddenLayers>
+        <Normalization>-1:1</Normalization>
+    </Experiment>
+    <Experiment id="nn_diabetes_svd">
+        <!-- Training set: 76.04% -->
+        <!-- Cross-validation: 75.19% -->
+        <Classifier>NN</Classifier>
+        <TrainingData>data/diabetes_svd.csv</TrainingData>
+        <Iterations>3000</Iterations>
+        <LearningRate>0.5</LearningRate>
+        <UseRegularization>false</UseRegularization>
+        <HiddenLayers>8</HiddenLayers>
+        <Normalization>-1:1</Normalization>
     </Experiment>
     <Experiment id="nn_glass">
         <!-- Training set: 98.13% -->
         <!-- Cross-validation: 71.26% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/glass.csv</TrainingData>
-        <Iterations>6000</Iterations> <!-- 6000 -->
-        <LearningRate>0.9</LearningRate> <!-- 1.0 -->
+        <Iterations>6000</Iterations>
+        <LearningRate>0.9</LearningRate>
         <UseRegularization>false</UseRegularization>
-        <HiddenLayers>72</HiddenLayers> <!-- 72 -->
-        <Normalization>0:2</Normalization> <!-- 0:2 -->
+        <HiddenLayers>72</HiddenLayers>
+        <Normalization>0:2</Normalization>
+    </Experiment>
+    <Experiment id="nn_glass_pca">
+        <!-- Training set: 86.45% -->
+        <!-- Cross-validation: 73.39% -->
+        <Classifier>NN</Classifier>
+        <TrainingData>data/glass_pca.csv</TrainingData>
+        <Iterations>8000</Iterations>
+        <LearningRate>0.9</LearningRate>
+        <UseRegularization>false</UseRegularization>
+        <HiddenLayers>36</HiddenLayers>
+        <Normalization>0:2</Normalization>
     </Experiment>
     <Experiment id="nn_mnist">
         <!-- Training set: 96.50% -->
