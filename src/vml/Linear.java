@@ -328,8 +328,8 @@ public class Linear extends Classifier
         }
         
         //Average gradients
-        dW.divide(num_train);
-        dB.divide(num_train);
+        dW.div(num_train);
+        dB.div(num_train);
         
         //Average loss + reqularization
         loss = loss / num_train + RW;

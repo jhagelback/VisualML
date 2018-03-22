@@ -1,6 +1,8 @@
 
 package vml;
 
+import java.util.ArrayList;
+
 /**
  * Eigendecomposition into Eigenpairs (Eigenvector and Eigenvalue) of a matrix.
  * 
@@ -15,7 +17,13 @@ public class EigenDecomp
     /** Eigenvalues */
     protected Vector EV;
     /** Used in Power Iteration */
-    private Matrix cM;
+    private Matrix new_M;
+    
+    /** Temporary placeholder for eigenvectors */
+    private ArrayList<Vector> e_list;
+    /** Temporary placeholder for eigenvalues */
+    private ArrayList<Double> ev_list;
+    
     
     /**
      * Intialises a new Eigenpairs decomposition.
@@ -24,29 +32,10 @@ public class EigenDecomp
      */
     public EigenDecomp(Matrix data)
     {
-        //Temp
-        /*double[][] v = {
-            {3, 2},
-            {2, 6}
-        };
-        m = new Matrix(v);//*/
-        
-        /*double[][] v = {
-            {5, 4, 11, 10},
-            {4, 5, 10, 11},
-            {11, 10, 25, 24},
-            {10, 11, 24, 25}
-        };
-        m = new Matrix(v);//*/
-        
         this.data = data;
         
         //Create a copy of matrix M
-        cM = data.copy();
-        
-        //Placeholders for Eigenvectors and Eigenvalues
-        E = Matrix.zeros(data.rows(), data.columns());
-        EV = Vector.zeros(data.columns());     
+        new_M = data.copy();     
     }
     
     /**
@@ -54,14 +43,22 @@ public class EigenDecomp
      */
     public void decomp()
     {
-        //Calculate eigenpairs for all columns in the input data
-        for (int c = 0; c < data.columns(); c++)
-        {
-            next(c);
-        }
+        //Temporary placeholders for eigenpairs
+        e_list = new ArrayList<>();
+        ev_list = new ArrayList<>();
         
-        System.out.println("Eigenvalues are:");
-        System.out.println(EV);
+        //Calculate all eigenpairs for the input data
+        while(next()) {}
+        
+        //Placeholders for Eigenvectors and Eigenvalues
+        E = Matrix.zeros(data.rows(), e_list.size());
+        EV = Vector.zeros(e_list.size());
+        //Copy to placeholders
+        for (int i = 0; i < e_list.size(); i++)
+        {
+            E.insert(e_list.get(i), i);
+            EV.set(i, ev_list.get(i));
+        }
         
         //Verify that the result is correct
         if (!checkResult())
@@ -106,48 +103,60 @@ public class EigenDecomp
     
     /**
      * Calculates the next Eigenpair for the input data matrix.
-     * 
-     * @param c Column number
      */
-    private void next(int c)
+    private boolean next()
     {
         //Create a random x vector to decrease the chance that the vector
         //is orthogonal to the eigenvector (the result will then be incorrect.
-        Vector x = Vector.random_norm(cM.rows());
-        
+        Vector x = Vector.random_norm(new_M.rows());
+
         //When to stop iteration
         double diff = 1.0;
         int it = 0;
+        double n = 1000;
         
         //Power Iteration to find Eigenvector
-        while (diff > 0.00001 && it <= 50)
+        while (diff > 0.000005 && it <= 100)
         {
             //Multiply M with x0
-            Vector x1 = Matrix.mul(cM,x);
+            Vector new_x = Matrix.mul(new_M, x);
             //Calculate Frobenius norm
-            double n = x1.frobenius_norm();
+            double new_n = new_x.frobenius_norm();    
             //Divide x with the norm
-            x1.divide(n);
-            //Calculate the difference between current and previous x
-            //(square root of the squared sum of the difference between the components)
-            diff = Vector.diff(x, x1);
-            //Set new x
-            x = x1;
+            new_x.div(new_n);
+            //Calculate the absolut difference from previous Frobenius norm
+            diff = Math.abs(n - new_n);
+            
+            //Set new x and n
+            n = new_n;
+            x = new_x;
+            
             //Next iteration
             it++;
         }
         
-        //Calculate Eigenvalue
-        Vector v = Matrix.transpose_mul(x, cM);
-        double ev = v.dot(x);
+        //Re-orient the vector so first component is positive
+        //This is fine since it creates an orthogonal vector to the eigenvector
+        if (x.get(0) < 0)
+        {
+            x.mul(-1);
+        }
         
-        //Copy to placeholders
-        E.insert(x, c);
-        EV.v[c] = ev;
+        //Calculate Eigenvalue
+        Vector v = Matrix.transpose_mul(x, new_M);
+        double ev = v.dot(x);
+        //Stop if eigenvalue is 0
+        if (Math.abs(ev) <= 0.0001) return false;
+        
+        //Copy to temporary placeholders
+        e_list.add(x);
+        ev_list.add(ev);
         
         //Create new M for next eigenpair
         Matrix xxT = Vector.mul(x, x);
         xxT.multiply(ev);
-        cM.subtract(xxT);
-    }  
+        new_M.subtract(xxT);
+        
+        return true;
+    }
 }

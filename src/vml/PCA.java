@@ -39,30 +39,7 @@ public class PCA
         //Transform the dataset
         Matrix ME = Matrix.mul(data, ed.E);
         //Reduce the size of dataset by removing columns
-        Matrix red = reduce(ME, columns);
-        return red;
-    }
-    
-    /**
-     * Reduces the dataset, i.e. copies the specified number of columns
-     * into a new dataset.
-     * 
-     * @param ME Transformed dataset with all columns
-     * @param columns Number of columns to keep
-     * @return Reduced dataset
-     */
-    private Matrix reduce(Matrix ME, int columns)
-    {
-        double[][] v = new double[ME.rows()][columns];
-        for (int r = 0; r < ME.rows(); r++)
-        {
-            for (int c = 0; c < columns; c++)
-            {
-                v[r][c] = ME.v[r][c];
-            }
-        }
-        
-        Matrix red = new Matrix(v);
+        Matrix red = Matrix.submatrix(ME, data.rows(), columns);
         return red;
     }
 }

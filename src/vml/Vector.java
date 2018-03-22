@@ -83,21 +83,20 @@ public class Vector
         Random rnd = new Random();
         //Generate random double values between: 0 ... 1
         double[] v = new double[s];
-        double abs = 0;
+        double sqSum = 0;
         for (int a = 0; a < s; a++)
         {
             v[a] = rnd.nextDouble();
-            abs += Math.pow(v[a], 2);
+            sqSum += Math.pow(v[a], 2);
         }
-        abs = Math.sqrt(abs);
+        sqSum = Math.sqrt(sqSum);
         
         //Normalize values
         double[] sv = new double[s];
         for (int a = 0; a < s; a++)
         {
-            sv[a] = v[a] / abs;
+            sv[a] = v[a] / sqSum;
         }
-        sv = v;
         
         //Return normalized vector
         return new Vector(sv);
@@ -273,11 +272,24 @@ public class Vector
      * 
      * @param cons The constant
      */
-    public void divide(double cons)
+    public void div(double cons)
     {
         for (int i = 0; i < size(); i++)
         {
             v[i] /= cons;
+        }
+    }
+    
+    /**
+     * Multiplies all values in the vector by a constant.
+     * 
+     * @param cons The constant
+     */
+    public void mul(double cons)
+    {
+        for (int i = 0; i < size(); i++)
+        {
+            v[i] *= cons;
         }
     }
     
@@ -344,29 +356,29 @@ public class Vector
     }
     
     /**
-     * Calculates the square root of the squared sum of differences between the components in 
-     * two vectors.
+     * Normalizes a vector.
      * 
-     * @param v1 First vector
-     * @param v2 Second vector
-     * @return Different between vectors
-     * @throws ArithmeticException If unable to calculate the difference
+     * @param v The vector
+     * @return Normalized vector
      */
-    public static double diff(Vector v1, Vector v2) throws ArithmeticException
+    public static Vector normalize(Vector v)
     {
-        if (v1.size() != v2.size())
+        double sqSum = 0;
+        for (int i = 0; i < v.size(); i++)
         {
-            throw new ArithmeticException("Size of vectors must be equal");
+            sqSum += Math.pow(v.v[i], 2);
+        }
+        sqSum = Math.sqrt(sqSum);
+        
+        //Normalize values
+        double[] sv = new double[v.size()];
+        for (int i = 0; i < v.size(); i++)
+        {
+            sv[i] = v.v[i] / sqSum;
         }
         
-        double d = 0;
-        for (int i = 0; i < v1.size(); i++)
-        {
-            //d += Math.abs(v1.v[i] - v2.v[i]);
-            d += Math.pow(v1.v[i] - v2.v[i], 2);
-        }
-        
-        return Math.sqrt(d);
+        //Return normalized vector
+        return new Vector(sv);
     }
     
     /**

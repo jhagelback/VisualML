@@ -647,7 +647,7 @@ public class Matrix
      * 
      * @param cons The constant
      */
-    public void divide(double cons)
+    public void div(double cons)
     {
         for (int r = 0; r < rows(); r++)
         {
@@ -699,9 +699,9 @@ public class Matrix
     public void insert(Vector x, int c) throws ArithmeticException
     {
         //Error check
-        if (columns() != x.size())
+        if (rows() != x.size())
         {
-            throw new ArithmeticException("Number of columns in the matrix does not match size of vector");
+            throw new ArithmeticException("Number of rows in the matrix does not match size of vector");
         }
         
         //Copy values from the vector to a column in the matrix
@@ -762,6 +762,35 @@ public class Matrix
                 }
             }
         }
+    }
+    
+    /**
+     * Creates a submatrix from this matrix.
+     * 
+     * @param m The matrix
+     * @param rows Number of rows to keep
+     * @param columns Number of columns to keep
+     * @return The submatrix
+     */
+    public static Matrix submatrix(Matrix m, int rows, int columns) throws ArithmeticException
+    {
+        //Error check
+        if (rows < 1 || rows > m.rows() || columns < 1 || columns > m.columns())
+        {
+            throw new ArithmeticException("Invalid size of submatrix");
+        }
+        
+        double[][] v = new double[rows][columns];
+        for (int r = 0; r < rows; r++)
+        {
+            for (int c = 0; c < columns; c++)
+            {
+                v[r][c] = m.v[r][c];
+            }
+        }
+        
+        Matrix red = new Matrix(v);
+        return red;
     }
     
     /**

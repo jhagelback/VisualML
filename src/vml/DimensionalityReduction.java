@@ -20,20 +20,34 @@ public class DimensionalityReduction
     private int columns;
     /** Reduced dataset */
     private Matrix red;
+    /** Type of dr: PCA or SVD */
+    private String type;
     
     //For output
-    private DecimalFormat df = new DecimalFormat("0.0000"); 
+    private DecimalFormat df = new DecimalFormat("0.0000");
+    
+    public static DimensionalityReduction getPCA(String filename, int columns)
+    {
+        return new DimensionalityReduction(filename, columns, "PCA");
+    }
+    
+    public static DimensionalityReduction getSVD(String filename, int columns)
+    {
+        return new DimensionalityReduction(filename, columns, "SVD");
+    }
     
     /**
      * Initialises a new dimensionality reduction. 
      * 
      * @param filename Path to dataset file
      * @param columns Number of columns to keep in the reduced dataset
+     * @param type Type of dimensionality reduction: PCA or SVD
      */
-    public DimensionalityReduction(String filename, int columns)
+    private DimensionalityReduction(String filename, int columns, String type)
     {
         this.filename = filename;
         this.columns = columns;
+        this.type = type;
         
         DataSource reader = new DataSource();
         data = reader.read(filename);
@@ -50,7 +64,8 @@ public class DimensionalityReduction
      */
     public void reduceAndSave()
     {
-        reducePCA();
+        if (type.equalsIgnoreCase("PCA")) reducePCA();
+        if (type.equalsIgnoreCase("SVD")) reduceSVD();
         saveReducedData();
     }
     
@@ -66,12 +81,23 @@ public class DimensionalityReduction
     }
     
     /**
+     * Reduces the dataset with Singular-Value Decomposition (SVD).
+     */
+    public void reduceSVD()
+    {
+        System.out.print("Reducing data with SVD ... ");
+        SVD svd = new SVD(data.input_matrix());
+        red = svd.analyze();
+        System.out.println("done");
+    }
+    
+    /**
      * Saves the reduced dataset to a new data file.
      */
     public void saveReducedData()
     {
         //Output filename
-        String out_filename = filename.replaceAll(".csv", "_pca.csv");
+        String out_filename = filename.replaceAll(".csv", "_" + type.toLowerCase() + ".csv");
         System.out.print("Saving reduced dataset to '" + out_filename + "' ... ");
         //Labels vector
         Vector y = data.label_vector();
@@ -83,7 +109,7 @@ public class DimensionalityReduction
             String header = "";
             for (int c = 0; c < red.columns(); c++)
             {
-                header += "pca" + c + ",";
+                header += "dr" + c + ",";
             }
             header += "category";
             //Write to file
