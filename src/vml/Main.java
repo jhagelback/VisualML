@@ -24,7 +24,7 @@ public class Main extends Application
     /**
      * Application version.
      */
-    public static String version = "3.3";
+    public static String version = "3.4";
     
     //Panel to render stuff on
     private VizCanvas p;
@@ -608,10 +608,24 @@ public class Main extends Application
         {
             if (args.length >= 3)
             {
-                String filename = args[1];
-                int columns = Integer.parseInt(args[2]);
-                DimensionalityReduction dr = new DimensionalityReduction(filename, columns);
-                dr.reduceAndSave();
+                String type = args[1];
+                String filename = args[2];
+                int columns = 1;
+                if (args.length >= 4)
+                {
+                    columns = Integer.parseInt(args[3]);
+                }
+                //Run dimensionality reduction
+                if (type.equalsIgnoreCase("PCA"))
+                {
+                    DimensionalityReduction dr = DimensionalityReduction.getPCA(filename, columns);
+                    dr.reduceAndSave();
+                }
+                if (type.equalsIgnoreCase("SVD"))
+                {
+                    DimensionalityReduction dr = DimensionalityReduction.getSVD(filename, columns);
+                    dr.reduceAndSave();
+                }
             }
             System.exit(0);
         }
