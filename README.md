@@ -60,3 +60,23 @@ You can classify a new instance with:
 ```
 String pred_label = c.classify(Instance);
 ```
+## Dimensionality Reduction
+VisualML supports dimensionality reduction using Principal-Component Analysis (PCA) and Single-Value Decomposition (SVD).
+
+To reduce the dimensionality of a dataset, run the VisualML.jar file with the following parameters:
+```
+java -jar VisualML.jar -dr PCA|SVD [filename] [columns]
+```
+where [filename] is the path to the dataset file and [columns] is the number of columns to keep (dimensionality) if PCA 
+is used. The dataset will be saved in a new dataset file in the same folder as the original dataset file.
+
+Example:
+```
+java -jar VisualML.jar -dr PCA data/iris.csv 2
+```
+This reduces the number of attributes in the iris dataset to 2 using PCA, and saves the new dataset as data/iris_pca.csv.
+
+```
+java -jar VisualML.jar -dr SVD data/iris.csv
+```
+This reduces the number of attributes in the iris dataset using SVD, and saves the new dataset as data/iris_svd.csv.
