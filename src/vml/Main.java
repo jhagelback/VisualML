@@ -308,7 +308,7 @@ public class Main extends Application
         
         mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("l_iris_2d"), 1);
+            initClassifier(ClassifierFactory.build("l_iris_2d"), 10);
         }); 
         lmenu.getItems().add(mitem);
         
@@ -355,6 +355,12 @@ public class Main extends Application
         }); 
         nmenu.getItems().add(mitem);
         
+        mitem = new MenuItem("Iris PCA");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("nn_iris_pca"), 20);
+        }); 
+        nmenu.getItems().add(mitem);
+        
         mitem = new MenuItem("Flame");
         mitem.setOnAction((ActionEvent t) -> {
             initClassifier(ClassifierFactory.build("nn_flame"), 30);
@@ -389,6 +395,12 @@ public class Main extends Application
         mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
             initClassifier(ClassifierFactory.build("dnn_iris_2d"), 10);
+        }); 
+        dmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Iris PCA");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("dnn_iris_pca"), 10);
         }); 
         dmenu.getItems().add(mitem);
         
@@ -429,6 +441,12 @@ public class Main extends Application
         }); 
         kmenu.getItems().add(mitem);
         
+        mitem = new MenuItem("Iris PCA");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("knn_iris_pca"), 1);
+        }); 
+        kmenu.getItems().add(mitem);
+        
         mitem = new MenuItem("Flame");
         mitem.setOnAction((ActionEvent t) -> {
             initClassifier(ClassifierFactory.build("knn_flame"), 1);
@@ -463,6 +481,12 @@ public class Main extends Application
         mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
             initClassifier(ClassifierFactory.build("rbf_iris_2d"), 1);
+        }); 
+        kemenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Iris PCA");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("rbf_iris_pca"), 1);
         }); 
         kemenu.getItems().add(mitem);
         
