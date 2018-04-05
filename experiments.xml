@@ -75,13 +75,12 @@
         <LearningRate>0.1</LearningRate>
     </Experiment>
     <Experiment id="l_iris_2d">
-        <!-- Training set: 96.00% -->
-        <!-- Cross-validation: 95.33% -->
+        <!-- Training set: 96.67% -->
+        <!-- Cross-validation: 96.67% -->
         <Classifier>Linear</Classifier>
         <TrainingData>data/iris.2d.csv</TrainingData>
-        <Iterations>500</Iterations>
-        <LearningRate>0.1</LearningRate>
-        <Normalization>-1:1</Normalization>
+        <Iterations>1000</Iterations>
+        <LearningRate>0.2</LearningRate>
     </Experiment>
     <Experiment id="l_flame">
         <!-- Training set: 67.92% -->
@@ -222,15 +221,24 @@
         <Normalization>-1:1</Normalization>
     </Experiment>
     <Experiment id="nn_iris_2d">
-        <!-- Training set: 96.00% -->
-        <!-- Cross-validation: 96.00% -->
+        <!-- Training set: 96.67% -->
+        <!-- Cross-validation: 96.67% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/iris.2D.csv</TrainingData>
-        <Iterations>1000</Iterations>
-        <LearningRate>0.3</LearningRate>
+        <Iterations>800</Iterations>
+        <LearningRate>0.1</LearningRate>
         <UseRegularization>false</UseRegularization>
-        <HiddenLayers>6</HiddenLayers>
-        <Normalization>-1:1</Normalization>
+        <HiddenLayers>8</HiddenLayers>
+    </Experiment>
+    <Experiment id="nn_iris_pca">
+        <!-- Training set: 98.00% -->
+        <!-- Cross-validation: 97.33% -->
+        <Classifier>NN</Classifier>
+        <TrainingData>data/iris_pca.csv</TrainingData>
+        <Iterations>1000</Iterations>
+        <LearningRate>0.2</LearningRate>
+        <UseRegularization>false</UseRegularization>
+        <HiddenLayers>16</HiddenLayers>
     </Experiment>
     <Experiment id="nn_flame">
         <!-- Training set: 99.17% -->
@@ -253,16 +261,16 @@
         <HiddenLayers>16</HiddenLayers>
     </Experiment>
     <Experiment id="nn_diabetes">
-        <!-- Training set: 83.07% -->
-        <!-- Cross-validation: 77.02% -->
+        <!-- Training set: 80.21% -->
+        <!-- Cross-validation: 77.04% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/diabetes.csv</TrainingData>
         <Iterations>2500</Iterations>
-        <LearningRate>0.9</LearningRate>
+        <LearningRate>0.3</LearningRate>
         <UseRegularization>false</UseRegularization>
         <HiddenLayers>32</HiddenLayers>
         <Normalization>-1:1</Normalization>
-        <ShuffleData>false</ShuffleData>
+        <BatchSize>50</BatchSize>
     </Experiment>
     <Experiment id="nn_diabetes_pca">
         <!-- Training set: 75.78% -->
@@ -395,16 +403,24 @@
         <Normalization>-1:1</Normalization>
     </Experiment>
     <Experiment id="dnn_iris_2d">
-        <!-- Training set: 96.67% -->
-        <!-- Cross-validation: 96.67% -->
+        <!-- Training set: 97.33% -->
+        <!-- Cross-validation: 97.33% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/iris.2D.csv</TrainingData>
         <Iterations>400</Iterations>
-        <LearningRate>0.6</LearningRate>
+        <LearningRate>0.1</LearningRate>
         <UseRegularization>false</UseRegularization>
         <HiddenLayers>16,8</HiddenLayers>
-        <Normalization>-1:1</Normalization>
-        <BatchSize>100</BatchSize>
+    </Experiment>
+    <Experiment id="dnn_iris_pca">
+        <!-- Training set: 97.33% -->
+        <!-- Cross-validation: 97.33% -->
+        <Classifier>NN</Classifier>
+        <TrainingData>data/iris_pca.csv</TrainingData>
+        <Iterations>1200</Iterations>
+        <LearningRate>0.1</LearningRate>
+        <UseRegularization>false</UseRegularization>
+        <HiddenLayers>16,8</HiddenLayers>
     </Experiment>
     <Experiment id="dnn_flame">
         <!-- Training set: 100.00% -->
@@ -428,7 +444,7 @@
     </Experiment>
     <Experiment id="dnn_diabetes">
         <!-- Training set: 79.04% -->
-        <!-- Cross-validation: 77.99% -->
+        <!-- Cross-validation: 77.57% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/diabetes.csv</TrainingData>
         <Iterations>1000</Iterations>
@@ -437,6 +453,7 @@
         <HiddenLayers>12,8</HiddenLayers>
         <Normalization>-1:1</Normalization>
         <ShuffleData>false</ShuffleData>
+        <BatchSize>50</BatchSize>
     </Experiment>
     <Experiment id="dnn_glass">
         <!-- Training set: 97.20% -->
@@ -516,7 +533,13 @@
         <!-- Cross-validation: 96.00% -->
         <Classifier>KNN</Classifier>
         <TrainingData>data/iris.2D.csv</TrainingData>
-        <Normalization>-1:1</Normalization>
+        <K>4</K>
+    </Experiment>
+    <Experiment id="knn_iris_pca">
+        <!-- Training set: 98.67% -->
+        <!-- Cross-validation: 96.00% -->
+        <Classifier>KNN</Classifier>
+        <TrainingData>data/iris_pca.csv</TrainingData>
         <K>4</K>
     </Experiment>
     <Experiment id="knn_flame">
@@ -609,6 +632,13 @@
         <Classifier>RBF</Classifier>
         <TrainingData>data/iris.2D.csv</TrainingData>
         <Gamma>1.0</Gamma>
+    </Experiment>
+    <Experiment id="rbf_iris_pca">
+        <!-- Training set: 96.00% -->
+        <!-- Cross-validation: 94.67% -->
+        <Classifier>RBF</Classifier>
+        <TrainingData>data/iris_pca.csv</TrainingData>
+        <Gamma>1.5</Gamma>
     </Experiment>
     <Experiment id="rbf_flame">
         <!-- Training set: 98.75% -->
