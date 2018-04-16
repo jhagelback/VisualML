@@ -28,6 +28,8 @@ public abstract class Classifier
     protected int noCategories;
     //Number of attributes in dataset
     protected int noInputs;
+    //Confusion matrix
+    protected Matrix cm;
     
     /**
      * Get next batch for batch training
@@ -178,6 +180,8 @@ public abstract class Classifier
         activation(d);
         int correct = 0;
         
+        cm = Matrix.zeros(d.noCategories(), d.noCategories());
+        
         for (int i = 0; i < d.size(); i++)
         {
             int pred_class = classify(i);
@@ -185,10 +189,16 @@ public abstract class Classifier
             {
                 correct++;
             }
+            
+            cm.v[d.get(i).label][pred_class]++;
         }
         double perc = (double)correct / (double)d.size() * 100.0;
         
         out.appendText("Accuracy: " + correct + "/" + d.size() + "  " + df.format(perc) + "%");
+        
+        Experiment.format_conf_matrix(cm, d, out);
+        Experiment.format_scores(cm, d, out);
+        
         return perc;
     }
     
@@ -230,6 +240,8 @@ public abstract class Classifier
         activation(test);
         int correct = 0;
         
+        cm = Matrix.zeros(test.noCategories(), test.noCategories());
+        
         for (int i = 0; i < test.size(); i++)
         {
             int pred_class = classify(i);
@@ -237,6 +249,8 @@ public abstract class Classifier
             {
                 correct++;
             }
+            
+            cm.v[test.get(i).label][pred_class]++;
         }
         double perc = (double)correct / (double)test.size() * 100.0;
         

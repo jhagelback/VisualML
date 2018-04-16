@@ -201,6 +201,8 @@ public class NN extends Classifier
         double best_loss = Double.MAX_VALUE;
         int best_iteration = 0;
         
+        o.appendText("  Iteration  Loss");
+        
         for (int i = 1; i <= settings.iterations; i++)
         {
             //Copy current weights and biases
@@ -225,7 +227,12 @@ public class NN extends Classifier
             }
             
             //Output result
-            if (i % out_step == 0 || i == settings.iterations || i == 1) o.appendText("    iteration " + i + ":  loss " + df.format(loss));
+            if (i % out_step == 0 || i == settings.iterations || i == 1) 
+            {
+                String str = "  " + Experiment.format_spaces(i + ":", 9);
+                str += "  " + df.format(loss);
+                o.appendText(str);
+            }
         }
         
         //Set best weights

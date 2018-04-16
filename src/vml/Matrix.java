@@ -559,6 +559,39 @@ public class Matrix
     }
     
     /**
+     * Returns the sum of a specified row in this matrix.
+     * 
+     * @param r The rum
+     * @return Sum of the row
+     */
+    public double sum_row(int r)
+    {
+        double sum = 0;
+        for (int c = 0; c < columns(); c++)
+        {
+            sum += v[r][c];
+        }
+        return sum;
+    }
+    
+    /**
+     * Returns the sum of a specified column in this matrix.
+     * 
+     * @param c The column
+     * @return Sum of the column
+     */
+    public double sum_col(int c)
+    {
+        double sum = 0;
+        for (int r = 0; r < rows(); r++)
+        {
+            sum += v[r][c];
+        }
+        return sum;
+    }
+    
+    
+    /**
      * Creates a new vector with the sum of each row in this matrix.
      * 
      * @return The vector

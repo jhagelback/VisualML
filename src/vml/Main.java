@@ -13,6 +13,9 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.animation.AnimationTimer;
 import javafx.stage.WindowEvent;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+
 
 /**
  * Main class for the VisualML application.
@@ -24,7 +27,7 @@ public class Main extends Application
     /**
      * Application version.
      */
-    public static String version = "3.4";
+    public static String version = "3.5";
     
     //Panel to render stuff on
     private VizCanvas p;
@@ -203,6 +206,7 @@ public class Main extends Application
         ecb3.setSelected(false);
         //Text field
         output = new TextArea("");
+        output.setFont(Font.font("Menlo", FontWeight.NORMAL, 12));
         output.setEditable(false);
         out = Logger.getGUILogger();
         output.setPrefRowCount(29);
