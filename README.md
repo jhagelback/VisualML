@@ -52,9 +52,17 @@ Now you can train and evaluate the accuracy on the dataset:
 ```
 Logger out = Logger.getConsoleLogger();
 c.train(out);
-c.evaluate(true, true, out);
+Metrics m = c.evaluate(true, true, out);
 ```
 The first two parameters in the evaluate method is if the classifier shall be evaluated on the training dataset and test dataset.
+The Metrics object contains various performance metrics:
+```
+m.getAccuracy(); //Returns the accuracy
+m.getAvgPrecision(); //Returns the average precision
+m.getAvgRecall(); //Returns the average recall
+m.getAvgFscore(); //Returns the average recall
+m.format_conf_matrix(out); //Outputs the Confusion Matrix to an output logger
+```
 
 You can classify a new instance with:
 ```
