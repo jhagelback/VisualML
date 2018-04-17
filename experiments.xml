@@ -33,7 +33,7 @@
     </Experiment>
     <Experiment id="l_circle">
         <!-- Training set: 68.60% -->
-        <!-- Cross-validation: 68.67% -->
+        <!-- Cross-validation: 68.60% -->
         <Classifier>Linear</Classifier>
         <TrainingData>data/circle.csv</TrainingData>
         <Iterations>20</Iterations>
@@ -46,7 +46,6 @@
         <TrainingData>data/iris.csv</TrainingData>
         <Iterations>1000</Iterations>
         <LearningRate>0.2</LearningRate>
-        <ShuffleData>false</ShuffleData>
     </Experiment>
     <Experiment id="l_iris_pca">
         <!-- Training set: 98.00% -->
@@ -90,17 +89,17 @@
         <Iterations>200</Iterations>
         <LearningRate>0.5</LearningRate>
     </Experiment>
-    <Experiment id="l_jain">
+    <Experiment id="l_moons">
         <!-- Training set: 85.79% -->
-        <!-- Cross-validation: 85.01% -->
+        <!-- Cross-validation: 84.99% -->
         <Classifier>Linear</Classifier>
-        <TrainingData>data/jain.csv</TrainingData>
+        <TrainingData>data/moons.csv</TrainingData>
         <Iterations>200</Iterations>
         <LearningRate>0.5</LearningRate>
     </Experiment>
     <Experiment id="l_diabetes">
         <!-- Training set: 77.34% -->
-        <!-- Cross-validation: 77.15% -->
+        <!-- Cross-validation: 77.21% -->
         <Classifier>Linear</Classifier>
         <TrainingData>data/diabetes.csv</TrainingData>
         <Iterations>2000</Iterations>
@@ -110,7 +109,7 @@
     </Experiment>
     <Experiment id="l_diabetes_pca">
         <!-- Training set: 75.26% -->
-        <!-- Cross-validation: 74.67% -->
+        <!-- Cross-validation: 74.74% -->
         <Classifier>Linear</Classifier>
         <TrainingData>data/diabetes_pca.csv</TrainingData>
         <Iterations>2000</Iterations>
@@ -120,7 +119,7 @@
     </Experiment>
     <Experiment id="l_diabetes_svd">
         <!-- Training set: 75.26% -->
-        <!-- Cross-validation: 74.81% -->
+        <!-- Cross-validation: 74.87% -->
         <Classifier>Linear</Classifier>
         <TrainingData>data/diabetes_svd.csv</TrainingData>
         <Iterations>2000</Iterations>
@@ -130,7 +129,7 @@
     </Experiment>
     <Experiment id="l_glass">
         <!-- Training set: 56.54% -->
-        <!-- Cross-validation: 55.52% -->
+        <!-- Cross-validation: 55.61% -->
         <Classifier>Linear</Classifier>
         <TrainingData>data/glass.csv</TrainingData>
         <Iterations>500</Iterations>
@@ -250,11 +249,11 @@
         <UseRegularization>true</UseRegularization>
         <HiddenLayers>16</HiddenLayers>
     </Experiment>
-    <Experiment id="nn_jain">
+    <Experiment id="nn_moons">
         <!-- Training set: 95.44% -->
-        <!-- Cross-validation: 95.20% -->
+        <!-- Cross-validation: 95.17% -->
         <Classifier>NN</Classifier>
-        <TrainingData>data/jain.csv</TrainingData>
+        <TrainingData>data/moons.csv</TrainingData>
         <Iterations>300</Iterations>
         <LearningRate>0.8</LearningRate>
         <UseRegularization>false</UseRegularization>
@@ -262,7 +261,7 @@
     </Experiment>
     <Experiment id="nn_diabetes">
         <!-- Training set: 80.21% -->
-        <!-- Cross-validation: 77.04% -->
+        <!-- Cross-validation: 77.08% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/diabetes.csv</TrainingData>
         <Iterations>2500</Iterations>
@@ -274,7 +273,7 @@
     </Experiment>
     <Experiment id="nn_diabetes_pca">
         <!-- Training set: 75.78% -->
-        <!-- Cross-validation: 74.42% -->
+        <!-- Cross-validation: 74.48% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/diabetes_pca.csv</TrainingData>
         <Iterations>4000</Iterations>
@@ -285,7 +284,7 @@
     </Experiment>
     <Experiment id="nn_diabetes_svd">
         <!-- Training set: 76.04% -->
-        <!-- Cross-validation: 75.19% -->
+        <!-- Cross-validation: 75.26% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/diabetes_svd.csv</TrainingData>
         <Iterations>3000</Iterations>
@@ -296,7 +295,7 @@
     </Experiment>
     <Experiment id="nn_glass">
         <!-- Training set: 98.13% -->
-        <!-- Cross-validation: 71.26% -->
+        <!-- Cross-validation: 71.50% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/glass.csv</TrainingData>
         <Iterations>6000</Iterations>
@@ -306,14 +305,14 @@
         <Normalization>0:2</Normalization>
     </Experiment>
     <Experiment id="nn_glass_pca">
-        <!-- Training set: 86.45% -->
-        <!-- Cross-validation: 73.39% -->
+        <!-- Training set: 84.11% -->
+        <!-- Cross-validation: 67.29% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/glass_pca.csv</TrainingData>
         <Iterations>8000</Iterations>
-        <LearningRate>0.9</LearningRate>
+        <LearningRate>0.6</LearningRate>
         <UseRegularization>false</UseRegularization>
-        <HiddenLayers>36</HiddenLayers>
+        <HiddenLayers>18</HiddenLayers>
         <Normalization>0:2</Normalization>
     </Experiment>
     <Experiment id="nn_mnist">
@@ -432,11 +431,11 @@
         <UseRegularization>false</UseRegularization>
         <HiddenLayers>12,8</HiddenLayers>
     </Experiment>
-    <Experiment id="dnn_jain">
+    <Experiment id="dnn_moons">
         <!-- Training set: 100.00% -->
         <!-- Cross-validation: 97.32% -->
         <Classifier>NN</Classifier>
-        <TrainingData>data/jain.csv</TrainingData>
+        <TrainingData>data/moons.csv</TrainingData>
         <Iterations>2500</Iterations>
         <LearningRate>0.7</LearningRate>
         <UseRegularization>false</UseRegularization>
@@ -444,7 +443,7 @@
     </Experiment>
     <Experiment id="dnn_diabetes">
         <!-- Training set: 79.04% -->
-        <!-- Cross-validation: 77.57% -->
+        <!-- Cross-validation: 77.60% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/diabetes.csv</TrainingData>
         <Iterations>1000</Iterations>
@@ -457,7 +456,7 @@
     </Experiment>
     <Experiment id="dnn_glass">
         <!-- Training set: 97.20% -->
-        <!-- Cross-validation: 69.03% -->
+        <!-- Cross-validation: 69.16% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/glass.csv</TrainingData>
         <Iterations>3000</Iterations>
@@ -469,7 +468,7 @@
     <Experiment id="dnn_mnist">
         <!-- Training set: 97.32% -->
         <!-- Test set: 96.17% -->
-        <!-- Cross-validation: 96.13% -->
+        <!-- Cross-validation: 96.14% -->
         <Classifier>NN</Classifier>
         <TrainingData>data_mnist/mnist_train.csv</TrainingData>
         <TestData>data_mnist/mnist_test.csv</TestData>
@@ -549,16 +548,16 @@
         <TrainingData>data/flame.csv</TrainingData>
         <K>3</K>
     </Experiment>
-    <Experiment id="knn_jain">
+    <Experiment id="knn_moons">
         <!-- Training set: 100.00% -->
         <!-- Cross-validation: 100.00% -->
         <Classifier>KNN</Classifier>
-        <TrainingData>data/jain.csv</TrainingData>
+        <TrainingData>data/moons.csv</TrainingData>
         <K>3</K>
     </Experiment>
     <Experiment id="knn_diabetes">
         <!-- Training set: 85.81% -->
-        <!-- Cross-validation: 73.00% -->
+        <!-- Cross-validation: 73.05% -->
         <Classifier>KNN</Classifier>
         <TrainingData>data/diabetes.csv</TrainingData>
         <Normalization>-1:1</Normalization>
@@ -566,7 +565,7 @@
     </Experiment>
     <Experiment id="knn_glass">
         <!-- Training set: 100.00% -->
-        <!-- Cross-validation: 72.44% -->
+        <!-- Cross-validation: 72.43% -->
         <Classifier>KNN</Classifier>
         <TrainingData>data/glass.csv</TrainingData>
         <K>2</K>
@@ -605,7 +604,7 @@
     </Experiment>
     <Experiment id="rbf_circle">
         <!-- Training set: 100.00% -->
-        <!-- Cross-validation: 84.28% -->
+        <!-- Cross-validation: 84.11% -->
         <Classifier>RBF</Classifier>
         <TrainingData>data/circle.csv</TrainingData>
         <Gamma>130.0</Gamma>
@@ -647,16 +646,16 @@
         <TrainingData>data/flame.csv</TrainingData>
         <Gamma>1000.0</Gamma>
     </Experiment>
-    <Experiment id="rbf_jain">
+    <Experiment id="rbf_moons">
         <!-- Training set: 98.12% -->
-        <!-- Cross-validation: 97.84% -->
+        <!-- Cross-validation: 97.86% -->
         <Classifier>RBF</Classifier>
-        <TrainingData>data/jain.csv</TrainingData>
+        <TrainingData>data/moons.csv</TrainingData>
         <Gamma>55.0</Gamma>
     </Experiment>
     <Experiment id="rbf_diabetes">
         <!-- Training set: 100.00% -->
-        <!-- Cross-validation: 65.13% -->
+        <!-- Cross-validation: 65.10% -->
         <Classifier>RBF</Classifier>
         <TrainingData>data/diabetes.csv</TrainingData>
         <Normalization>0:2</Normalization>
@@ -664,7 +663,7 @@
     </Experiment>
     <Experiment id="rbf_glass">
         <!-- Training set: 100.00% -->
-        <!-- Cross-validation: 46.46% -->
+        <!-- Cross-validation: 46.26% -->
         <Classifier>RBF</Classifier>
         <TrainingData>data/glass.csv</TrainingData>
         <Normalization>0:2</Normalization>
