@@ -596,16 +596,6 @@ public class Main extends Application
      */
     public static void main(String[] args) 
     {
-        /*args = new String[3];
-        args[0] = "-exp";
-        args[1] = "l_iris_test";
-        args[2] = "train|test|cv";//*/
-        /*args = new String[4];
-        args[0] = "-dr";
-        args[1] = "SVD";
-        args[2] = "data/glass.csv";
-        args[3] = "4";//*/
-        
         //No args. Start GUI
         if (args.length == 0) 
         {
