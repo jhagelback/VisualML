@@ -65,8 +65,7 @@ public class Experiment
         int size = data.size();
         int fold_size = size / 10;
         
-        //Confusion matrix
-        Matrix cm = Matrix.zeros(data.noCategories(), data.noCategories());
+        //Metrics
         Metrics m = new Metrics(data);
         
         long st = System.currentTimeMillis();
