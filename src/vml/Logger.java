@@ -101,4 +101,23 @@ public class Logger
             System.err.println(text);
         }
     }
+    
+    /**
+     * Formats a string to a specified length by putting whitespaces in front.
+     * 
+     * @param s The string
+     * @param strlen Preferred length
+     * @return Formatted string
+     */
+    protected static String format_spaces(String s, int strlen)
+    {
+        String str = "";
+        int l = s.length();
+        int rest = strlen - l;
+        for (int i = 0; i < rest; i++)
+        {
+            str += " ";
+        }
+        return str + s;
+    }
 }

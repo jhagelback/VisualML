@@ -229,7 +229,7 @@ public class NN extends Classifier
             //Output result
             if (i % out_step == 0 || i == settings.iterations || i == 1) 
             {
-                String str = "  " + Experiment.format_spaces(i + ":", 9);
+                String str = "  " + Logger.format_spaces(i + ":", 9);
                 str += "  " + df.format(loss);
                 o.appendText(str);
             }

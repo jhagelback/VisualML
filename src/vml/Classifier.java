@@ -172,88 +172,56 @@ public abstract class Classifier
      * 
      * @param d The dataset
      * @param out Logger for log info
-     * @return Accuracy on the dataset
+     * @return Performance metrics
      */
-    private double evaluate(Dataset d, Logger out)
+    private Metrics evaluate(Dataset d, Logger out)
     {
         //Activation for the dataset
         activation(d);
-        int correct = 0;
         
-        cm = Matrix.zeros(d.noCategories(), d.noCategories());
+        Metrics m = new Metrics(d);
+        m.compute(this);
         
-        for (int i = 0; i < d.size(); i++)
-        {
-            int pred_class = classify(i);
-            if (pred_class == d.get(i).label)
-            {
-                correct++;
-            }
-            
-            cm.v[d.get(i).label][pred_class]++;
-        }
-        double perc = (double)correct / (double)d.size() * 100.0;
+        out.appendText("Accuracy: " + m.getCorrectlyClassified() + "/" + d.size() + "  " + df.format(m.getAccuracy()) + "%");
         
-        out.appendText("Accuracy: " + correct + "/" + d.size() + "  " + df.format(perc) + "%");
+        m.format_conf_matrix(out);
+        m.format_scores(out);
         
-        Experiment.format_conf_matrix(cm, d, out);
-        Experiment.format_scores(cm, d, out);
-        
-        return perc;
+        return m;
     }
     
     /**
      * Calculates the accuracy on the training dataset.
      * 
-     * @return Accuracy (in %)
+     * @return Performance metrics
      */
-    public double train_accuracy()
+    public Metrics train_accuracy()
     {
         //Activation for the dataset
         activation(data);
-        int correct = 0;
         
-        for (int i = 0; i < data.size(); i++)
-        {
-            int pred_class = classify(i);
-            if (pred_class == data.get(i).label)
-            {
-                correct++;
-            }
-        }
-        double perc = (double)correct / (double)data.size() * 100.0;
+        Metrics m = new Metrics(data);
+        m.compute(this);
         
-        return perc;
+        return m;
     }
     
     /**
      * Calculates the accuracy on the test dataset.
      * 
-     * @return Accuracy (in %)
+     * @return Performance metrics
      */
-    public double test_accuracy()
+    public Metrics test_accuracy()
     {
         //Error check
-        if (test == null) return 0;
+        if (test == null) return null;
         
         //Activation for the dataset
         activation(test);
-        int correct = 0;
         
-        cm = Matrix.zeros(test.noCategories(), test.noCategories());
+        Metrics m = new Metrics(test);
+        m.compute(this);
         
-        for (int i = 0; i < test.size(); i++)
-        {
-            int pred_class = classify(i);
-            if (pred_class == test.get(i).label)
-            {
-                correct++;
-            }
-            
-            cm.v[test.get(i).label][pred_class]++;
-        }
-        double perc = (double)correct / (double)test.size() * 100.0;
-        
-        return perc;
+        return m;
     }
 }

@@ -328,9 +328,9 @@ public class Main extends Application
         }); 
         lmenu.getItems().add(mitem);
         
-        mitem = new MenuItem("Jain's toy problem");
+        mitem = new MenuItem("Moons");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("l_jain"), 5);
+            initClassifier(ClassifierFactory.build("l_moons"), 5);
         }); 
         lmenu.getItems().add(mitem);
         
@@ -371,9 +371,9 @@ public class Main extends Application
         }); 
         nmenu.getItems().add(mitem);
         
-        mitem = new MenuItem("Jain's toy problem");
+        mitem = new MenuItem("Moons");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("nn_jain"), 10);
+            initClassifier(ClassifierFactory.build("nn_moons"), 10);
         }); 
         nmenu.getItems().add(mitem);
         
@@ -414,9 +414,9 @@ public class Main extends Application
         }); 
         dmenu.getItems().add(mitem);
         
-        mitem = new MenuItem("Jain's toy problem");
+        mitem = new MenuItem("Moons");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("dnn_jain"), 10);
+            initClassifier(ClassifierFactory.build("dnn_moons"), 10);
         }); 
         dmenu.getItems().add(mitem);
         
@@ -457,9 +457,9 @@ public class Main extends Application
         }); 
         kmenu.getItems().add(mitem);
         
-        mitem = new MenuItem("Jain's toy problem");
+        mitem = new MenuItem("Moons");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("knn_jain"), 1);
+            initClassifier(ClassifierFactory.build("knn_moons"), 1);
         }); 
         kmenu.getItems().add(mitem);
         
@@ -500,9 +500,9 @@ public class Main extends Application
         }); 
         kemenu.getItems().add(mitem);
         
-        mitem = new MenuItem("Jain's toy problem");
+        mitem = new MenuItem("Moons");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("rbf_jain"), 1);
+            initClassifier(ClassifierFactory.build("rbf_moons"), 1);
         }); 
         kemenu.getItems().add(mitem);
         
@@ -539,7 +539,8 @@ public class Main extends Application
         //Update panel
         p.update();
         
-        acc = c.train_accuracy();
+        Metrics m = c.train_accuracy();
+        acc = m.getAccuracy();
     }
     
     /**
@@ -556,7 +557,8 @@ public class Main extends Application
                 loss = c.iterate();
             }
             //Current classifier accuracy
-            acc = c.train_accuracy();
+            Metrics m = c.train_accuracy();
+            acc = m.getAccuracy();
             
             //No errors occured, generate frame
             p.build_frame();
@@ -594,6 +596,16 @@ public class Main extends Application
      */
     public static void main(String[] args) 
     {
+        /*args = new String[3];
+        args[0] = "-exp";
+        args[1] = "l_iris_test";
+        args[2] = "train|test|cv";//*/
+        /*args = new String[4];
+        args[0] = "-dr";
+        args[1] = "SVD";
+        args[2] = "data/glass.csv";
+        args[3] = "4";//*/
+        
         //No args. Start GUI
         if (args.length == 0) 
         {
