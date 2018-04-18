@@ -104,10 +104,13 @@ public class ClassifierFactory
                         {
                             c = readRBF(e);
                         }
+                        if (ctype.equalsIgnoreCase("CART"))
+                        {
+                            c = readCART(e);
+                        }
                     }      
                 }
             }
-             
         }
         catch (Exception ex)
         {
@@ -174,6 +177,55 @@ public class ClassifierFactory
 
             //Init classifier
             c = new Linear(data, test, settings);
+        }
+        catch (Exception ex)
+        {
+            System.err.println("Experiments XML file is invalid");
+            ex.printStackTrace();
+            System.exit(1);
+        }
+        
+        return c;
+    }
+    
+    /**
+     * Read settings and creates a CART Tree classifier.
+     * 
+     * @param e Experiment xml node
+     * @return The classifier
+     */
+    private static Classifier readCART(Element e)
+    {
+        Classifier c = null;
+        
+        try
+        {
+            String dataset_name = get(e, "TrainingData");
+            String testset_name = get(e, "TestData");
+            
+            //Read settings
+            CARTSettings settings = new CARTSettings();
+            if (exists(e, "MaxDepth")) settings.max_depth = getInt(e, "MaxDepth");
+            if (exists(e, "MinSize")) settings.min_size = getInt(e, "MinSize");
+            if (exists(e, "ShuffleData")) settings.shuffle = getBoolean(e, "ShuffleData");
+            
+            //Read training dataset
+            DataSource reader = new DataSource();
+            Dataset data = ClassifierFactory.readDataset(dataset_name, reader);
+            if (data == null)
+            {
+                System.out.println("Unable to find training dataset '" + dataset_name + "'");
+                System.exit(1);
+            }
+            if (settings.shuffle)
+            {
+                Collections.shuffle(data.data, new Random(DataSource.seed));
+            }
+            //Read test dataset
+            Dataset test = ClassifierFactory.readDataset(testset_name, reader);
+            
+            //Init classifier
+            c = new CART(data, test, settings);
         }
         catch (Exception ex)
         {

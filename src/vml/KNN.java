@@ -2,7 +2,6 @@
 package vml;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * k-Nearest Neighbor classifier.
@@ -47,8 +46,6 @@ public class KNN extends Classifier
     
     //Training data
     private ArrayList<KInstance> d;
-    //Number of categories
-    private int noCategories;
     //Internal test dataset
     private Dataset tdata;
     //Configuration settings
