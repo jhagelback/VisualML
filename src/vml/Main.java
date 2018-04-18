@@ -27,7 +27,7 @@ public class Main extends Application
     /**
      * Application version.
      */
-    public static String version = "3.5";
+    public static String version = "3.6";
     
     //Panel to render stuff on
     private VizCanvas p;
@@ -101,6 +101,10 @@ public class Main extends Application
                 return;
             }
             if (c instanceof Kernel) 
+            {
+                return;
+            }
+            if (c instanceof CART) 
             {
                 return;
             }
@@ -290,6 +294,7 @@ public class Main extends Application
         Menu dmenu = new Menu("DeepNN");
         Menu kmenu = new Menu("kNN");
         Menu kemenu = new Menu("RBF");
+        Menu cmenu = new Menu("CART");
         
         //Linear tasks
         MenuItem mitem = new MenuItem("Demo");
@@ -506,8 +511,51 @@ public class Main extends Application
         }); 
         kemenu.getItems().add(mitem);
         
+        //CART tasks
+        mitem = new MenuItem("Demo");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("c_demo"), 1);
+        }); 
+        cmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Spiral");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("c_spiral"), 1);
+        }); 
+        cmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Circle");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("c_circle"), 1);
+        }); 
+        cmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Iris.2D");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("c_iris_2d"), 1);
+        }); 
+        cmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Iris PCA");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("c_iris_pca"), 1);
+        }); 
+        cmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Flame");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("c_flame"), 1);
+        }); 
+        cmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Moons");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("c_moons"), 1);
+        }); 
+        cmenu.getItems().add(mitem);
+        
         //Add menus to frame
-        menubar.getMenus().addAll(lmenu, nmenu, dmenu, kmenu, kemenu);
+        menubar.getMenus().addAll(lmenu, nmenu, dmenu, kmenu, kemenu, cmenu);
         return menubar;
     }
     
@@ -525,6 +573,10 @@ public class Main extends Application
             c.iterate();
         }
         if (c instanceof Kernel)
+        {
+            c.iterate();
+        }
+        if (c instanceof CART)
         {
             c.iterate();
         }
