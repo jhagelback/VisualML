@@ -121,12 +121,8 @@ public class VizCanvas extends Canvas
             //Iterate over each instance
             Instance inst = data.get(i);
             //Calculate cell (x,y) values
-            //double x = (inst.x.get(0) / scale + shift) * 100.0;
-            //double y = (inst.x.get(1) / scale + shift) * 100.0;
-            double x = ( (inst.x.get(0)+shift) / scale) * 100.0;
-            double y = ( (inst.x.get(1)+shift) / scale) * 100.0;
-            
-            //System.out.println("(" + inst.x.get(0) + "," + inst.x.get(1) + ") -> (" + x + "," + y + ")");
+            double x = ((inst.x.get(0)+shift) / scale) * 100.0;
+            double y = ((inst.x.get(1)+shift) / scale) * 100.0;
             
             //Draw outer border
             gc.setFill(Color.BLACK);
