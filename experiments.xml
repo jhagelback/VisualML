@@ -177,7 +177,7 @@
     </Experiment>
     <Experiment id="nn_spiral">
         <!-- Training set: 99.33% -->
-        <!-- Cross-validation: 98.00% -->
+        <!-- Cross-validation: 97.67% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/spiral.csv</TrainingData>
         <Iterations>8000</Iterations>
@@ -251,7 +251,7 @@
     </Experiment>
     <Experiment id="nn_moons">
         <!-- Training set: 95.44% -->
-        <!-- Cross-validation: 95.17% -->
+        <!-- Cross-validation: 95.44% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/moons.csv</TrainingData>
         <Iterations>300</Iterations>
@@ -358,7 +358,7 @@
     </Experiment>
     <Experiment id="dnn_spiral">
         <!-- Training set: 99.33% -->
-        <!-- Cross-validation: 98.33% -->
+        <!-- Cross-validation: 98.67% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/spiral.csv</TrainingData>
         <Iterations>8000</Iterations>
@@ -423,7 +423,7 @@
     </Experiment>
     <Experiment id="dnn_flame">
         <!-- Training set: 100.00% -->
-        <!-- Cross-validation: 99.17% -->
+        <!-- Cross-validation: 98.75% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/flame.csv</TrainingData>
         <Iterations>2000</Iterations>
@@ -432,7 +432,7 @@
         <HiddenLayers>12,8</HiddenLayers>
     </Experiment>
     <Experiment id="dnn_moons">
-        <!-- Training set: 100.00% -->
+        <!-- Training set: 98.93% -->
         <!-- Cross-validation: 97.32% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/moons.csv</TrainingData>
@@ -490,6 +490,7 @@
         <K>3</K>                                                Integer (default is 3)
         <DistanceMeasure>L2</DistanceMeasure>                   L1 or L2 (default is L2)
         <Normalization>0:1</Normalization>                      Lower and upper bound for normalized values
+        <ShuffleData>true</ShuffleData>                         Sets if dataset shall be shuffle (default is true)
     -->
     <Experiment id="knn_demo">
         <!-- Training set: 100.00% -->
@@ -588,6 +589,7 @@
         <TestData></TestData>                                   Path (or empty if no test data is used)
         <Gamma>1.0</Gamma>                                      Gamma value for RBF kernel (decimal value, default is 3)
         <Normalization>0:1</Normalization>                      Lower and upper bound for normalized values
+        <ShuffleData>true</ShuffleData>                         Sets if dataset shall be shuffle (default is true)
     -->
     <Experiment id="rbf_demo">
         <!-- Training set: 100.00% -->
@@ -640,8 +642,8 @@
         <Gamma>1.5</Gamma>
     </Experiment>
     <Experiment id="rbf_flame">
-        <!-- Training set: 98.75% -->
-        <!-- Cross-validation: 89.17% -->
+        <!-- Training set: 98.33% -->
+        <!-- Cross-validation: 88.75% -->
         <Classifier>RBF</Classifier>
         <TrainingData>data/flame.csv</TrainingData>
         <Gamma>1000.0</Gamma>
@@ -668,5 +670,132 @@
         <TrainingData>data/glass.csv</TrainingData>
         <Normalization>0:2</Normalization>
         <Gamma>200.0</Gamma>
+    </Experiment>
+    <!--
+        CART Tree Classifiers
+        
+        The following parameters are available:
+        
+        <Classifier>CART</Classifier>                           CART
+        <TrainingData>data/demo.csv</TrainingData>              Path
+        <TestData></TestData>                                   Path (or empty if no test data is used)
+        <MaxDepth>5</MaxDepth>                                  Max depth of the tree (decimal value, default is 5)
+        <MinSize>10</MinSize>                                   Minimum size of dataset for a split (decimal value, default is 10)
+        <ShuffleData>true</ShuffleData>                         Sets if dataset shall be shuffle (default is true)
+    -->
+    <Experiment id="c_demo">
+        <!-- Training set: 100.00% -->
+        <Classifier>CART</Classifier>
+        <TrainingData>data/demo.csv</TrainingData>
+        <MaxDepth>2</MaxDepth>
+        <MinSize>1</MinSize>
+    </Experiment>
+    <Experiment id="c_spiral">
+        <!-- Training set: 99.33% -->
+        <!-- Cross-validation: 94.33% -->
+        <Classifier>CART</Classifier>
+        <TrainingData>data/spiral.csv</TrainingData>
+        <MaxDepth>7</MaxDepth>
+        <MinSize>5</MinSize>
+    </Experiment>
+    <Experiment id="c_circle">
+        <!-- Training set: 100.00% -->
+        <!-- Cross-validation: 98.06% -->
+        <Classifier>CART</Classifier>
+        <TrainingData>data/circle.csv</TrainingData>
+        <MaxDepth>5</MaxDepth>
+        <MinSize>20</MinSize>
+    </Experiment>
+    <Experiment id="c_iris">
+        <!-- Training set: 98.67% -->
+        <!-- Cross-validation: 94.00% -->
+        <Classifier>CART</Classifier>
+        <TrainingData>data/iris.csv</TrainingData>
+        <MaxDepth>5</MaxDepth>
+        <MinSize>5</MinSize>
+    </Experiment>
+    <Experiment id="c_iris_pca">
+        <!-- Training set: 99.33% -->
+        <!-- Cross-validation: 96.00% -->
+        <Classifier>CART</Classifier>
+        <TrainingData>data/iris_pca.csv</TrainingData>
+        <MaxDepth>5</MaxDepth>
+        <MinSize>10</MinSize>
+    </Experiment>
+    <Experiment id="c_iris_svd">
+        <!-- Training set: 99.33% -->
+        <!-- Cross-validation: 96.00% -->
+        <Classifier>CART</Classifier>
+        <TrainingData>data/iris_svd.csv</TrainingData>
+        <MaxDepth>5</MaxDepth>
+        <MinSize>10</MinSize>
+    </Experiment>
+    <Experiment id="c_iris_test">
+        <!-- Training set: 97.50% -->
+        <!-- Test set: 96.67% -->
+        <!-- Cross-validation: 92.50% -->
+        <Classifier>CART</Classifier>
+        <TrainingData>data/iris_training.csv</TrainingData>
+        <TestData>data/iris_test.csv</TestData>
+        <MaxDepth>5</MaxDepth>
+        <MinSize>5</MinSize>
+    </Experiment>
+    <Experiment id="c_iris_2d">
+        <!-- Training set: 98.67% -->
+        <!-- Cross-validation: 94.67% -->
+        <Classifier>CART</Classifier>
+        <TrainingData>data/iris.2d.csv</TrainingData>
+        <MaxDepth>5</MaxDepth>
+        <MinSize>5</MinSize>
+    </Experiment>
+    <Experiment id="c_flame">
+        <!-- Training set: 99.17% -->
+        <!-- Cross-validation: 96.67% -->
+        <Classifier>CART</Classifier>
+        <TrainingData>data/flame.csv</TrainingData>
+        <MaxDepth>5</MaxDepth>
+        <MinSize>5</MinSize>
+    </Experiment>
+    <Experiment id="c_moons">
+        <!-- Training set: 100.00% -->
+        <!-- Cross-validation: 98.93% -->
+        <Classifier>CART</Classifier>
+        <TrainingData>data/moons.csv</TrainingData>
+        <MaxDepth>5</MaxDepth>
+        <MinSize>5</MinSize>
+    </Experiment>
+    <Experiment id="c_diabetes">
+        <!-- Training set: 83.46% -->
+        <!-- Cross-validation: 75.65% -->
+        <Classifier>CART</Classifier>
+        <TrainingData>data/diabetes.csv</TrainingData>
+        <MaxDepth>5</MaxDepth>
+        <MinSize>10</MinSize>
+    </Experiment>
+    <Experiment id="c_diabetes_pca">
+        <!-- Training set: 78.26% -->
+        <!-- Cross-validation: 69.27% -->
+        <Classifier>CART</Classifier>
+        <TrainingData>data/diabetes_pca.csv</TrainingData>
+        <MaxDepth>4</MaxDepth>
+        <MinSize>10</MinSize>
+    </Experiment>
+    <Experiment id="c_glass">
+        <!-- Training set: 87.85% -->
+        <!-- Cross-validation: 66.82% -->
+        <Classifier>CART</Classifier>
+        <TrainingData>data/glass.csv</TrainingData>
+        <MaxDepth>7</MaxDepth>
+        <MinSize>5</MinSize>
+    </Experiment>
+    <Experiment id="c_mnist">
+        <!-- Training set: 0.00% -->
+        <!-- Test set: 0.00% -->
+        <!-- Cross-validation: 0.00% -->
+        <Classifier>CART</Classifier>
+        <TrainingData>data_mnist/mnist_train.csv</TrainingData>
+        <TestData>data_mnist/mnist_test.csv</TestData>
+        <MaxDepth>5</MaxDepth>
+        <MinSize>10</MinSize>
     </Experiment>
 </Experiments>
