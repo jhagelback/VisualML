@@ -52,6 +52,9 @@ public class DimensionalityReduction
         DataSource reader = new DataSource();
         data = reader.read(filename);
         
+        //PCA and SVD requires that the data is centered
+        data.normalizeAttributes(-1, 1);
+        
         if (data == null)
         {
             System.err.println("Dataset '" + filename + "' was not found!");

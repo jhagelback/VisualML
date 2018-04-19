@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * 
  * @author Johan Hagelbäck, Linnaeus University  (johan.hagelback@lnu.se)
  */
-public class Logger 
+class Logger 
 {
     //Enable or disable logging
     private boolean enabled = true;

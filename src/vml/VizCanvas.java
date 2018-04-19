@@ -9,7 +9,7 @@ import javafx.scene.canvas.*;
  * 
  * @author Johan Hagelbäck, Linnaeus University  (johan.hagelback@lnu.se)
  */
-public class VizCanvas extends Canvas
+class VizCanvas extends Canvas
 {
     //The classifier
     private Classifier c;
