@@ -41,7 +41,7 @@ public class HiddenLayer
         if (rnd != null)
         {
             //Init weight matrix
-            w = Matrix.random(noOutputs, noInputs, 0.05, rnd);
+            w = Matrix.randomNormal(noOutputs, noInputs, rnd);
             //Init bias vector to 0's
             b = Vector.zeros(noOutputs);
         }

@@ -85,6 +85,34 @@ public class Matrix
     }
     
     /**
+     * Creates a new matrix with values sampled from a (normal) Gaussian distribution
+     * with standard deviation of 2/Sqrt(noInputs).
+     * 
+     *  @param r Number of rows
+     * @param c Number of columns (no inputs)
+     * @param rnd Randomizer
+     * @return A matrix
+     */
+    public static Matrix randomNormal(int r, int c, Random rnd)
+    {
+        //Desired standard deviation: 2 / sqrt(noInputs)
+        double stddev = 2.0 / Math.sqrt(c);
+        
+        //Generate random double values between: 0 ... 1
+        double[][] v = new double[r][c];
+        for (int a = 0; a < r; a++)
+        {
+            for (int b = 0; b < c; b++)
+            {
+                v[a][b] = rnd.nextGaussian() * stddev;
+            }
+        }
+        
+        //Return matrix
+        return new Matrix(v);
+    }
+    
+    /**
      * Creates a new matrix.
      * 
      * @param v Values

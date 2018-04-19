@@ -66,7 +66,7 @@ public class Linear extends Classifier
     {
         Random rnd = new java.util.Random(seed);
         //Init weight matrix
-        w = Matrix.random(noCategories, noInputs, 0.05, rnd);
+        w = Matrix.randomNormal(noCategories, noInputs, rnd);
         //Init bias vector to 0's
         b = Vector.zeros(noCategories);
     }

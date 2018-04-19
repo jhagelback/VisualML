@@ -43,7 +43,7 @@ public class OutLayer
         if (rnd != null)
         {
             //Init weight matrix
-            w = Matrix.random(noCategories, noInputs, 0.05, rnd);
+            w = Matrix.randomNormal(noCategories, noInputs, rnd);
             //Init bias vector to 0's
             b = Vector.zeros(noCategories);
         }
