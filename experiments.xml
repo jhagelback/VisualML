@@ -210,9 +210,8 @@
         <Classifier>NN</Classifier>
         <TrainingData>data/iris.2D.csv</TrainingData>
         <Iterations>500</Iterations>
-        <LearningRate>1.0</LearningRate>
-        <HiddenLayers>2</HiddenLayers>
-        <Normalization>-1:1</Normalization>
+        <LearningRate>0.04</LearningRate>
+        <HiddenLayers>4</HiddenLayers>
     </Experiment>
     <Experiment id="nn_iris_pca">
         <!-- Training set: 97.33% -->
@@ -363,24 +362,22 @@
         <Normalization>-1:1</Normalization>
     </Experiment>
     <Experiment id="dnn_iris_2d">
-        <!-- Training set: 96.67% -->
+        <!-- Training set: 96.00% -->
         <!-- Cross-validation: 96.00% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/iris.2D.csv</TrainingData>
-        <Iterations>1500</Iterations>
-        <LearningRate>0.2</LearningRate>
+        <Iterations>1000</Iterations>
+        <LearningRate>0.06</LearningRate>
         <HiddenLayers>16,8</HiddenLayers>
-        <Normalization>0:1</Normalization>
     </Experiment>
     <Experiment id="dnn_iris_pca">
-        <!-- Training set: 98.00% -->
-        <!-- Cross-validation: 97.33% -->
+        <!-- Training set: 97.33% -->
+        <!-- Cross-validation: 98.00% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/iris_pca.csv</TrainingData>
-        <Iterations>800</Iterations>
-        <LearningRate>0.2</LearningRate>
-        <HiddenLayers>16,8</HiddenLayers>
-        <Normalization>0:1</Normalization>
+        <Iterations>1000</Iterations>
+        <LearningRate>0.02</LearningRate>
+        <HiddenLayers>32,16</HiddenLayers>
     </Experiment>
     <Experiment id="dnn_flame">
         <!-- Training set: 100.00% -->
