@@ -123,8 +123,6 @@ class VizCanvas extends Canvas
             //Calculate cell (x,y) values
             double x = ((inst.x.get(0)+shift) / scale) * 100.0;
             double y = ((inst.x.get(1)+shift) / scale) * 100.0;
-            x = Math.round(x);
-            y = Math.round(y);
             
             //Draw outer border
             gc.setFill(Color.BLACK);
