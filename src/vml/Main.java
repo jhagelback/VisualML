@@ -315,7 +315,7 @@ public class Main extends Application
         
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("l_spiral"), 1);
+            initClassifier(ClassifierFactory.build("l_spiral"), 10);
         }); 
         lmenu.getItems().add(mitem);
         
@@ -339,13 +339,13 @@ public class Main extends Application
         
         mitem = new MenuItem("Flame");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("l_flame"), 5);
+            initClassifier(ClassifierFactory.build("l_flame"), 20);
         }); 
         lmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Moons");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("l_moons"), 5);
+            initClassifier(ClassifierFactory.build("l_moons"), 20);
         }); 
         lmenu.getItems().add(mitem);
         
@@ -358,37 +358,37 @@ public class Main extends Application
         
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("nn_spiral"), 50);
+            initClassifier(ClassifierFactory.build("nn_spiral"), 5);
         }); 
         nmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Circle");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("nn_circle"), 10);
+            initClassifier(ClassifierFactory.build("nn_circle"), 1);
         }); 
         nmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("nn_iris_2d"), 20);
+            initClassifier(ClassifierFactory.build("nn_iris_2d"), 5);
         }); 
         nmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Iris PCA");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("nn_iris_pca"), 20);
+            initClassifier(ClassifierFactory.build("nn_iris_pca"), 5);
         }); 
         nmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Flame");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("nn_flame"), 30);
+            initClassifier(ClassifierFactory.build("nn_flame"), 20);
         }); 
         nmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Moons");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("nn_moons"), 10);
+            initClassifier(ClassifierFactory.build("nn_moons"), 20);
         }); 
         nmenu.getItems().add(mitem);
         
@@ -401,19 +401,19 @@ public class Main extends Application
         
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("dnn_spiral"), 100);
+            initClassifier(ClassifierFactory.build("dnn_spiral"), 10);
         }); 
         dmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Circle");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("dnn_circle"), 10);
+            initClassifier(ClassifierFactory.build("dnn_circle"), 1);
         }); 
         dmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("dnn_iris_2d"), 10);
+            initClassifier(ClassifierFactory.build("dnn_iris_2d"), 20);
         }); 
         dmenu.getItems().add(mitem);
         
@@ -425,7 +425,7 @@ public class Main extends Application
         
         mitem = new MenuItem("Flame");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("dnn_flame"), 30);
+            initClassifier(ClassifierFactory.build("dnn_flame"), 10);
         }); 
         dmenu.getItems().add(mitem);
         
