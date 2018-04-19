@@ -6,7 +6,7 @@ VisualML is fast compared to other Java implementations of neural networks, and 
 
 The following classifiers are available in the library:
 - k-Nearest Neighbor
-- Softmax Linear classifier
+- Softmax Regression linear classifier
 - Neural Network
 - Deep Neural Network (2 or more hidden layers)
 - RBF (Radial-Basis Function) Kernel classifier
