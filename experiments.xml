@@ -426,7 +426,7 @@
     <Experiment id="dnn_mnist">
         <!-- Training set: 97.05% -->
         <!-- Test set: 95.69% -->
-        <!-- Cross-validation: 9.% -->
+        <!-- Cross-validation: 95.60% -->
         <Classifier>NN</Classifier>
         <TrainingData>data_mnist/mnist_train.csv</TrainingData>
         <TestData>data_mnist/mnist_test.csv</TestData>
