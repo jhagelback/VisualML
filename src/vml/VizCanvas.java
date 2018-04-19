@@ -123,6 +123,8 @@ class VizCanvas extends Canvas
             //Calculate cell (x,y) values
             double x = ((inst.x.get(0)+shift) / scale) * 100.0;
             double y = ((inst.x.get(1)+shift) / scale) * 100.0;
+            x = Math.round(x);
+            y = Math.round(y);
             
             //Draw outer border
             gc.setFill(Color.BLACK);
@@ -146,6 +148,9 @@ class VizCanvas extends Canvas
     {
         try
         {
+            //Container for the test instances
+            Dataset d = data.clone_empty();
+            //Temporary frame
             int[][] tmp = new int[101][101];
             
             //Calculate cell values
@@ -155,13 +160,12 @@ class VizCanvas extends Canvas
                 {
                     //Calculate instance values for this cell
                     double[] vals = new double[2];
-                    //vals[0] = (x / 100.0 - shift) * scale;
-                    //vals[1] = (y / 100.0 - shift) * scale;
                     vals[0] = (x / 100.0) * scale - shift;
                     vals[1] = (y / 100.0) * scale - shift;
+                    
                     //Create dataset for the instance
-                    Dataset d = new Dataset();
                     Instance inst = new Instance(vals, 0);
+                    d.data.clear();
                     d.add(inst);
                     //Classify the instance
                     c.activation(d);
