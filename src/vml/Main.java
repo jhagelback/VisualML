@@ -27,7 +27,7 @@ public class Main extends Application
     /**
      * Application version.
      */
-    public static String version = "3.6";
+    public static String version = "3.7";
     
     //Panel to render stuff on
     private VizCanvas p;
@@ -95,16 +95,8 @@ public class Main extends Application
         bt2.setOnAction((ActionEvent e) -> {
             //Error check
             if (c == null) return;
-            //Don't run for KNN classifier
-            if (c instanceof KNN) 
-            {
-                return;
-            }
-            if (c instanceof Kernel) 
-            {
-                return;
-            }
-            if (c instanceof CART) 
+            //Don't run for non-iterable classifier
+            if (!isIterable(c))
             {
                 return;
             }
@@ -171,7 +163,9 @@ public class Main extends Application
         rt = new Button();
         rt.setOnAction((ActionEvent e) -> {
             //Find selected experiment
-            String sel_exp = (String)dd.getValue();
+            ChoiceItem sel = (ChoiceItem)dd.getValue();
+            String sel_exp = sel.id;
+            
             if (sel_exp != null && !running)
             {
                 boolean eval_train = ecb1.isSelected();
@@ -199,7 +193,8 @@ public class Main extends Application
         //Experiments dropdown
         dd = new ComboBox();
         dd.setPrefWidth(220);
-        ArrayList<String> exp = ClassifierFactory.findAvailableExperiments();
+        //Fill experiments choice box
+        ArrayList<ChoiceItem> exp = ClassifierFactory.findAvailableExperiments();
         dd.getItems().addAll(exp);
         //Evaluation checkbox
         ecb1 = new CheckBox("Training dataset");
@@ -283,6 +278,20 @@ public class Main extends Application
     }
     
     /**
+     * Checks if a classifier has iterable training phase for
+     * visualization.
+     * 
+     * @param c The classifier
+     * @return Iterable training phase
+     */
+    private boolean isIterable(Classifier c)
+    {
+        if (c instanceof Linear) return true;
+        if (c instanceof NN) return true;
+        return false;
+    }
+    
+    /**
      * Adds the lmenu to the frame.
      */
     private MenuBar buildMenu()
@@ -293,8 +302,9 @@ public class Main extends Application
         Menu nmenu = new Menu("NN");
         Menu dmenu = new Menu("DeepNN");
         Menu kmenu = new Menu("kNN");
-        Menu kemenu = new Menu("RBF");
+        Menu kemenu = new Menu("RBF kernel");
         Menu cmenu = new Menu("CART");
+        Menu rmenu = new Menu("RandomForest");
         
         //Linear tasks
         MenuItem mitem = new MenuItem("Demo");
@@ -554,8 +564,51 @@ public class Main extends Application
         }); 
         cmenu.getItems().add(mitem);
         
+        //Random Forest tasks
+        mitem = new MenuItem("Demo");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("rf_demo"), 1);
+        }); 
+        rmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Spiral");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("rf_spiral"), 1);
+        }); 
+        rmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Circle");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("rf_circle"), 1);
+        }); 
+        rmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Iris.2D");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("rf_iris_2d"), 1);
+        }); 
+        rmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Iris PCA");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("rf_iris_pca"), 1);
+        }); 
+        rmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Flame");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("rf_flame"), 1);
+        }); 
+        rmenu.getItems().add(mitem);
+        
+        mitem = new MenuItem("Moons");
+        mitem.setOnAction((ActionEvent t) -> {
+            initClassifier(ClassifierFactory.build("rf_moons"), 1);
+        }); 
+        rmenu.getItems().add(mitem);
+        
         //Add menus to frame
-        menubar.getMenus().addAll(lmenu, nmenu, dmenu, kmenu, kemenu, cmenu);
+        menubar.getMenus().addAll(lmenu, nmenu, dmenu, kmenu, kemenu, cmenu, rmenu);
         return menubar;
     }
     
@@ -567,16 +620,8 @@ public class Main extends Application
      */
     private void initClassifier(Classifier c, int it_steps)
     {
-        //Special case for KNN
-        if (c instanceof KNN)
-        {
-            c.iterate();
-        }
-        if (c instanceof Kernel)
-        {
-            c.iterate();
-        }
-        if (c instanceof CART)
+        //Special case for non-iterable classifiers
+        if (!isIterable(c))
         {
             c.iterate();
         }

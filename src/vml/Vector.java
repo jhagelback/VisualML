@@ -159,6 +159,19 @@ public class Vector
     }
     
     /**
+     * Adds another vector to this vector.
+     * 
+     * @param v2 The other vector
+     */
+    public void add(Vector v2)
+    {
+        for (int i = 0; i < v.length; i++)
+        {
+            v[i] += v2.v[i];
+        }
+    }
+    
+    /**
      * Returns the length of the vector.
      * 
      * @return Length

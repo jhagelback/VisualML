@@ -108,6 +108,10 @@ public class ClassifierFactory
                         {
                             c = readCART(e);
                         }
+                        if (ctype.equalsIgnoreCase("RF"))
+                        {
+                            c = readRF(e);
+                        }
                     }      
                 }
             }
@@ -226,6 +230,57 @@ public class ClassifierFactory
             
             //Init classifier
             c = new CART(data, test, settings);
+        }
+        catch (Exception ex)
+        {
+            System.err.println("Experiments XML file is invalid");
+            ex.printStackTrace();
+            System.exit(1);
+        }
+        
+        return c;
+    }
+    
+    /**
+     * Read settings and creates a RandomForest Tree classifier.
+     * 
+     * @param e Experiment xml node
+     * @return The classifier
+     */
+    private static Classifier readRF(Element e)
+    {
+        Classifier c = null;
+        
+        try
+        {
+            String dataset_name = get(e, "TrainingData");
+            String testset_name = get(e, "TestData");
+            
+            //Read settings
+            RFSettings settings = new RFSettings();
+            if (exists(e, "MaxDepth")) settings.max_depth = getInt(e, "MaxDepth");
+            if (exists(e, "MinSize")) settings.min_size = getInt(e, "MinSize");
+            if (exists(e, "Trees")) settings.trees = getInt(e, "Trees");
+            if (exists(e, "SampleSize")) settings.sample_size = getDouble(e, "SampleSize");
+            if (exists(e, "ShuffleData")) settings.shuffle = getBoolean(e, "ShuffleData");
+            
+            //Read training dataset
+            DataSource reader = new DataSource();
+            Dataset data = ClassifierFactory.readDataset(dataset_name, reader);
+            if (data == null)
+            {
+                System.out.println("Unable to find training dataset '" + dataset_name + "'");
+                System.exit(1);
+            }
+            if (settings.shuffle)
+            {
+                Collections.shuffle(data.data, new Random(DataSource.seed));
+            }
+            //Read test dataset
+            Dataset test = ClassifierFactory.readDataset(testset_name, reader);
+            
+            //Init classifier
+            c = new RandomForest(data, test, settings);
         }
         catch (Exception ex)
         {
@@ -444,13 +499,13 @@ public class ClassifierFactory
     }
     
     /**
-     * Returns a list of all experiment IDs in the experiments.xml file.
+     * Returns a list of all experiments in the experiments.xml file.
      * 
-     * @return List of experiment IDs
+     * @return List of experiment
      */
-    public static ArrayList<String> findAvailableExperiments()
+    public static ArrayList<ChoiceItem> findAvailableExperiments()
     {
-        ArrayList<String> exp = new ArrayList<>();
+        ArrayList<ChoiceItem> exp = new ArrayList<>();
         
         try
         {
@@ -466,7 +521,13 @@ public class ClassifierFactory
                     Element e = (Element) node;
                     //Find experiment id
                     String cid = e.getAttribute("id");
-                    exp.add(cid);
+                    //Find type and filename
+                    String ctype = e.getElementsByTagName("Classifier").item(0).getTextContent();
+                    String cdata = e.getElementsByTagName("TrainingData").item(0).getTextContent();
+                    cdata = cdata.substring(cdata.lastIndexOf("/")+1, cdata.length());
+                    //cdata = cdata.substring(cdata.lastIndexOf("/")+1, cdata.lastIndexOf("."));
+                    cdata = cdata.substring(cdata.lastIndexOf("/")+1, cdata.length());
+                    exp.add(new ChoiceItem(cid, ctype, cdata));
                 }
             }
         }

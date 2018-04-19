@@ -18,6 +18,8 @@ public class CART extends Classifier
     private HashSet<Integer> classes;
     //Root node of the CART tree
     private Node root;
+    //Randomizer used for forest classifier
+    private Random rnd;
     
     /**
      * Internal class for tree nodes
@@ -38,7 +40,7 @@ public class CART extends Classifier
         protected int label = -1;
         // Class distribution (for leaf nodes)
         protected Vector labels;
-        
+ 
         /**
          * Creates a new node.
          * 
@@ -74,6 +76,22 @@ public class CART extends Classifier
                 labels.v[i.label]++;
             }
             this.label = labels.argmax();
+        }
+        
+        /**
+         * Returns the class probabilities vector.
+         * 
+         * @return Class probabilities vector
+         */
+        public Vector getClassProbabilities()
+        {
+            Vector p = Vector.zeros(labels.size());
+            double sum = labels.sum();
+            for (int i = 0; i < p.size(); i++)
+            {
+                p.v[i] = labels.v[i] / sum;
+            }
+            return p;
         }
     }
     
@@ -159,7 +177,14 @@ public class CART extends Classifier
     @Override
     public int classify(int i)
     {
-        return classify(root, tdata.get(i));
+        Node t = classify(root, tdata.get(i));
+        return t.label;
+    }
+    
+    public Vector classifyProbability(int i)
+    {
+        Node t = classify(root, tdata.get(i));
+        return t.getClassProbabilities();
     }
     
     /**
@@ -167,9 +192,9 @@ public class CART extends Classifier
      * 
      * @param node Current node
      * @param inst Instance to classify
-     * @return Predicted label
+     * @return Predicted terminal node
      */
-    public int classify(Node node, Instance inst)
+    public Node classify(Node node, Instance inst)
     {
         int a_index = node.a_index;
         double val = node.val;
@@ -185,7 +210,7 @@ public class CART extends Classifier
             else
             {
                 //Terminal node - return label
-                return node.left.label;
+                return node.left;
             }
         }
         else
@@ -198,7 +223,7 @@ public class CART extends Classifier
             else
             {
                 //Terminal node - return label
-                return node.right.label;
+                return node.right;
             }
         }
     }
@@ -302,6 +327,54 @@ public class CART extends Classifier
     }
     
     /**
+     * Sets that only a subset of the attributes are evaluated on each split.
+     * Used by the random forest classifier to create diverse trees.
+     * 
+     * @param rnd Randomizer
+     */
+    public void enableForestRandomizer(Random rnd)
+    {
+        this.rnd = rnd;
+    }
+    
+    /**
+     * Sets that only a subset of the attributes are evaluated on each split.
+     * Used by the random forest classifier to create diverse trees.
+     * 
+     * @param seed Randomizer seed
+     */
+    public void enableForestRandomizer(int seed)
+    {
+        this.rnd = new Random(seed);
+    }
+    
+    /**
+     * Randomizes which attributes to evaluate for a split. Used by
+     * the random forest classifier to create diverse trees.
+     * 
+     * @return List of attribute indexes to include
+     */
+    private ArrayList<Integer> incIndexes()
+    {
+        //If no randomizer is set, use all attributes
+        if (rnd == null) return null;
+        
+        ArrayList<Integer> inc = new ArrayList<>();
+        
+        //Must have at least one attribute to consider for each split
+        while (inc.isEmpty())
+        {
+            //50% chance to include each attribute
+            for (int a = 0; a < data.noInputs(); a++)
+            {
+                if (rnd.nextDouble() > 0.5) inc.add(a);
+            }
+        }
+        
+        return inc;
+    }
+    
+    /**
      * Search for and splits the dataset at the best attribute-value combination.
      * 
      * @param data Dataset to split
@@ -316,8 +389,18 @@ public class CART extends Classifier
         Node[] b_groups = null; 
         
         //Iterate over all attributes...
+        ArrayList<Integer> inc = incIndexes(); //Used for forest classifier
         for (int a = 0; a < data.noInputs(); a++)
         {
+            //For random forest, only include a subset of the attributes
+            if (inc != null)
+            {
+                if (!inc.contains(a)) 
+                {
+                    continue;
+                }
+            }
+            
             //... and instances
             for (Instance inst : data.data)
             {
