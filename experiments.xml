@@ -304,17 +304,6 @@
         <HiddenLayers>72</HiddenLayers>
         <Normalization>0:2</Normalization>
     </Experiment>
-    <Experiment id="nn_glass_pca">
-        <!-- Training set: 84.11% -->
-        <!-- Cross-validation: 67.29% -->
-        <Classifier>NN</Classifier>
-        <TrainingData>data/glass_pca.csv</TrainingData>
-        <Iterations>8000</Iterations>
-        <LearningRate>0.6</LearningRate>
-        <UseRegularization>false</UseRegularization>
-        <HiddenLayers>18</HiddenLayers>
-        <Normalization>0:2</Normalization>
-    </Experiment>
     <Experiment id="nn_mnist">
         <!-- Training set: 96.50% -->
         <!-- Test set: 95.96% -->
@@ -797,5 +786,130 @@
         <TestData>data_mnist/mnist_test.csv</TestData>
         <MaxDepth>5</MaxDepth>
         <MinSize>10</MinSize>
+    </Experiment>
+    <!--
+        Random Forest Classifiers
+        
+        The following parameters are available:
+        
+        <Classifier>RF</Classifier>                             RF
+        <TrainingData>data/demo.csv</TrainingData>              Path
+        <TestData></TestData>                                   Path (or empty if no test data is used)
+        <MaxDepth>5</MaxDepth>                                  Max depth of the tree (decimal value, default is 5)
+        <MinSize>10</MinSize>                                   Minimum size of dataset for a split (decimal value, default is 10)
+        <ShuffleData>true</ShuffleData>                         Sets if dataset shall be shuffle (default is true)
+        <Trees>7</Trees>                                       Number of trees in the forest (default is 7)
+        <SampleSize>0.9</SampleSize>                            Sample size of data subset for each tree (default is 0.9) 
+    -->
+    
+    <Experiment id="rf_demo">
+        <!-- Training set: 100.00% -->
+        <Classifier>RF</Classifier>
+        <TrainingData>data/demo.csv</TrainingData>
+        <MaxDepth>2</MaxDepth>
+        <MinSize>1</MinSize>
+        <Trees>3</Trees>
+        <SampleSize>0.8</SampleSize>
+    </Experiment>
+    <Experiment id="rf_spiral">
+        <!-- Training set: 99.33% -->
+        <!-- Cross-validation: 96.00% -->
+        <Classifier>RF</Classifier>
+        <TrainingData>data/spiral.csv</TrainingData>
+        <MaxDepth>7</MaxDepth>
+        <MinSize>5</MinSize>
+        <Trees>11</Trees>
+    </Experiment>
+    <Experiment id="rf_circle">
+        <!-- Training set: 100.00% -->
+        <!-- Cross-validation: 98.45% -->
+        <Classifier>RF</Classifier>
+        <TrainingData>data/circle.csv</TrainingData>
+        <MaxDepth>5</MaxDepth>
+        <MinSize>5</MinSize>
+        <Trees>7</Trees>
+    </Experiment>
+    <Experiment id="rf_iris">
+        <!-- Training set: 97.33% -->
+        <!-- Cross-validation: 96.67% -->
+        <Classifier>RF</Classifier>
+        <TrainingData>data/iris.csv</TrainingData>
+        <MaxDepth>5</MaxDepth>
+        <MinSize>5</MinSize>
+        <Trees>11</Trees>
+    </Experiment>
+    <Experiment id="rf_iris_pca">
+        <!-- Training set: 99.33% -->
+        <!-- Cross-validation: 96.67% -->
+        <Classifier>RF</Classifier>
+        <TrainingData>data/iris_pca.csv</TrainingData>
+        <MaxDepth>5</MaxDepth>
+        <MinSize>5</MinSize>
+        <Trees>15</Trees>
+    </Experiment>
+    <Experiment id="rf_iris_test">
+        <!-- Training set: 98.33% -->
+        <!-- Test set: 100.00% -->
+        <!-- Cross-validation: 95.00% -->
+        <Classifier>RF</Classifier>
+        <TrainingData>data/iris_training.csv</TrainingData>
+        <TestData>data/iris_test.csv</TestData>
+        <MaxDepth>5</MaxDepth>
+        <MinSize>5</MinSize>
+        <Trees>15</Trees>
+    </Experiment>
+    <Experiment id="rf_iris_2d">
+        <!-- Training set: 98.00% -->
+        <!-- Cross-validation: 94.67% -->
+        <Classifier>RF</Classifier>
+        <TrainingData>data/iris.2d.csv</TrainingData>
+        <MaxDepth>5</MaxDepth>
+        <MinSize>5</MinSize>
+        <Trees>15</Trees>
+    </Experiment>
+    <Experiment id="rf_flame">
+        <!-- Training set: 100.00% -->
+        <!-- Cross-validation: 98.75% -->
+        <Classifier>RF</Classifier>
+        <TrainingData>data/flame.csv</TrainingData>
+        <MaxDepth>6</MaxDepth>
+        <MinSize>5</MinSize>
+        <Trees>19</Trees>
+    </Experiment>
+    <Experiment id="rf_moons">
+        <!-- Training set: 100.00% -->
+        <!-- Cross-validation: 98.12% -->
+        <Classifier>RF</Classifier>
+        <TrainingData>data/moons.csv</TrainingData>
+        <MaxDepth>7</MaxDepth>
+        <MinSize>3</MinSize>
+        <Trees>7</Trees>
+    </Experiment>
+    <Experiment id="rf_diabetes">
+        <!-- Training set: 89.58% -->
+        <!-- Cross-validation: 77.99% -->
+        <Classifier>RF</Classifier>
+        <TrainingData>data/diabetes.csv</TrainingData>
+        <MaxDepth>7</MaxDepth>
+        <MinSize>10</MinSize>
+        <Trees>19</Trees>
+    </Experiment>
+    <Experiment id="rf_diabetes_pca">
+        <!-- Training set: 78.91% -->
+        <!-- Cross-validation: 72.01% -->
+        <Classifier>RF</Classifier>
+        <TrainingData>data/diabetes_pca.csv</TrainingData>
+        <MaxDepth>5</MaxDepth>
+        <MinSize>10</MinSize>
+        <Trees>19</Trees>
+    </Experiment>
+    <Experiment id="rf_glass">
+        <!-- Training set: 94.39% -->
+        <!-- Cross-validation: 74.30% -->
+        <Classifier>RF</Classifier>
+        <TrainingData>data/glass.csv</TrainingData>
+        <MaxDepth>7</MaxDepth>
+        <MinSize>5</MinSize>
+        <Trees>25</Trees>
     </Experiment>
 </Experiments>
