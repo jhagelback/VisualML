@@ -139,20 +139,36 @@ public class NN extends Classifier
     @Override
     public double iterate()
     {
+        double loss = 0;
+        
         if (batch_size > 0)
         {
-            Dataset batch = getNextBatch();
-            X = batch.input_matrix();
-            y = batch.label_vector();
+            int no_batches = data.size() / batch_size;
+            if (data.size() % batch_size != 0) no_batches++;
+            
+            //Train each batch
+            for (int i = 0; i < no_batches; i++)
+            {
+                Dataset batch = getNextBatch();
+                X = batch.input_matrix();
+                y = batch.label_vector();
+                
+                forward();
+                loss += backward();
+            }
+            
+            loss /= no_batches;
         }
         else
         {
+            //Train whole dataset
             X = data.input_matrix();
             y = data.label_vector();
+            
+            forward();
+            loss = backward();
         }
         
-        forward();
-        double loss = backward();
         return loss;
     }
     
@@ -189,7 +205,8 @@ public class NN extends Classifier
         o.appendText("\nTraining classifier");
         
         //For output
-        int out_step = settings.iterations / 10;
+        int out_step = settings.epochs / 10;
+        if (out_step <= 0) out_step = 1;
         
         //Optimization Gradient Descent
         OutLayer bOut = null;
@@ -203,7 +220,7 @@ public class NN extends Classifier
         
         o.appendText("  Iteration  Loss");
         
-        for (int i = 1; i <= settings.iterations; i++)
+        for (int i = 1; i <= settings.epochs; i++)
         {
             //Copy current weights and biases
             cOut = out.copy();
@@ -227,7 +244,7 @@ public class NN extends Classifier
             }
             
             //Output result
-            if (i % out_step == 0 || i == settings.iterations || i == 1) 
+            if (i % out_step == 0 || i == settings.epochs || i == 1) 
             {
                 String str = "  " + Logger.format_spaces(i + ":", 9);
                 str += "  " + df.format(loss);
@@ -236,13 +253,9 @@ public class NN extends Classifier
         }
         
         //Set best weights
-        //Don't use in batch training since loss heavily depends on which batch is trained on
-        if (batch_size == 0)
-        {
-            out = bOut;
-            hidden = bHidden;
-            forward();
-            o.appendText("  Best loss " + df.format(best_loss) + " at iteration " + best_iteration);
-        }
+        out = bOut;
+        hidden = bHidden;
+        forward();
+        o.appendText("  Best loss " + df.format(best_loss) + " at iteration " + best_iteration);
     }
 }

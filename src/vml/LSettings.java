@@ -24,9 +24,9 @@ public class LSettings
     public double lambda = 0.01;
     
     /**
-     * Number of training iterations.
+     * Number of training epochs.
      */
-    public int iterations = 200;
+    public int epochs = 200;
     
     /**
      * Sets if data shall be normalized.
@@ -58,7 +58,7 @@ public class LSettings
         lambda = 0.01;
         use_normalization = false;
         normalization_bounds = new int[2];
-        iterations = 200;
+        epochs = 200;
         batch_size = 0;
         shuffle = true;
     }

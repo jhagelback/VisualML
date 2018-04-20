@@ -95,6 +95,10 @@ public class Matrix
      */
     public static Matrix randomNormal(int r, int c, Random rnd)
     {
+        //TODO: This shall actually be
+        //sqrt(2) * sqrt(2/(noIn+noOut))
+        //double stddev = Math.sqrt(2.0) * Math.sqrt(2.0/(r+c));
+        
         //Desired standard deviation: 2 / sqrt(noInputs)
         double stddev = 2.0 / Math.sqrt(c);
         

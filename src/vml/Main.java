@@ -333,19 +333,19 @@ public class Main extends Application
         
         mitem = new MenuItem("Iris PCA");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("l_iris_pca"), 5);
+            initClassifier(ClassifierFactory.build("l_iris_pca"), 2);
         }); 
         lmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Flame");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("l_flame"), 20);
+            initClassifier(ClassifierFactory.build("l_flame"), 5);
         }); 
         lmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Moons");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("l_moons"), 20);
+            initClassifier(ClassifierFactory.build("l_moons"), 5);
         }); 
         lmenu.getItems().add(mitem);
         
@@ -358,7 +358,7 @@ public class Main extends Application
         
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("nn_spiral"), 5);
+            initClassifier(ClassifierFactory.build("nn_spiral"), 2);
         }); 
         nmenu.getItems().add(mitem);
         
@@ -382,13 +382,13 @@ public class Main extends Application
         
         mitem = new MenuItem("Flame");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("nn_flame"), 20);
+            initClassifier(ClassifierFactory.build("nn_flame"), 10);
         }); 
         nmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Moons");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("nn_moons"), 20);
+            initClassifier(ClassifierFactory.build("nn_moons"), 10);
         }); 
         nmenu.getItems().add(mitem);
         
@@ -401,7 +401,7 @@ public class Main extends Application
         
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("dnn_spiral"), 10);
+            initClassifier(ClassifierFactory.build("dnn_spiral"), 2);
         }); 
         dmenu.getItems().add(mitem);
         

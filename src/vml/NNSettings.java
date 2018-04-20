@@ -34,9 +34,9 @@ public class NNSettings
     public int[] layers = {16};
     
     /**
-     * Number of training iterations.
+     * Number of training epochs.
      */
-    public int iterations = 1000;
+    public int epochs = 1000;
     
     /**
      * Sets if data shall be normalized.
@@ -70,7 +70,7 @@ public class NNSettings
         use_normalization = false;
         normalization_bounds = new int[2];
         layers = new int[]{16};
-        iterations = 1000;
+        epochs = 1000;
         batch_size = 0;
         shuffle = true;
     }

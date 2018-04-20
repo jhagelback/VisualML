@@ -142,7 +142,7 @@ public class ClassifierFactory
             
             //Read settings
             LSettings settings = new LSettings();
-            if (exists(e, "Iterations")) settings.iterations = getInt(e, "Iterations");
+            if (exists(e, "Epochs")) settings.epochs = getInt(e, "Epochs");
             if (exists(e, "LearningRate")) settings.learningrate = getDouble(e, "LearningRate");
             if (exists(e, "RegularizationStrength")) settings.lambda = getDouble(e, "RegularizationStrength");
             if (exists(e, "UseRegularization")) settings.use_regularization = getBoolean(e, "UseRegularization");
@@ -309,7 +309,7 @@ public class ClassifierFactory
             
             //Read settings
             NNSettings settings = new NNSettings();
-            if (exists(e, "Iterations")) settings.iterations = getInt(e, "Iterations");
+            if (exists(e, "Epochs")) settings.epochs = getInt(e, "Epochs");
             if (exists(e, "LearningRate")) settings.learningrate = getDouble(e, "LearningRate");
             if (exists(e, "RegularizationStrength")) settings.lambda = getDouble(e, "RegularizationStrength");
             if (exists(e, "UseRegularization")) settings.use_regularization = getBoolean(e, "UseRegularization");
