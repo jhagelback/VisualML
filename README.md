@@ -62,7 +62,7 @@ The Metrics object contains various performance metrics:
 m.getAccuracy(); //Returns the accuracy
 m.getAvgPrecision(); //Returns the average precision
 m.getAvgRecall(); //Returns the average recall
-m.getAvgFscore(); //Returns the average recall
+m.getAvgFscore(); //Returns the average F-score
 m.format_conf_matrix(out); //Outputs the Confusion Matrix to an output logger
 ```
 
