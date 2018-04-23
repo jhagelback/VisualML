@@ -126,14 +126,25 @@
         <BatchSize>50</BatchSize>
     </Experiment>
     <Experiment id="l_mnist">
-        <!-- Training set: 92.82% -->
-        <!-- Test set: 92.57% -->
-        <!-- Cross-validation: 92.02% -->
+        <!-- Training set: 93.17% -->
+        <!-- Test set: 92.59% -->
         <Classifier>Linear</Classifier>
         <TrainingData>data_mnist/mnist_train.csv</TrainingData>
         <TestData>data_mnist/mnist_test.csv</TestData>
-        <Epochs>20</Epochs>
-        <LearningRate>0.4</LearningRate>
+        <Epochs>50</Epochs>
+        <LearningRate>0.3</LearningRate>
+        <UseRegularization>false</UseRegularization>
+        <Normalization>0:1</Normalization>
+        <BatchSize>200</BatchSize>
+    </Experiment>
+    <Experiment id="l_mnist_pa">
+        <!-- Training set: 92.54% -->
+        <!-- Test set: 92.38% -->
+        <Classifier>Linear</Classifier>
+        <TrainingData>data_mnist/mnist_train_scaled_avg.csv</TrainingData>
+        <TestData>data_mnist/mnist_test_scaled_avg.csv</TestData>
+        <Epochs>80</Epochs>
+        <LearningRate>0.6</LearningRate>
         <UseRegularization>false</UseRegularization>
         <Normalization>0:1</Normalization>
         <BatchSize>200</BatchSize>
@@ -284,15 +295,29 @@
         <BatchSize>50</BatchSize>
     </Experiment>
     <Experiment id="nn_mnist">
-        <!-- Training set: 97.81% -->
-        <!-- Test set: 96.49% -->
-        <!-- Cross-validation: 96.01% -->
+        <!-- Training set: 98.27% -->
+        <!-- Test set: 97.01% -->
         <Classifier>NN</Classifier>
         <TrainingData>data_mnist/mnist_train.csv</TrainingData>
         <TestData>data_mnist/mnist_test.csv</TestData>
-        <Epochs>20</Epochs>
+        <Epochs>80</Epochs>
         <LearningRate>0.3</LearningRate>
-        <UseRegularization>false</UseRegularization>
+        <HiddenLayers>32</HiddenLayers>
+        <Normalization>0:1</Normalization>
+        <BatchSize>200</BatchSize>
+    </Experiment>
+    <Experiment id="nn_mnist_pa">
+        <!-- 
+            Using the scaled images has comparable results, 
+            but reduces training and evaluation with 75% 
+        -->
+        <!-- Training set: 97.23% -->
+        <!-- Test set: 96.92% -->
+        <Classifier>NN</Classifier>
+        <TrainingData>data_mnist/mnist_train_scaled_avg.csv</TrainingData>
+        <TestData>data_mnist/mnist_test_scaled_avg.csv</TestData>
+        <Epochs>50</Epochs>
+        <LearningRate>0.5</LearningRate>
         <HiddenLayers>32</HiddenLayers>
         <Normalization>0:1</Normalization>
         <BatchSize>200</BatchSize>
@@ -441,16 +466,26 @@
         <BatchSize>100</BatchSize>
     </Experiment>
     <Experiment id="dnn_mnist">
-        <!-- Training set: 97.85% -->
-        <!-- Test set: 96.15% -->
-        <!-- Cross-validation: 95.56% -->
+        <!-- Training set: 98.55%-->
+        <!-- Test set: 96.93% -->
         <Classifier>NN</Classifier>
         <TrainingData>data_mnist/mnist_train.csv</TrainingData>
         <TestData>data_mnist/mnist_test.csv</TestData>
-        <Epochs>20</Epochs>
+        <Epochs>80</Epochs>
         <LearningRate>0.3</LearningRate>
-        <UseRegularization>false</UseRegularization>
         <HiddenLayers>32,16</HiddenLayers>
+        <Normalization>0:1</Normalization>
+        <BatchSize>200</BatchSize>
+    </Experiment>
+    <Experiment id="dnn_mnist_pa">
+        <!-- Training set: 98.59%-->
+        <!-- Test set: 97.81% -->
+        <Classifier>NN</Classifier>
+        <TrainingData>data_mnist/mnist_train_scaled_avg.csv</TrainingData>
+        <TestData>data_mnist/mnist_test_scaled_avg.csv</TestData>
+        <Epochs>70</Epochs>
+        <LearningRate>0.5</LearningRate>
+        <HiddenLayers>56,16</HiddenLayers>
         <Normalization>0:1</Normalization>
         <BatchSize>200</BatchSize>
     </Experiment>
