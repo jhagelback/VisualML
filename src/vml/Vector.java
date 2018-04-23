@@ -197,6 +197,37 @@ public class Vector
     }
     
     /**
+     * Calculates the max all values in this vector.
+     * 
+     * @return The sum
+     */
+    public double max()
+    {
+        double max = Double.MIN_VALUE;
+        for (int i = 0; i < size(); i++)
+        {
+            if (v[i] > max) max = v[i];
+        }
+        return max;
+    }
+    
+    /**
+     * Calculates the average of all values in this vector.
+     * 
+     * @return The average
+     */
+    public double avg()
+    {
+        double avg = 0;
+        for (int i = 0; i < size(); i++)
+        {
+            avg += v[i];
+        }
+        avg /= size();
+        return avg;
+    }
+    
+    /**
      * Calculates the dot product between this vector and another vector.
      * 
      * @param v2 The other vector
