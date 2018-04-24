@@ -25,29 +25,31 @@ public class Experiment
      */
     public static void run(String id, boolean eval_train, boolean eval_test, boolean eval_cv, Logger out)
     {
-        //Create classifier
-        Classifier c = ClassifierFactory.build(id);
-        if (c == null)
+        try
         {
-            out.appendError("Cannot find experiment with id '" + id + "'");
-            return;
+            //Initialize classifier
+            Classifier c = ClassifierFactory.build(id, out);
+            
+            //Train classifier
+            if (eval_train || eval_test)
+            {
+                long st = System.currentTimeMillis();
+                c.train(out);
+                long el = System.currentTimeMillis() - st;
+                out.appendText("Training time: " + Classifier.time_string(el));
+            }
+
+            //Evaluate accuracy on training and test datasets
+            c.evaluate(eval_train, eval_test, out);
+            //Evaluate accuracy using 10-fold cross validation
+            if (eval_cv && c.data.size() >= 10)
+            {
+                run_cv(c, out);
+            }
         }
-        
-        //Train classifier
-        if (eval_train || eval_test)
+        catch (Exception ex)
         {
-            long st = System.currentTimeMillis();
-            c.train(out);
-            long el = System.currentTimeMillis() - st;
-            out.appendText("Training time: " + Classifier.time_string(el));
-        }
-        
-        //Evaluate accuracy on training and test datasets
-        c.evaluate(eval_train, eval_test, out);
-        //Evaluate accuracy using 10-fold cross validation
-        if (eval_cv && c.data.size() >= 10)
-        {
-            run_cv(c, out);
+            out.appendError("Unable to run experiment with id '" + id + "'");
         }
     }
     

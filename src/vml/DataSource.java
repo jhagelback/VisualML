@@ -4,8 +4,11 @@ package vml;
 import java.io.*;
 import java.util.HashMap;
 
+import java.util.zip.*;
+
 /**
- * Reads comma-separated values (csv) data files into a dataset container.
+ * Reads comma-separated values (csv) data files into a dataset container. Supports compressed
+ * (zip) files containing csv dataset files.
  * 
  * @author Johan Hagelbäck, Linnaeus University  (johan.hagelback@lnu.se)
  */
@@ -34,15 +37,18 @@ public class DataSource
      * 
      * @param filename Filename for the data file
      * @return Dataset container
+     * @throws java.lang.Exception If unable to read dataset file
      */
-    public Dataset read(String filename)
+    public Dataset read(String filename) throws Exception
     {
-        File f = new File(filename);
-        Dataset dset = new Dataset(f.getName());
-        
         try
         {
-            BufferedReader in = new BufferedReader(new FileReader(filename));
+            //Dataset file
+            File f = new File(filename);
+            Dataset dset = new Dataset(f.getName());
+        
+            //Open reader
+            BufferedReader in = open(f);
             String str = in.readLine();
             //Skip header line
             str = in.readLine();
@@ -56,16 +62,57 @@ public class DataSource
                 //Read next line
                 str = in.readLine();
             }
+            
+            //Set int label to category label
+            dset.setLabelMapping(intToCat);
+
+            return dset;
         }
         catch (Exception ex)
         {
-            ex.printStackTrace();
+            throw ex;
         }
-        
-        //Set int label to category label
-        dset.setLabelMapping(intToCat);
-        
-        return dset;
+    }
+    
+    /**
+     * Opens a reader to a dataset file. Supports csv and compressed (zip) files.
+     * 
+     * @param f Dataset file
+     * @return File reader
+     * @throws Exception If dataset file is not supported
+     */
+    private BufferedReader open(File f) throws Exception
+    {
+        try
+        {
+            //Read CSV file
+            if (f.getName().endsWith(".csv"))
+            {
+                return new BufferedReader(new FileReader(f));
+            }
+            //Read ZIP file
+            else if(f.getName().endsWith(".zip"))
+            {
+                ZipFile zf = new ZipFile(f);
+                while (zf.entries().hasMoreElements())
+                {
+                    ZipEntry e = zf.entries().nextElement();
+                    if (e.getName().endsWith(".csv"))
+                    {
+                        return new BufferedReader(new InputStreamReader(zf.getInputStream(e)));
+                    }
+                }
+                throw new Exception("Zip file does not contain a csv file");
+            }
+            else
+            {
+                throw new Exception("Not a valid dataset file: " + f.getName());
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Unable to find dataset file");
+        }
     }
     
     /**

@@ -28,11 +28,20 @@ public class ClassifierFactory
      * Builds the classifier with the specified experiment id.
      * 
      * @param id Experiment id
+     * @param o Logger for log info
      * @return Classifier, or null if experiments was not found
      */
-    public static Classifier build(String id)
+    public static Classifier build(String id, Logger o)
     {
-        return readSettings(id);
+        try
+        {
+            return readSettings(id);
+        }
+        catch (Exception ex)
+        {
+            o.appendError(ex.getMessage());
+        }
+        return null;
     }
     
     /**
@@ -42,20 +51,24 @@ public class ClassifierFactory
      * @param dataset_name Name of the training dataset
      * @param reader Data reader instance
      * @return The dataset
+     * @throws java.lang.Exception If unable to read dataset file or file is not supported
      */
-    public static Dataset readDataset(String dataset_name, DataSource reader)
+    public static Dataset readDataset(String dataset_name, DataSource reader) throws Exception
     {
-        //Check if dataset is found
-        if (dataset_name == null) return null;
-        String fname = dataset_name;
-        if (!fname.endsWith(".csv")) fname += ".csv";
-        File f = new File(fname);
-        if (!f.exists()) return null;
-        
-        //Read data
-        Dataset data = reader.read(fname);
-        
-        return data;
+        try
+        {
+            //Check if dataset is found
+            if (dataset_name == null) return null;
+
+            //Read data
+            Dataset data = reader.read(dataset_name);
+
+            return data;
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
     }
     
     /**
@@ -64,8 +77,9 @@ public class ClassifierFactory
      * 
      * @param id Experiment id
      * @return Classifier for this experiment, or null if experiment was not found
+     * @throws java.lang.Exception If unable to read settings or dataset
      */
-    private static Classifier readSettings(String id)
+    private static Classifier readSettings(String id) throws Exception
     {
         Classifier c = null;
         
@@ -118,8 +132,7 @@ public class ClassifierFactory
         }
         catch (Exception ex)
         {
-            System.err.println("Experiments XML file is invalid");
-            System.exit(1);
+            throw ex;
         }
         
         return c;
@@ -130,8 +143,9 @@ public class ClassifierFactory
      * 
      * @param e Experiment xml node
      * @return The classifier
+     * @throws java.lang.Exception If unable to read settings
      */
-    private static Classifier readLinear(Element e)
+    private static Classifier readLinear(Element e) throws Exception
     {
         Classifier c = null;
         
@@ -184,9 +198,7 @@ public class ClassifierFactory
         }
         catch (Exception ex)
         {
-            System.err.println("Experiments XML file is invalid");
-            ex.printStackTrace();
-            System.exit(1);
+            throw ex;
         }
         
         return c;
@@ -197,8 +209,9 @@ public class ClassifierFactory
      * 
      * @param e Experiment xml node
      * @return The classifier
+     * @throws java.lang.Exception If unable to read settings
      */
-    private static Classifier readCART(Element e)
+    private static Classifier readCART(Element e) throws Exception
     {
         Classifier c = null;
         
@@ -216,11 +229,6 @@ public class ClassifierFactory
             //Read training dataset
             DataSource reader = new DataSource();
             Dataset data = ClassifierFactory.readDataset(dataset_name, reader);
-            if (data == null)
-            {
-                System.out.println("Unable to find training dataset '" + dataset_name + "'");
-                System.exit(1);
-            }
             if (settings.shuffle)
             {
                 Collections.shuffle(data.data, new Random(DataSource.seed));
@@ -233,9 +241,7 @@ public class ClassifierFactory
         }
         catch (Exception ex)
         {
-            System.err.println("Experiments XML file is invalid");
-            ex.printStackTrace();
-            System.exit(1);
+            throw ex;
         }
         
         return c;
@@ -246,8 +252,9 @@ public class ClassifierFactory
      * 
      * @param e Experiment xml node
      * @return The classifier
+     * @throws java.lang.Exception If unable to read settings
      */
-    private static Classifier readRF(Element e)
+    private static Classifier readRF(Element e) throws Exception
     {
         Classifier c = null;
         
@@ -267,11 +274,6 @@ public class ClassifierFactory
             //Read training dataset
             DataSource reader = new DataSource();
             Dataset data = ClassifierFactory.readDataset(dataset_name, reader);
-            if (data == null)
-            {
-                System.out.println("Unable to find training dataset '" + dataset_name + "'");
-                System.exit(1);
-            }
             if (settings.shuffle)
             {
                 Collections.shuffle(data.data, new Random(DataSource.seed));
@@ -284,9 +286,7 @@ public class ClassifierFactory
         }
         catch (Exception ex)
         {
-            System.err.println("Experiments XML file is invalid");
-            ex.printStackTrace();
-            System.exit(1);
+            throw ex;
         }
         
         return c;
@@ -297,8 +297,9 @@ public class ClassifierFactory
      * 
      * @param e Experiment xml node
      * @return The classifier
+     * @throws java.lang.Exception If unable to read settings
      */
-    private static Classifier readNN(Element e)
+    private static Classifier readNN(Element e) throws Exception
     {
         Classifier c = null;
         
@@ -334,11 +335,6 @@ public class ClassifierFactory
             //Read training dataset
             DataSource reader = new DataSource();
             Dataset data = ClassifierFactory.readDataset(dataset_name, reader);
-            if (data == null)
-            {
-                System.out.println("Unable to find training dataset '" + dataset_name + "'");
-                System.exit(1);
-            }
             if (settings.shuffle)
             {
                 Collections.shuffle(data.data, new Random(DataSource.seed));
@@ -361,8 +357,7 @@ public class ClassifierFactory
         }
         catch (Exception ex)
         {
-            System.err.println("Experiments XML file is invalid");
-            System.exit(1);
+            throw ex;
         }
         
         return c;
@@ -373,8 +368,9 @@ public class ClassifierFactory
      * 
      * @param e Experiment xml node
      * @return The classifier
+     * @throws java.lang.Exception If unable to read settings
      */
-    private static Classifier readKNN(Element e)
+    private static Classifier readKNN(Element e) throws Exception
     {
         Classifier c = null;
         
@@ -402,11 +398,6 @@ public class ClassifierFactory
             //Read training dataset
             DataSource reader = new DataSource();
             Dataset data = ClassifierFactory.readDataset(dataset_name, reader);
-            if (data == null)
-            {
-                System.out.println("Unable to find training dataset '" + dataset_name + "'");
-                System.exit(1);
-            }
             if (settings.shuffle)
             {
                 Collections.shuffle(data.data, new Random(DataSource.seed));
@@ -429,8 +420,7 @@ public class ClassifierFactory
         }
         catch (Exception ex)
         {
-            System.err.println("Experiments XML file is invalid");
-            System.exit(1);
+            throw ex;
         }
         
         return c;
@@ -441,8 +431,9 @@ public class ClassifierFactory
      * 
      * @param e Experiment xml node
      * @return The classifier
+     * @throws java.lang.Exception If unable to read settings
      */
-    private static Classifier readRBF(Element e)
+    private static Classifier readRBF(Element e) throws Exception
     {
         Classifier c = null;
         
@@ -464,11 +455,6 @@ public class ClassifierFactory
             //Read training dataset
             DataSource reader = new DataSource();
             Dataset data = ClassifierFactory.readDataset(dataset_name, reader);
-            if (data == null)
-            {
-                System.out.println("Unable to find training dataset '" + dataset_name + "'");
-                System.exit(1);
-            }
             if (settings.shuffle)
             {
                 Collections.shuffle(data.data, new Random(DataSource.seed));
@@ -491,8 +477,7 @@ public class ClassifierFactory
         }
         catch (Exception ex)
         {
-            System.err.println("Experiments XML file is invalid");
-            System.exit(1);
+            throw ex;
         }
         
         return c;
@@ -501,9 +486,9 @@ public class ClassifierFactory
     /**
      * Returns a list of all experiments in the experiments.xml file.
      * 
-     * @return List of experiment
+     * @return List of experiments
      */
-    public static ArrayList<ChoiceItem> findAvailableExperiments()
+    static ArrayList<ChoiceItem> findAvailableExperiments()
     {
         ArrayList<ChoiceItem> exp = new ArrayList<>();
         
@@ -533,8 +518,7 @@ public class ClassifierFactory
         }
         catch (Exception ex)
         {
-            System.err.println("Experiments XML file is invalid");
-            System.exit(1);
+            //Return what has been found so far
         }
         
         return exp;
@@ -542,8 +526,10 @@ public class ClassifierFactory
     
     /**
      * Reads the settings.xml file into memory.
+     * 
+     * @throws java.lang.Exception If unable to open settings xml file
      */
-    private static void openXML()
+    private static void openXML() throws Exception
     {
         //Read xml file, if not already read into memory
         try
@@ -574,8 +560,7 @@ public class ClassifierFactory
         }
         catch (Exception ex)
         {
-            System.err.println("Experiments XML file is invalid");
-            System.exit(1);
+            throw ex;
         }
     }
     
@@ -613,8 +598,9 @@ public class ClassifierFactory
      * @param e Current element
      * @param node Child node to search for (NormalizationType)
      * @return Normalization bounds (min and max value)
+     * @throws java.lang.Exception If unable to read settings
      */
-    private static int[] getNormalization(Element e, String node)
+    private static int[] getNormalization(Element e, String node) throws Exception
     {
         int[] bounds = new int[2];
         
@@ -630,8 +616,7 @@ public class ClassifierFactory
         }
         catch (Exception ex)
         {
-            ex.printStackTrace();
-            bounds = new int[2];
+            throw new Exception("Invalid normalization parameter");
         }
         
         return bounds;
@@ -660,12 +645,20 @@ public class ClassifierFactory
      * @param e Current element
      * @param node Child node to search for
      * @return Integer contents, or 0 if not found
+     * @throws java.lang.Exception If unable to parse integer parameter
      */
-    private static int getInt(Element e, String node) throws NumberFormatException
+    private static int getInt(Element e, String node) throws Exception
     {
-        if (e.getElementsByTagName(node).getLength() == 1)
+        try
         {
-            return Integer.parseInt(e.getElementsByTagName(node).item(0).getTextContent());
+            if (e.getElementsByTagName(node).getLength() == 1)
+            {
+                return Integer.parseInt(e.getElementsByTagName(node).item(0).getTextContent());
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Invalid integer parameter");
         }
         return 0;
     }
@@ -676,14 +669,22 @@ public class ClassifierFactory
      * @param e Current element
      * @param node Child node to search for
      * @return Double contents, or 0 if not found
+     * @throws java.lang.Exception If unable to parse double parameter
      */
-    private static double getDouble(Element e, String node) throws ParseException
+    private static double getDouble(Element e, String node) throws Exception
     {
-        if (e.getElementsByTagName(node).getLength() == 1)
+        try
         {
-            String t = e.getElementsByTagName(node).item(0).getTextContent();
-            NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);
-            return nf.parse(t).doubleValue();
+            if (e.getElementsByTagName(node).getLength() == 1)
+            {
+                String t = e.getElementsByTagName(node).item(0).getTextContent();
+                NumberFormat nf = NumberFormat.getInstance(Locale.ENGLISH);
+                return nf.parse(t).doubleValue();
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Invalid double parameter");
         }
         return 0;
     }

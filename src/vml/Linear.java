@@ -72,33 +72,6 @@ public class Linear extends Classifier
     }
     
     /**
-     * Initializes the weight matrix and bias vector as the example in
-     * http://vision.stanford.edu/teaching/cs231n-demos/linear-classify/
-     */
-    public Linear()
-    {
-        double[][] w_init = {
-                    {1.00,  2.00},
-                    {2.00, -4.00},
-                    {3.00, -1.00}
-        };
-        
-        double[] b_init = {0.00, 0.50, -0.50};
-        
-        //Init weight matrix
-        w = new Matrix(w_init);
-        //Init bias vector
-        b = new Vector(b_init);
-        //Settings
-        settings = new LSettings();
-        settings.learningrate = 1.0;
-        settings.epochs = 20;
-        
-        //Read data
-        data = ClassifierFactory.readDataset("data/demo.csv", new DataSource());
-    }
-    
-    /**
      * Trains the classifier.
      * 
      * @param o Logger for log info
