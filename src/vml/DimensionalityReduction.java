@@ -26,14 +26,30 @@ public class DimensionalityReduction
     //For output
     private DecimalFormat df = new DecimalFormat("0.0000");
     
-    public static DimensionalityReduction getPCA(String filename, int columns)
+    /**
+     * Runs a Principal-Component Analysis (PCA) dimensionality reduction on a dataset.
+     * 
+     * @param filename Dataset file
+     * @param vars Number of variables to keep in the dataset
+     * @param o Logger for log info
+     * @return 
+     */
+    public static DimensionalityReduction getPCA(String filename, int vars, Logger o)
     {
-        return new DimensionalityReduction(filename, columns, "PCA");
+        return new DimensionalityReduction(filename, vars, "PCA", o);
     }
     
-    public static DimensionalityReduction getSVD(String filename, int columns)
+    /**
+     * Runs a Singular-Value Decomposition (SVD) dimensionality reduction on a dataset.
+     * 
+     * @param filename Dataset file
+     * @param vars Number of variables to keep in the dataset
+     * @param o Logger for log info
+     * @return 
+     */
+    public static DimensionalityReduction getSVD(String filename, int vars, Logger o)
     {
-        return new DimensionalityReduction(filename, columns, "SVD");
+        return new DimensionalityReduction(filename, vars, "SVD", o);
     }
     
     /**
@@ -42,23 +58,31 @@ public class DimensionalityReduction
      * @param filename Path to dataset file
      * @param columns Number of columns to keep in the reduced dataset
      * @param type Type of dimensionality reduction: PCA or SVD
+     * @param o Logger for log info
      */
-    private DimensionalityReduction(String filename, int columns, String type)
+    private DimensionalityReduction(String filename, int columns, String type, Logger o)
     {
-        this.filename = filename;
-        this.columns = columns;
-        this.type = type;
-        
-        DataSource reader = new DataSource();
-        data = reader.read(filename);
-        
-        //PCA and SVD requires that the data is centered
-        data.normalizeAttributes(-1, 1);
-        
-        if (data == null)
+        try
         {
-            System.err.println("Dataset '" + filename + "' was not found!");
-            System.exit(1);
+            this.filename = filename;
+            this.columns = columns;
+            this.type = type;
+
+            DataSource reader = new DataSource();
+            data = reader.read(filename);
+
+            //PCA and SVD requires that the data is centered
+            data.normalizeAttributes(-1, 1);
+
+            if (data == null)
+            {
+                System.err.println("Dataset '" + filename + "' was not found!");
+                System.exit(1);
+            }
+        }
+        catch (Exception ex)
+        {
+            o.appendError(ex.getMessage());
         }
     }
     
