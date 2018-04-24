@@ -27,7 +27,7 @@ public class Main extends Application
     /**
      * Application version.
      */
-    public static String version = "3.7";
+    public static String version = "3.8";
     
     //Panel to render stuff on
     private VizCanvas p;
@@ -309,301 +309,301 @@ public class Main extends Application
         //Linear tasks
         MenuItem mitem = new MenuItem("Demo");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(new Linear(), 1);
+            initClassifier(ClassifierFactory.build("l_demo", out), 1);
         }); 
         lmenu.getItems().add(mitem);
         
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("l_spiral"), 10);
+            initClassifier(ClassifierFactory.build("l_spiral", out), 10);
         }); 
         lmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Circle");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("l_circle"), 1);
+            initClassifier(ClassifierFactory.build("l_circle", out), 1);
         }); 
         lmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("l_iris_2d"), 10);
+            initClassifier(ClassifierFactory.build("l_iris_2d", out), 10);
         }); 
         lmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Iris PCA");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("l_iris_pca"), 2);
+            initClassifier(ClassifierFactory.build("l_iris_pca", out), 2);
         }); 
         lmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Flame");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("l_flame"), 5);
+            initClassifier(ClassifierFactory.build("l_flame", out), 5);
         }); 
         lmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Moons");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("l_moons"), 5);
+            initClassifier(ClassifierFactory.build("l_moons", out), 5);
         }); 
         lmenu.getItems().add(mitem);
-        
+
         //NN tasks
         mitem = new MenuItem("Demo");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("nn_demo"), 1);
+            initClassifier(ClassifierFactory.build("nn_demo", out), 1);
         }); 
         nmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("nn_spiral"), 2);
+            initClassifier(ClassifierFactory.build("nn_spiral", out), 2);
         }); 
         nmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Circle");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("nn_circle"), 1);
+            initClassifier(ClassifierFactory.build("nn_circle", out), 1);
         }); 
         nmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("nn_iris_2d"), 5);
+            initClassifier(ClassifierFactory.build("nn_iris_2d", out), 5);
         }); 
         nmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Iris PCA");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("nn_iris_pca"), 5);
+            initClassifier(ClassifierFactory.build("nn_iris_pca", out), 5);
         }); 
         nmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Flame");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("nn_flame"), 10);
+            initClassifier(ClassifierFactory.build("nn_flame", out), 10);
         }); 
         nmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Moons");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("nn_moons"), 10);
+            initClassifier(ClassifierFactory.build("nn_moons", out), 10);
         }); 
         nmenu.getItems().add(mitem);
-        
+
         //Deep NN tasks
         mitem = new MenuItem("Demo");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("dnn_demo"), 1);
+            initClassifier(ClassifierFactory.build("dnn_demo", out), 1);
         }); 
         dmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("dnn_spiral"), 2);
+            initClassifier(ClassifierFactory.build("dnn_spiral", out), 2);
         }); 
         dmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Circle");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("dnn_circle"), 1);
+            initClassifier(ClassifierFactory.build("dnn_circle", out), 1);
         }); 
         dmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("dnn_iris_2d"), 20);
+            initClassifier(ClassifierFactory.build("dnn_iris_2d", out), 20);
         }); 
         dmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Iris PCA");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("dnn_iris_pca"), 10);
+            initClassifier(ClassifierFactory.build("dnn_iris_pca", out), 10);
         }); 
         dmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Flame");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("dnn_flame"), 10);
+            initClassifier(ClassifierFactory.build("dnn_flame", out), 10);
         }); 
         dmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Moons");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("dnn_moons"), 10);
+            initClassifier(ClassifierFactory.build("dnn_moons", out), 10);
         }); 
         dmenu.getItems().add(mitem);
-        
+
         //kNN tasks
         mitem = new MenuItem("Demo");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("knn_demo"), 1);
+            initClassifier(ClassifierFactory.build("knn_demo", out), 1);
         }); 
         kmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("knn_spiral"), 1);
+            initClassifier(ClassifierFactory.build("knn_spiral", out), 1);
         }); 
         kmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Circle");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("knn_circle"), 1);
+            initClassifier(ClassifierFactory.build("knn_circle", out), 1);
         }); 
         kmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("knn_iris_2d"), 1);
+            initClassifier(ClassifierFactory.build("knn_iris_2d", out), 1);
         }); 
         kmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Iris PCA");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("knn_iris_pca"), 1);
+            initClassifier(ClassifierFactory.build("knn_iris_pca", out), 1);
         }); 
         kmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Flame");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("knn_flame"), 1);
+            initClassifier(ClassifierFactory.build("knn_flame", out), 1);
         }); 
         kmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Moons");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("knn_moons"), 1);
+            initClassifier(ClassifierFactory.build("knn_moons", out), 1);
         }); 
         kmenu.getItems().add(mitem);
-        
+
         //RBF kernel tasks
         mitem = new MenuItem("Demo");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("rbf_demo"), 1);
+            initClassifier(ClassifierFactory.build("rbf_demo", out), 1);
         }); 
         kemenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("rbf_spiral"), 1);
+            initClassifier(ClassifierFactory.build("rbf_spiral", out), 1);
         }); 
         kemenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Circle");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("rbf_circle"), 1);
+            initClassifier(ClassifierFactory.build("rbf_circle", out), 1);
         }); 
         kemenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("rbf_iris_2d"), 1);
+            initClassifier(ClassifierFactory.build("rbf_iris_2d", out), 1);
         }); 
         kemenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Iris PCA");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("rbf_iris_pca"), 1);
+            initClassifier(ClassifierFactory.build("rbf_iris_pca", out), 1);
         }); 
         kemenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Flame");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("rbf_flame"), 1);
+            initClassifier(ClassifierFactory.build("rbf_flame", out), 1);
         }); 
         kemenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Moons");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("rbf_moons"), 1);
+            initClassifier(ClassifierFactory.build("rbf_moons", out), 1);
         }); 
         kemenu.getItems().add(mitem);
-        
+
         //CART tasks
         mitem = new MenuItem("Demo");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("c_demo"), 1);
+            initClassifier(ClassifierFactory.build("c_demo", out), 1);
         }); 
         cmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("c_spiral"), 1);
+            initClassifier(ClassifierFactory.build("c_spiral", out), 1);
         }); 
         cmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Circle");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("c_circle"), 1);
+            initClassifier(ClassifierFactory.build("c_circle", out), 1);
         }); 
         cmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("c_iris_2d"), 1);
+            initClassifier(ClassifierFactory.build("c_iris_2d", out), 1);
         }); 
         cmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Iris PCA");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("c_iris_pca"), 1);
+            initClassifier(ClassifierFactory.build("c_iris_pca", out), 1);
         }); 
         cmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Flame");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("c_flame"), 1);
+            initClassifier(ClassifierFactory.build("c_flame", out), 1);
         }); 
         cmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Moons");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("c_moons"), 1);
+            initClassifier(ClassifierFactory.build("c_moons", out), 1);
         }); 
         cmenu.getItems().add(mitem);
-        
+
         //Random Forest tasks
         mitem = new MenuItem("Demo");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("rf_demo"), 1);
+            initClassifier(ClassifierFactory.build("rf_demo", out), 1);
         }); 
         rmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Spiral");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("rf_spiral"), 1);
+            initClassifier(ClassifierFactory.build("rf_spiral", out), 1);
         }); 
         rmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Circle");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("rf_circle"), 1);
+            initClassifier(ClassifierFactory.build("rf_circle", out), 1);
         }); 
         rmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("rf_iris_2d"), 1);
+            initClassifier(ClassifierFactory.build("rf_iris_2d", out), 1);
         }); 
         rmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Iris PCA");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("rf_iris_pca"), 1);
+            initClassifier(ClassifierFactory.build("rf_iris_pca", out), 1);
         }); 
         rmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Flame");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("rf_flame"), 1);
+            initClassifier(ClassifierFactory.build("rf_flame", out), 1);
         }); 
         rmenu.getItems().add(mitem);
-        
+
         mitem = new MenuItem("Moons");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("rf_moons"), 1);
+            initClassifier(ClassifierFactory.build("rf_moons", out), 1);
         }); 
         rmenu.getItems().add(mitem);
         
