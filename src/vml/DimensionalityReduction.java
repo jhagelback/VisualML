@@ -32,7 +32,7 @@ public class DimensionalityReduction
      * @param filename Dataset file
      * @param vars Number of variables to keep in the dataset
      * @param o Logger for log info
-     * @return 
+     * @return Dimensionality Reducer
      */
     public static DimensionalityReduction getPCA(String filename, int vars, Logger o)
     {
@@ -45,7 +45,7 @@ public class DimensionalityReduction
      * @param filename Dataset file
      * @param vars Number of variables to keep in the dataset
      * @param o Logger for log info
-     * @return 
+     * @return Dimensionality Reducer
      */
     public static DimensionalityReduction getSVD(String filename, int vars, Logger o)
     {
