@@ -129,8 +129,8 @@
         <!-- Training set: 93.17% -->
         <!-- Test set: 92.59% -->
         <Classifier>Linear</Classifier>
-        <TrainingData>data_mnist/mnist_train.csv</TrainingData>
-        <TestData>data_mnist/mnist_test.csv</TestData>
+        <TrainingData>data_mnist/mnist_train.csv.zip</TrainingData>
+        <TestData>data_mnist/mnist_test.csv.zip</TestData>
         <Epochs>50</Epochs>
         <LearningRate>0.3</LearningRate>
         <UseRegularization>false</UseRegularization>
@@ -141,8 +141,8 @@
         <!-- Training set: 92.54% -->
         <!-- Test set: 92.38% -->
         <Classifier>Linear</Classifier>
-        <TrainingData>data_mnist/mnist_train_scaled_avg.csv</TrainingData>
-        <TestData>data_mnist/mnist_test_scaled_avg.csv</TestData>
+        <TrainingData>data_mnist/mnist_train_scaled_avg.csv.zip</TrainingData>
+        <TestData>data_mnist/mnist_test_scaled_avg.csv.zip</TestData>
         <Epochs>80</Epochs>
         <LearningRate>0.6</LearningRate>
         <UseRegularization>false</UseRegularization>
@@ -298,8 +298,8 @@
         <!-- Training set: 98.27% -->
         <!-- Test set: 97.01% -->
         <Classifier>NN</Classifier>
-        <TrainingData>data_mnist/mnist_train.csv</TrainingData>
-        <TestData>data_mnist/mnist_test.csv</TestData>
+        <TrainingData>data_mnist/mnist_train.csv.zip</TrainingData>
+        <TestData>data_mnist/mnist_test.csv.zip</TestData>
         <Epochs>80</Epochs>
         <LearningRate>0.3</LearningRate>
         <HiddenLayers>32</HiddenLayers>
@@ -314,8 +314,8 @@
         <!-- Training set: 97.23% -->
         <!-- Test set: 96.92% -->
         <Classifier>NN</Classifier>
-        <TrainingData>data_mnist/mnist_train_scaled_avg.csv</TrainingData>
-        <TestData>data_mnist/mnist_test_scaled_avg.csv</TestData>
+        <TrainingData>data_mnist/mnist_train_scaled_avg.csv.zip</TrainingData>
+        <TestData>data_mnist/mnist_test_scaled_avg.csv.zip</TestData>
         <Epochs>50</Epochs>
         <LearningRate>0.5</LearningRate>
         <HiddenLayers>32</HiddenLayers>
@@ -469,8 +469,8 @@
         <!-- Training set: 98.55%-->
         <!-- Test set: 96.93% -->
         <Classifier>NN</Classifier>
-        <TrainingData>data_mnist/mnist_train.csv</TrainingData>
-        <TestData>data_mnist/mnist_test.csv</TestData>
+        <TrainingData>data_mnist/mnist_train.csv.zip</TrainingData>
+        <TestData>data_mnist/mnist_test.csv.zip</TestData>
         <Epochs>80</Epochs>
         <LearningRate>0.3</LearningRate>
         <HiddenLayers>32,16</HiddenLayers>
@@ -481,8 +481,8 @@
         <!-- Training set: 98.59%-->
         <!-- Test set: 97.81% -->
         <Classifier>NN</Classifier>
-        <TrainingData>data_mnist/mnist_train_scaled_avg.csv</TrainingData>
-        <TestData>data_mnist/mnist_test_scaled_avg.csv</TestData>
+        <TrainingData>data_mnist/mnist_train_scaled_avg.csv.zip</TrainingData>
+        <TestData>data_mnist/mnist_test_scaled_avg.csv.zip</TestData>
         <Epochs>70</Epochs>
         <LearningRate>0.5</LearningRate>
         <HiddenLayers>56,16</HiddenLayers>
@@ -582,11 +582,11 @@
         <K>2</K>
     </Experiment>
     <Experiment id="knn_mnist">
-         <!-- Training set: 98.87% -->
-        <!-- Test set: 97.17% -->
+         <!-- Training set: .% -->
+        <!-- Test set: .% -->
         <Classifier>KNN</Classifier>
-        <TrainingData>data_mnist/mnist_train.csv</TrainingData>
-        <TestData>data_mnist/mnist_test.csv</TestData>
+        <TrainingData>data_mnist/mnist_train_scaled_avg.csv.zip</TrainingData>
+        <TestData>data_mnist/mnist_test_scaled_avg.csv.zip</TestData>
         <K>3</K>
     </Experiment>
     <!--
@@ -860,13 +860,13 @@
         <Trees>11</Trees>
     </Experiment>
     <Experiment id="rf_iris_pca">
-        <!-- Training set: 99.33% -->
+        <!-- Training set: 100.00% -->
         <!-- Cross-validation: 96.67% -->
         <Classifier>RF</Classifier>
         <TrainingData>data/iris_pca.csv</TrainingData>
         <MaxDepth>5</MaxDepth>
         <MinSize>5</MinSize>
-        <Trees>15</Trees>
+        <Trees>25</Trees>
     </Experiment>
     <Experiment id="rf_iris_test">
         <!-- Training set: 98.33% -->
