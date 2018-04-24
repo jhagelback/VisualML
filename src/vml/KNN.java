@@ -2,6 +2,7 @@
 package vml;
 
 import java.util.ArrayList;
+import java.util.stream.IntStream;
 
 /**
  * k-Nearest Neighbor classifier.
@@ -175,21 +176,21 @@ public class KNN extends Classifier
         for (int j = 0; j < noCategories; j++)
         {
             double no = res.get(j);
-            double d = dist.get(j);
+            double cd = dist.get(j);
             //More occurences
             if (no > bestNo)
             {
                 bestY = j;
-                bestD = d;
+                bestD = cd;
                 bestNo = no;
             }
             //Same occurences, check distance
             if (no == bestNo)
             {
-                if (d < bestD)
+                if (cd < bestD)
                 {
                     bestY = j;
-                    bestD = d;
+                    bestD = cd;
                     bestNo = no;
                 }
             }
