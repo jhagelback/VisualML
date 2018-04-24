@@ -1,4 +1,4 @@
-# VisualML 3.7
+# VisualML 3.8
 VisualML is a machine learning library written in Java with a GUI to visualize the decision boundaries for a classifier and how they change during training. 
 The visualization is useful when teaching machine learning where students can see how different types of classifiers learn. 
 The library can also be used for classification tasks, both as stand-alone application and API, on all datasets in CSV format.
@@ -48,7 +48,8 @@ Example:
 ```
 After that you build the classifier using the ClassifierFactory class:
 ```
-Classifier c = ClassifierFactory.build("nn_iris_test");
+Logger out = Logger.getConsoleLogger();
+Classifier c = ClassifierFactory.build("nn_iris_test", out);
 ```
 Now you can train and evaluate the accuracy on the dataset:
 ```
