@@ -737,20 +737,20 @@ public class Main extends Application
             {
                 String type = args[1];
                 String filename = args[2];
-                int columns = 1;
+                int vars = 1;
                 if (args.length >= 4)
                 {
-                    columns = Integer.parseInt(args[3]);
+                    vars = Integer.parseInt(args[3]);
                 }
                 //Run dimensionality reduction
                 if (type.equalsIgnoreCase("PCA"))
                 {
-                    DimensionalityReduction dr = DimensionalityReduction.getPCA(filename, columns);
+                    DimensionalityReduction dr = DimensionalityReduction.getPCA(filename, vars, Logger.getConsoleLogger());
                     dr.reduceAndSave();
                 }
                 if (type.equalsIgnoreCase("SVD"))
                 {
-                    DimensionalityReduction dr = DimensionalityReduction.getSVD(filename, columns);
+                    DimensionalityReduction dr = DimensionalityReduction.getSVD(filename, vars, Logger.getConsoleLogger());
                     dr.reduceAndSave();
                 }
             }
