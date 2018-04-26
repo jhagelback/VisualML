@@ -71,7 +71,7 @@
         <!-- Training set: 96.00% -->
         <!-- Cross-validation: 96.67% -->
         <Classifier>Linear</Classifier>
-        <TrainingData>data/iris.2d.csv</TrainingData>
+        <TrainingData>data/iris.2D.csv</TrainingData>
         <Epochs>500</Epochs>
         <LearningRate>0.2</LearningRate>
         <BatchSize>50</BatchSize>
@@ -233,13 +233,14 @@
         <BatchSize>50</BatchSize>
     </Experiment>
     <Experiment id="nn_iris_pca">
-        <!-- Training set: 97.33% -->
-        <!-- Cross-validation: 97.33% -->
+        <!-- Training set: 98.00% -->
+        <!-- Cross-validation: 98.00% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/iris_pca.csv</TrainingData>
-        <Epochs>500</Epochs>
-        <LearningRate>0.2</LearningRate>
-        <HiddenLayers>16</HiddenLayers>
+        <Epochs>50</Epochs>
+        <LearningRate>0.1</LearningRate>
+        <HiddenLayers>24</HiddenLayers>
+        <BatchSize>50</BatchSize>
     </Experiment>
     <Experiment id="nn_flame">
         <!-- Training set: 99.17% -->
@@ -582,8 +583,8 @@
         <K>2</K>
     </Experiment>
     <Experiment id="knn_mnist">
-         <!-- Training set: .% -->
-        <!-- Test set: .% -->
+         <!-- Training set: 99.02% -->
+        <!-- Test set: 97.43% -->
         <Classifier>KNN</Classifier>
         <TrainingData>data_mnist/mnist_train_scaled_avg.csv.zip</TrainingData>
         <TestData>data_mnist/mnist_test_scaled_avg.csv.zip</TestData>
@@ -754,9 +755,10 @@
         <!-- Training set: 98.67% -->
         <!-- Cross-validation: 94.67% -->
         <Classifier>CART</Classifier>
-        <TrainingData>data/iris.2d.csv</TrainingData>
+        <TrainingData>data/iris.2D.csv</TrainingData>
         <MaxDepth>5</MaxDepth>
         <MinSize>5</MinSize>
+        <Normalization>0:1</Normalization>
     </Experiment>
     <Experiment id="c_flame">
         <!-- Training set: 99.17% -->
@@ -883,7 +885,7 @@
         <!-- Training set: 98.00% -->
         <!-- Cross-validation: 94.67% -->
         <Classifier>RF</Classifier>
-        <TrainingData>data/iris.2d.csv</TrainingData>
+        <TrainingData>data/iris.2D.csv</TrainingData>
         <MaxDepth>5</MaxDepth>
         <MinSize>5</MinSize>
         <Trees>15</Trees>
