@@ -56,6 +56,32 @@ public class Dataset
     }
     
     /**
+     * Calculates statistics (min, max and mean) for an attribute.
+     * 
+     * @param attr Attribute value
+     * @return Statistics array {min,max,mean}
+     */
+    public double[] getStatistics(int attr)
+    {
+        double[] stats = new double[3];
+        stats[0] = Double.MAX_VALUE;
+        stats[1] = Double.MIN_VALUE;
+        
+        for (Instance inst : data)
+        {
+            double v = inst.x.get(attr);
+            
+            if (v < stats[0]) stats[0] = v;
+            if (v > stats[1]) stats[1] = v;
+            stats[2] += v;
+        }
+        
+        stats[2] /= data.size();
+        
+        return stats;
+    }
+    
+    /**
      * Sets the mapping between integer labels and category labels.
      * 
      * @param intToCat The mapping

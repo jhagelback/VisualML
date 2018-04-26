@@ -15,10 +15,12 @@ class VizCanvas extends Canvas
     private Classifier c;
     //Training dataset
     private Dataset data;
-    //Data attribute scale
-    private double scale;
+    //Data attribute scales
+    private double scaleX;
+    private double scaleY;
     //Data attribute shift
-    private double shift;
+    private double shiftX;
+    private double shiftY;
     //Width of cells in the rendered panel
     private final int cell_w = 7;
     //True of panels is rendering, false otherwise
@@ -31,7 +33,7 @@ class VizCanvas extends Canvas
      */
     public VizCanvas()
     {
-        super(707, 707);
+        super(700, 700);
     }
     
     /**
@@ -60,18 +62,76 @@ class VizCanvas extends Canvas
             if (v2 < min) min = v2;
             if (v2 > max) max = v2;
         }
-        //Round to integers
-        min = Math.floor(min);
-        max = Math.ceil(max);
         
-        //Scale factor of the data
-        scale = max - min;
-        //Shift factor of the data
-        shift = 0;
-        if (min < 0) shift = -min;
+        //Init scale and shift settings
+        init_settings();
         
         //Generate frame
         build_frame();
+    }
+    
+    /**
+     * Init scale and shift settings for this dataset.
+     */
+    private void init_settings()
+    {
+        if (data.getName().startsWith("iris_pca.csv"))
+        {
+            scaleX = 10;
+            scaleY = 8;
+            shiftX = 3;
+            shiftY = -4;
+        }
+        else if (data.getName().startsWith("iris.2D.csv"))
+        {
+            scaleX = 10;
+            scaleY = 5;
+            shiftX = -1;
+            shiftY = -1;
+        }
+        else if (data.getName().startsWith("demo.csv"))
+        {
+            scaleX = 3;
+            scaleY = 3;
+            shiftX = -1.5;
+            shiftY = -1.5;
+        }
+        else if (data.getName().startsWith("spiral.csv"))
+        {
+            scaleX = 2.5;
+            scaleY = 2.5;
+            shiftX = -1.25;
+            shiftY = -1.25;
+        }
+        else if (data.getName().startsWith("circle.csv"))
+        {
+            scaleX = 2;
+            scaleY = 2;
+            shiftX = -1;
+            shiftY = -1;
+        }
+        else if (data.getName().startsWith("flame.csv"))
+        {
+            scaleX = 1;
+            scaleY = 1;
+            shiftX = 0;
+            shiftY = 0;
+        }
+        else if (data.getName().startsWith("moons.csv"))
+        {
+            scaleX = 1;
+            scaleY = 1;
+            shiftX = 0;
+            shiftY = 0;
+        }
+        else
+        {
+            //Default values
+            scaleX = 1;
+            scaleY = 1;
+            shiftX = 0;
+            shiftY = 0;
+        }
     }
     
     /**
@@ -100,9 +160,9 @@ class VizCanvas extends Canvas
         updating = true;
         
         //Render cells
-        for (int x = 0; x < 101; x++)
+        for (int x = 0; x < 100; x++)
         {
-            for (int y = 0; y < 101; y++)
+            for (int y = 0; y < 100; y++)
             {
                 //Find predicted class
                 int label = frame[x][y];
@@ -121,8 +181,8 @@ class VizCanvas extends Canvas
             //Iterate over each instance
             Instance inst = data.get(i);
             //Calculate cell (x,y) values
-            double x = ((inst.x.get(0)+shift) / scale) * 100.0;
-            double y = ((inst.x.get(1)+shift) / scale) * 100.0;
+            double x = ((inst.x.get(0)-shiftX))/scaleX * 100.0;
+            double y = ((inst.x.get(1)-shiftY))/scaleY * 100.0;
             
             //Draw outer border
             gc.setFill(Color.BLACK);
@@ -149,17 +209,17 @@ class VizCanvas extends Canvas
             //Container for the test instances
             Dataset d = data.clone_empty();
             //Temporary frame
-            int[][] tmp = new int[101][101];
+            int[][] tmp = new int[100][100];
             
             //Calculate cell values
-            for (int x = 0; x < 101; x++)
+            for (int x = 0; x < 100; x++)
             {
-                for (int y = 0; y < 101; y++)
+                for (int y = 0; y < 100; y++)
                 {
                     //Calculate instance values for this cell
                     double[] vals = new double[2];
-                    vals[0] = (x / 100.0) * scale - shift;
-                    vals[1] = (y / 100.0) * scale - shift;
+                    vals[0] = x / 100.0 * scaleX + shiftX;
+                    vals[1] = y / 100.0 * scaleY + shiftY;
                     
                     //Create dataset for the instance
                     Instance inst = new Instance(vals, 0);

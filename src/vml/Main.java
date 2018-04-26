@@ -27,7 +27,7 @@ public class Main extends Application
     /**
      * Application version.
      */
-    public static String version = "3.8";
+    public static String version = "3.9";
     
     //Panel to render stuff on
     private VizCanvas p;
@@ -327,13 +327,13 @@ public class Main extends Application
 
         mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("l_iris_2d", out), 10);
+            initClassifier(ClassifierFactory.build("l_iris_2d", out), 5);
         }); 
         lmenu.getItems().add(mitem);
 
         mitem = new MenuItem("Iris PCA");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("l_iris_pca", out), 2);
+            initClassifier(ClassifierFactory.build("l_iris_pca", out), 1);
         }); 
         lmenu.getItems().add(mitem);
 
@@ -370,13 +370,13 @@ public class Main extends Application
 
         mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("nn_iris_2d", out), 5);
+            initClassifier(ClassifierFactory.build("nn_iris_2d", out), 1);
         }); 
         nmenu.getItems().add(mitem);
 
         mitem = new MenuItem("Iris PCA");
         mitem.setOnAction((ActionEvent t) -> {
-            initClassifier(ClassifierFactory.build("nn_iris_pca", out), 5);
+            initClassifier(ClassifierFactory.build("nn_iris_pca", out), 1);
         }); 
         nmenu.getItems().add(mitem);
 
