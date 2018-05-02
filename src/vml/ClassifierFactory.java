@@ -62,7 +62,7 @@ public class ClassifierFactory
 
             //Read data
             Dataset data = reader.read(dataset_name);
-
+ 
             return data;
         }
         catch (Exception ex)
@@ -178,7 +178,7 @@ public class ClassifierFactory
             }
             if (settings.shuffle)
             {
-                Collections.shuffle(data.data, new Random(DataSource.seed));
+                data.shuffle();
             }
             //Read test dataset
             Dataset test = ClassifierFactory.readDataset(testset_name, reader);
@@ -231,7 +231,7 @@ public class ClassifierFactory
             Dataset data = ClassifierFactory.readDataset(dataset_name, reader);
             if (settings.shuffle)
             {
-                Collections.shuffle(data.data, new Random(DataSource.seed));
+                data.shuffle();
             }
             //Read test dataset
             Dataset test = ClassifierFactory.readDataset(testset_name, reader);
@@ -276,7 +276,7 @@ public class ClassifierFactory
             Dataset data = ClassifierFactory.readDataset(dataset_name, reader);
             if (settings.shuffle)
             {
-                Collections.shuffle(data.data, new Random(DataSource.seed));
+                data.shuffle();
             }
             //Read test dataset
             Dataset test = ClassifierFactory.readDataset(testset_name, reader);
@@ -337,7 +337,7 @@ public class ClassifierFactory
             Dataset data = ClassifierFactory.readDataset(dataset_name, reader);
             if (settings.shuffle)
             {
-                Collections.shuffle(data.data, new Random(DataSource.seed));
+                data.shuffle();
             }
             //Read test dataset
             Dataset test = ClassifierFactory.readDataset(testset_name, reader);
@@ -400,7 +400,7 @@ public class ClassifierFactory
             Dataset data = ClassifierFactory.readDataset(dataset_name, reader);
             if (settings.shuffle)
             {
-                Collections.shuffle(data.data, new Random(DataSource.seed));
+                data.shuffle();
             }
             //Read test dataset
             Dataset test = ClassifierFactory.readDataset(testset_name, reader);
@@ -457,7 +457,7 @@ public class ClassifierFactory
             Dataset data = ClassifierFactory.readDataset(dataset_name, reader);
             if (settings.shuffle)
             {
-                Collections.shuffle(data.data, new Random(DataSource.seed));
+                data.shuffle();
             }
             //Read test dataset
             Dataset test = ClassifierFactory.readDataset(testset_name, reader);

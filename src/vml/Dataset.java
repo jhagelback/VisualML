@@ -277,6 +277,14 @@ public class Dataset
         }
     }
     
+    /**
+     * Shuffles the dataset.
+     */
+    public void shuffle()
+    {
+        Collections.shuffle(data, new Random(DataSource.seed));
+    }
+    
     @Override
     public String toString()
     {
