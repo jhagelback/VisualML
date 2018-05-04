@@ -27,7 +27,7 @@ public class Main extends Application
     /**
      * Application version.
      */
-    public static String version = "3.9";
+    public static String version = "3.10";
     
     //Panel to render stuff on
     private VizCanvas p;
@@ -496,7 +496,7 @@ public class Main extends Application
             initClassifier(ClassifierFactory.build("rbf_circle", out), 1);
         }); 
         kemenu.getItems().add(mitem);
-
+        
         mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
             initClassifier(ClassifierFactory.build("rbf_iris_2d", out), 1);
@@ -582,19 +582,19 @@ public class Main extends Application
             initClassifier(ClassifierFactory.build("rf_circle", out), 1);
         }); 
         rmenu.getItems().add(mitem);
-
+        
         mitem = new MenuItem("Iris.2D");
         mitem.setOnAction((ActionEvent t) -> {
             initClassifier(ClassifierFactory.build("rf_iris_2d", out), 1);
         }); 
         rmenu.getItems().add(mitem);
-
+        
         mitem = new MenuItem("Iris PCA");
         mitem.setOnAction((ActionEvent t) -> {
             initClassifier(ClassifierFactory.build("rf_iris_pca", out), 1);
         }); 
         rmenu.getItems().add(mitem);
-
+        
         mitem = new MenuItem("Flame");
         mitem.setOnAction((ActionEvent t) -> {
             initClassifier(ClassifierFactory.build("rf_flame", out), 1);
