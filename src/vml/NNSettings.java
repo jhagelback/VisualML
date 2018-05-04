@@ -14,6 +14,11 @@ public class NNSettings
     public double learningrate = 0.3;
     
     /**
+     * Loss threshold for stopping training.
+     */
+    public double stop_threshold = 0.000005;
+    
+    /**
      * Sets if regularization shall be used or not.
      */
     public boolean use_regularization = false;
@@ -64,6 +69,7 @@ public class NNSettings
     public NNSettings()
     {
         learningrate = 0.3;
+        stop_threshold = 0.000005;
         use_regularization = true;
         lambda = 0.001;
         use_momentum = true;

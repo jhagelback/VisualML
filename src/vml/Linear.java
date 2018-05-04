@@ -95,34 +95,15 @@ public class Linear extends Classifier
         if (out_step <= 0) out_step = 1;
         
         //Optimization Gradient Descent
-        double best_loss = Double.MAX_VALUE;
-        int best_iteration = 0;
         double loss = 0;
-        Matrix bestW = null;
-        Vector bestB = null;
-        Matrix cW = null;
-        Vector cB = null;
+        double p_loss = Double.MAX_VALUE;
         
         o.appendText("  Iteration  Loss");
         
         for (int i = 1; i <= settings.epochs; i++)
         {
-            //Copy current weights
-            cW = w.copy();
-            cB = b.copy();
-            
             //Training iteration
             loss = iterate();
-            
-            //Check if we have a new best loss
-            if (loss < best_loss)
-            {
-                best_loss = loss;
-                best_iteration = i;
-                //Set best weights and biases
-                bestW = cW;
-                bestB = cB;
-            }
             
             //Output result
             if (i % out_step == 0 || i == settings.epochs || i == 1) 
@@ -131,13 +112,20 @@ public class Linear extends Classifier
                 str += "  " + df.format(loss);
                 o.appendText(str);
             }
+            
+            //Check stopping criterion
+            if (i > 2)
+            {
+                double diff = loss - p_loss;
+                if (diff <= settings.stop_threshold && diff >= 0)
+                {
+                    //i = settings.epochs;
+                    o.appendText("  Stop threshold reached at iteration " + i);
+                    break;
+                }
+                p_loss = loss;
+            }
         }
-        
-        //Set best weights
-        w = bestW;
-        b = bestB;
-        activation();
-        o.appendText("  Best loss " + df.format(best_loss) + " at iteration " + best_iteration);
     }
     
     /**

@@ -14,6 +14,11 @@ public class LSettings
     public double learningrate = 1.0;
     
     /**
+     * Loss threshold for stopping training.
+     */
+    public double stop_threshold = 0.000005;
+    
+    /**
      * Sets if regularization shall be used or not.
      */
     public boolean use_regularization = true;
@@ -54,6 +59,7 @@ public class LSettings
     public LSettings()
     {
         learningrate = 1.0;
+        stop_threshold = 0.000005;
         use_regularization = true;
         lambda = 0.01;
         use_normalization = false;

@@ -209,39 +209,15 @@ public class NN extends Classifier
         if (out_step <= 0) out_step = 1;
         
         //Optimization Gradient Descent
-        OutLayer bOut = null;
-        HiddenLayer[] bHidden = new HiddenLayer[hidden.length];
-        OutLayer cOut = null;
-        HiddenLayer[] cHidden = new HiddenLayer[hidden.length];
-        
         double loss = 0;
-        double best_loss = Double.MAX_VALUE;
-        int best_iteration = 0;
+        double p_loss = Double.MAX_VALUE;
         
         o.appendText("  Iteration  Loss");
         
         for (int i = 1; i <= settings.epochs; i++)
         {
-            //Copy current weights and biases
-            cOut = out.copy();
-            cHidden = new HiddenLayer[hidden.length];
-            for (int h = 0; h < hidden.length; h++)
-            {
-                cHidden[h] = hidden[h].copy();
-            }
-            
             //Training iteration
             loss = iterate();
-            
-            //Check if we have a new best loss
-            if (loss < best_loss)
-            {
-                best_loss = loss;
-                best_iteration = i;
-                //Set best layers
-                bOut = cOut;
-                bHidden = cHidden;
-            }
             
             //Output result
             if (i % out_step == 0 || i == settings.epochs || i == 1) 
@@ -250,12 +226,19 @@ public class NN extends Classifier
                 str += "  " + df.format(loss);
                 o.appendText(str);
             }
+            
+            //Check stopping criterion
+            if (i > 2)
+            {
+                double diff = loss - p_loss;
+                if (diff <= settings.stop_threshold && diff >= 0)
+                {
+                    //i = settings.epochs;
+                    o.appendText("  Stop threshold reached at iteration " + i);
+                    break;
+                }
+                p_loss = loss;
+            }
         }
-        
-        //Set best weights
-        out = bOut;
-        hidden = bHidden;
-        forward();
-        o.appendText("  Best loss " + df.format(best_loss) + " at iteration " + best_iteration);
     }
 }
