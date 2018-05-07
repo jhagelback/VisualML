@@ -1,4 +1,4 @@
-# VisualML 3.10
+# VisualML 4.0
 VisualML is a machine learning library written in Java with a GUI to visualize the decision boundaries for a classifier and how they change during training. 
 The visualization is useful when teaching machine learning where students can see how different types of classifiers learn. 
 The library can also be used for classification tasks, both as stand-alone application and API, on all datasets in CSV format.
@@ -14,7 +14,7 @@ The following classifiers are available in the library:
 - Random Forest
 
 ## Use as stand-alone application
-To run the GUI, run the VisualML.jar file without any parameters
+To run the GUI, run the VisualML.jar file without any parameters.
 
 To run a classification task, run the VisualML.jar file with the following parameters:
 ```
@@ -29,10 +29,45 @@ This trains a Neural Network classifier on the iris_train.csv dataset and evalua
 
 Experiments can also be run in the right panel in the GUI window.
 
-A range of common datasets are available in the data folder. The MNIST hand-written characters dataset in CSV format is available in the data_mnist folder. You need to unzip the files before using them.
+A range of common datasets are available in the data folder. The MNIST hand-written characters dataset in CSV format is available in the data_mnist folder.
+
+The application supports CSV (comma-separated values) files with headers (comma used as separator) where the category label is the last value in each row. It also
+supports reading zip-compressed CSV files.
+
+## Visualize datasets and decision boundaries for classifiers
+VisualML can visualize datasets and classifier decision borders for 2-dimensional datasets. All visualizations tasks are specified
+in the visualization.xml file. 
+
+Example:
+```
+<Task>
+    <ExperimentId>l_spiral</ExperimentId>
+    <Speed>10</Speed>
+    <Name>Spiral</Name>
+    <Menu>Linear</Menu>
+</Task>
+```
+The experiment id is the unique experiment id in the experiments.xml file. Menu specifies the GUI menu to add the visualization task to, and name specifies
+the task name. The speed parameter sets the speed of the visualization (in number of training iterations per GUI update). It is only used
+for classifiers with iterable training phases, i.e. Linear and Neural Network classifiers.
+
+The visualization area in the GUI window requires that the data attribute values are between 0 and 1. If your dataset has different value ranges,
+you need to add scale and shift settings for the dataset in the visualization.xml file.
+
+Example:
+```
+<Dataset>
+    <DatasetFile>spiral.csv</DatasetFile>
+    <X-scale>2.5</X-scale>
+    <Y-scale>2.5</Y-scale>
+    <X-shift>-1.25</X-shift>
+    <Y-shift>-1.25</Y-shift>
+</Dataset>
+```
 
 ## Use as API
 To use the library from other Java code you first need to add a new experiment for your classification task in the experiments.xml file.
+
 Example:
 ```
 <Experiment id="nn_iris_test">
@@ -66,11 +101,11 @@ m.getAvgRecall(); //Returns the average recall
 m.getAvgFscore(); //Returns the average F-score
 m.format_conf_matrix(out); //Outputs the Confusion Matrix to an output logger
 ```
-
 You can classify a new instance with:
 ```
 String pred_label = c.classify(Instance);
 ```
+
 ## Dimensionality Reduction
 VisualML supports dimensionality reduction using Principal-Component Analysis (PCA) and Single-Value Decomposition (SVD).
 
