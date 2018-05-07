@@ -30,6 +30,8 @@ public abstract class Classifier
     protected int noInputs;
     //Confusion matrix
     protected Matrix cm;
+    //Iterable training phase
+    protected boolean iterable = false;
     
     /**
      * Get next batch for batch training
@@ -86,6 +88,17 @@ public abstract class Classifier
      * @param out Logger for log info
      */
     public abstract void train(Logger out);
+    
+    /**
+     * Checks if this classifier has iterable training phase (such as
+     * neural networks).
+     * 
+     * @return True if classifier has iterable training phase
+     */
+    public boolean iterable_training()
+    {
+        return iterable;
+    }
     
     /**
      * Returns the training dataset.

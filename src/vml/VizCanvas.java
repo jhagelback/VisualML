@@ -1,6 +1,7 @@
 
 package vml;
 
+import java.util.ArrayList;
 import javafx.scene.paint.*;
 import javafx.scene.canvas.*;
 
@@ -27,6 +28,8 @@ class VizCanvas extends Canvas
     public boolean updating;
     //Predicted class values
     private int[][] frame;
+    //Scale and shift settings
+    private ArrayList<VizDatasetSettings> settings;
     
     /**
      * Inits a new renderpanel.
@@ -34,6 +37,8 @@ class VizCanvas extends Canvas
     public VizCanvas()
     {
         super(700, 700);
+        //Read settings
+        settings = VizSetup.findDatasetSettings();
     }
     
     /**
@@ -75,62 +80,24 @@ class VizCanvas extends Canvas
      */
     private void init_settings()
     {
-        if (data.getName().startsWith("iris_pca.csv"))
+        //Default values
+        scaleX = 1;
+        scaleY = 1;
+        shiftX = 0;
+        shiftY = 0;
+        
+        //Check if we have custom settings for this dataset
+        for (VizDatasetSettings st : settings)
         {
-            scaleX = 10;
-            scaleY = 8;
-            shiftX = 3;
-            shiftY = -4;
-        }
-        else if (data.getName().startsWith("iris.2D.csv"))
-        {
-            scaleX = 10;
-            scaleY = 5;
-            shiftX = -1;
-            shiftY = -1;
-        }
-        else if (data.getName().startsWith("demo.csv"))
-        {
-            scaleX = 3;
-            scaleY = 3;
-            shiftX = -1.5;
-            shiftY = -1.5;
-        }
-        else if (data.getName().startsWith("spiral.csv"))
-        {
-            scaleX = 2.5;
-            scaleY = 2.5;
-            shiftX = -1.25;
-            shiftY = -1.25;
-        }
-        else if (data.getName().startsWith("circle.csv"))
-        {
-            scaleX = 2;
-            scaleY = 2;
-            shiftX = -1;
-            shiftY = -1;
-        }
-        else if (data.getName().startsWith("flame.csv"))
-        {
-            scaleX = 1;
-            scaleY = 1;
-            shiftX = 0;
-            shiftY = 0;
-        }
-        else if (data.getName().startsWith("moons.csv"))
-        {
-            scaleX = 1;
-            scaleY = 1;
-            shiftX = 0;
-            shiftY = 0;
-        }
-        else
-        {
-            //Default values
-            scaleX = 1;
-            scaleY = 1;
-            shiftX = 0;
-            shiftY = 0;
+            if(data.getName().contains(st.dataset_file))
+            {
+                //Set custom settings
+                scaleX = st.scale_x;
+                scaleY = st.scale_y;
+                shiftX = st.shift_x;
+                shiftY = st.shift_y;
+                return;
+            }
         }
     }
     
@@ -149,11 +116,19 @@ class VizCanvas extends Canvas
      */
     public void draw(GraphicsContext gc)
     {
+        //Background fill
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, getWidth(), getHeight());
         
         //Error check
         if (c == null) return;
+        if (data.noInputs() != 2) 
+        {
+            gc.setFill(Color.RED);
+            gc.fillText("Unable to visualize data", 150, 200);
+            gc.fillText("Dataset has " + data.noInputs() + " attributes, while 2 is required", 150, 220);
+            return;
+        }
         if (frame == null) return;
         
         //We are rendering
@@ -204,6 +179,9 @@ class VizCanvas extends Canvas
      */
     public void build_frame()
     {
+        //Error check
+        if (data.noInputs() != 2) return;
+        
         try
         {
             //Container for the test instances

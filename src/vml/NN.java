@@ -34,6 +34,9 @@ public class NN extends Classifier
      */
     public NN(Dataset data, Dataset test, NNSettings settings) 
     {
+        //Iterable training phase
+        iterable = true;
+        
         //Set dataset
         this.data = data;
         this.test = test;

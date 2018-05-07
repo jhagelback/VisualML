@@ -43,6 +43,9 @@ public class Linear extends Classifier
      */
     public Linear(Dataset data, Dataset test, LSettings settings) 
     {
+        //Iterable training phase
+        iterable = true;
+        
         //Set dataset
         this.data = data;
         this.test = test;

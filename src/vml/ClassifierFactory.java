@@ -3,7 +3,6 @@ package vml;
 
 import java.io.File;
 import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
