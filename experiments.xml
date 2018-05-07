@@ -239,9 +239,9 @@
         <!-- Cross-validation: 98.00% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/iris_pca.csv</TrainingData>
-        <Epochs>50</Epochs>
-        <LearningRate>0.1</LearningRate>
-        <HiddenLayers>24</HiddenLayers>
+        <Epochs>80</Epochs>
+        <LearningRate>0.04</LearningRate>
+        <HiddenLayers>8</HiddenLayers>
         <BatchSize>50</BatchSize>
     </Experiment>
     <Experiment id="nn_flame">
@@ -447,14 +447,14 @@
         <BatchSize>100</BatchSize>
     </Experiment>
     <Experiment id="dnn_diabetes_pca">
-        <!-- Training set: 75.78% -->
-        <!-- Cross-validation: 75.13% -->
+        <!-- Training set: 75.39% -->
+        <!-- Cross-validation: 75.78% -->
         <Classifier>NN</Classifier>
         <TrainingData>data/diabetes_pca.csv</TrainingData>
-        <Epochs>400</Epochs>
-        <LearningRate>0.2</LearningRate>
+        <Epochs>800</Epochs>
+        <LearningRate>0.1</LearningRate>
         <StopThreshold>0.000001</StopThreshold>
-        <HiddenLayers>8,8</HiddenLayers>
+        <HiddenLayers>12,12</HiddenLayers>
         <Normalization>0:1</Normalization>
         <BatchSize>50</BatchSize>
     </Experiment>

@@ -1,0 +1,329 @@
+<?xml version="1.0"?>
+<Visualizations>
+    <!--
+        This file defines the visualization tasks shown in the GUI window. A visualization
+        task has a dataset and a classifier, and shows the decision borders the classifier
+        has learned from the dataset.
+        
+        The following parameters are available:
+        
+        <ExperimentId>l_demo</ExperimentId>         Experiment id (in the experiments.xml file)
+        <Speed>1</Speed>                            Speed (training iterations per step in the visualization). Only used for iterable training phase classifiers (Linear and NN).
+        <Name>Demo</Name>                           Name of the visualization task
+        <Menu>Linear</Menu>                         Menu to add the task to
+    -->
+    
+    <!--
+        Linear tasks
+    -->
+    <Task>
+        <ExperimentId>l_demo</ExperimentId>
+        <Speed>1</Speed>
+        <Name>Demo</Name>
+        <Menu>Linear</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>l_spiral</ExperimentId>
+        <Speed>10</Speed>
+        <Name>Spiral</Name>
+        <Menu>Linear</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>l_circle</ExperimentId>
+        <Speed>1</Speed>
+        <Name>Circle</Name>
+        <Menu>Linear</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>l_iris_2d</ExperimentId>
+        <Speed>5</Speed>
+        <Name>Iris 2D</Name>
+        <Menu>Linear</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>l_iris_pca</ExperimentId>
+        <Speed>1</Speed>
+        <Name>Iris PCA</Name>
+        <Menu>Linear</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>l_flame</ExperimentId>
+        <Speed>5</Speed>
+        <Name>Flame</Name>
+        <Menu>Linear</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>l_moons</ExperimentId>
+        <Speed>5</Speed>
+        <Name>Moons</Name>
+        <Menu>Linear</Menu>
+    </Task>
+    <!--
+        NN and DNN tasks
+    -->
+    <Task>
+        <ExperimentId>nn_demo</ExperimentId>
+        <Speed>1</Speed>
+        <Name>Demo</Name>
+        <Menu>Neural Network</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>nn_spiral</ExperimentId>
+        <Speed>2</Speed>
+        <Name>Spiral</Name>
+        <Menu>Neural Network</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>dnn_spiral</ExperimentId>
+        <Speed>2</Speed>
+        <Name>Spiral (deep)</Name>
+        <Menu>Neural Network</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>nn_circle</ExperimentId>
+        <Speed>1</Speed>
+        <Name>Circle</Name>
+        <Menu>Neural Network</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>nn_iris_2d</ExperimentId>
+        <Speed>1</Speed>
+        <Name>Iris 2D</Name>
+        <Menu>Neural Network</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>dnn_iris_2d</ExperimentId>
+        <Speed>20</Speed>
+        <Name>Iris 2D (deep)</Name>
+        <Menu>Neural Network</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>nn_iris_pca</ExperimentId>
+        <Speed>1</Speed>
+        <Name>Iris PCA</Name>
+        <Menu>Neural Network</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>dnn_iris_pca</ExperimentId>
+        <Speed>10</Speed>
+        <Name>Iris PCA (deep)</Name>
+        <Menu>Neural Network</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>nn_flame</ExperimentId>
+        <Speed>10</Speed>
+        <Name>Flame</Name>
+        <Menu>Neural Network</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>dnn_flame</ExperimentId>
+        <Speed>10</Speed>
+        <Name>Flame (deep)</Name>
+        <Menu>Neural Network</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>nn_moons</ExperimentId>
+        <Speed>10</Speed>
+        <Name>Moons</Name>
+        <Menu>Neural Network</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>dnn_moons</ExperimentId>
+        <Speed>10</Speed>
+        <Name>Moons (deep)</Name>
+        <Menu>Neural Network</Menu>
+    </Task>
+    <!--
+        kNN tasks
+    -->
+    <Task>
+        <ExperimentId>knn_demo</ExperimentId>
+        <Name>Demo</Name>
+        <Menu>k-Nearest Neighbor</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>knn_spiral</ExperimentId>
+        <Name>Spiral</Name>
+        <Menu>k-Nearest Neighbor</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>knn_circle</ExperimentId>
+        <Name>Circle</Name>
+        <Menu>k-Nearest Neighbor</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>knn_iris_2d</ExperimentId>
+        <Name>Iris 2D</Name>
+        <Menu>k-Nearest Neighbor</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>knn_iris_pca</ExperimentId>
+        <Name>Iris PCA</Name>
+        <Menu>k-Nearest Neighbor</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>knn_flame</ExperimentId>
+        <Name>Flame</Name>
+        <Menu>k-Nearest Neighbor</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>knn_moons</ExperimentId>
+        <Name>Moons</Name>
+        <Menu>k-Nearest Neighbor</Menu>
+    </Task>
+    <!--
+        RBF tasks
+    -->
+    <Task>
+        <ExperimentId>rbf_demo</ExperimentId>
+        <Name>Demo</Name>
+        <Menu>RBF kernel</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>rbf_spiral</ExperimentId>
+        <Name>Spiral</Name>
+        <Menu>RBF kernel</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>rbf_circle</ExperimentId>
+        <Name>Circle</Name>
+        <Menu>RBF kernel</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>rbf_iris_2d</ExperimentId>
+        <Name>Iris 2D</Name>
+        <Menu>RBF kernel</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>rbf_iris_pca</ExperimentId>
+        <Name>Iris PCA</Name>
+        <Menu>RBF kernel</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>rbf_flame</ExperimentId>
+        <Name>Flame</Name>
+        <Menu>RBF kernel</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>rbf_moons</ExperimentId>
+        <Name>Moons</Name>
+        <Menu>RBF kernel</Menu>
+    </Task>
+    <!--
+        CART tasks
+    -->
+    <Task>
+        <ExperimentId>c_demo</ExperimentId>
+        <Name>Demo</Name>
+        <Menu>CART trees</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>c_spiral</ExperimentId>
+        <Name>Spiral</Name>
+        <Menu>CART trees</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>c_circle</ExperimentId>
+        <Name>Circle</Name>
+        <Menu>CART trees</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>c_iris_2d</ExperimentId>
+        <Name>Iris 2D</Name>
+        <Menu>CART trees</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>c_iris_pca</ExperimentId>
+        <Name>Iris PCA</Name>
+        <Menu>CART trees</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>c_flame</ExperimentId>
+        <Name>Flame</Name>
+        <Menu>CART trees</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>c_moons</ExperimentId>
+        <Name>Moons</Name>
+        <Menu>CART trees</Menu>
+    </Task>
+    <!--
+        Random Forest tasks
+    -->
+    <Task>
+        <ExperimentId>rf_demo</ExperimentId>
+        <Name>Demo</Name>
+        <Menu>Random Forest</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>rf_spiral</ExperimentId>
+        <Name>Spiral</Name>
+        <Menu>Random Forest</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>rf_circle</ExperimentId>
+        <Name>Circle</Name>
+        <Menu>Random Forest</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>rf_iris_2d</ExperimentId>
+        <Name>Iris 2D</Name>
+        <Menu>Random Forest</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>rf_iris_pca</ExperimentId>
+        <Name>Iris PCA</Name>
+        <Menu>Random Forest</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>rf_flame</ExperimentId>
+        <Name>Flame</Name>
+        <Menu>Random Forest</Menu>
+    </Task>
+    <Task>
+        <ExperimentId>rf_moons</ExperimentId>
+        <Name>Moons</Name>
+        <Menu>Random Forest</Menu>
+    </Task>
+    <!-- 
+        Dataset scale and shift settings.
+        The visualization area has an x and y range between 0 and 1, so depending
+        on how the dataset looks like the attribute values might need to be scaled
+        and shifted to fit between 0 and 1.
+    -->
+    <Dataset>
+        <DatasetFile>iris_pca.csv</DatasetFile>
+        <X-scale>10</X-scale>
+        <Y-scale>8</Y-scale>
+        <X-shift>3</X-shift>
+        <Y-shift>-4</Y-shift>
+    </Dataset>
+    <Dataset>
+        <DatasetFile>iris.2D.csv</DatasetFile>
+        <X-scale>10</X-scale>
+        <Y-scale>5</Y-scale>
+        <X-shift>-1</X-shift>
+        <Y-shift>-1</Y-shift>
+    </Dataset>
+    <Dataset>
+        <DatasetFile>demo.csv</DatasetFile>
+        <X-scale>3</X-scale>
+        <Y-scale>3</Y-scale>
+        <X-shift>-1.5</X-shift>
+        <Y-shift>-1.5</Y-shift>
+    </Dataset>
+    <Dataset>
+        <DatasetFile>spiral.csv</DatasetFile>
+        <X-scale>2.5</X-scale>
+        <Y-scale>2.5</Y-scale>
+        <X-shift>-1.25</X-shift>
+        <Y-shift>-1.25</Y-shift>
+    </Dataset>
+    <Dataset>
+        <DatasetFile>circle.csv</DatasetFile>
+        <X-scale>2</X-scale>
+        <Y-scale>2</Y-scale>
+        <X-shift>-1</X-shift>
+        <Y-shift>-1</Y-shift>
+    </Dataset>
+</Visualizations>
