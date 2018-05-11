@@ -27,7 +27,7 @@ public class Main extends Application
     /**
      * Application version.
      */
-    public static String version = "4.0";
+    public static String version = "4.1";
     
     //Panel to render stuff on
     private VizCanvas p;
@@ -406,7 +406,7 @@ public class Main extends Application
      */
     public static void main(String[] args) 
     {
-       //No args. Start GUI
+        //No args. Start GUI
         if (args.length == 0) 
         {
             args = new String[]{"-gui"};
@@ -471,7 +471,7 @@ public class Main extends Application
         }
         else
         {
-            System.err.println("Wrong arguments: [-exp|-gui] [args]");
+            System.err.println("Wrong arguments: [-exp|-gui][-dr] [args]");
             System.exit(1);
         }
     }      

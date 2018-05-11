@@ -139,17 +139,63 @@ public class OutLayer
         //Regularization loss
         loss += RW;
         
+        //Momentum
+        Matrix oldDW = null;
+        Vector oldDB = null;
+        if (dW != null && settings.momentum > 0.0)
+        {
+            oldDW = dW.copy();
+            oldDB = dB.copy();
+        }
+        
         //Gradients
         dscores = logprobs.calc_dscores(y);
         dW = Matrix.mul_transpose(dscores, X);
         dB = dscores.sum_rows();
         
+        //Momentum
+        if (oldDW != null && settings.momentum > 0.0)
+        {
+            dW.add(oldDW, settings.momentum);
+            dB.add(oldDB, settings.momentum);
+        }
+        
         //Add regularization to gradients
         //The weight matrix scaled by Lambda*0.5 is added
-        if (settings.use_regularization)
+        if (settings.lambda > 0)
         {
             dW.add(w, settings.lambda * 0.5);
         }
+        
+        return loss;
+    }
+    
+    /**
+     * Calculates data loss using Softmax.
+     * 
+     * @return Current data loss
+     */
+    public double calc_loss()
+    {
+        //Init some variables
+        int num_train = X.columns();
+        double loss = 0;
+        
+        //Calculate exponentials
+        //Matrix logprobs = scores.exp();
+        
+        //To avoid numerical instability
+        Matrix logprobs = scores.shift_columns();
+        logprobs.exp();
+        
+        //Normalize
+        logprobs.normalize();
+        
+        //Calculate cross-entropy loss vector
+        Vector loss_vec = logprobs.calc_loss(y);
+        
+        //Average loss
+        loss = loss_vec.sum() / num_train;
         
         return loss;
     }
@@ -173,7 +219,7 @@ public class OutLayer
         //Regularization
         RW = 0;
         
-        if (settings.use_regularization)
+        if (settings.lambda > 0)
         {
             RW = w.L2_norm() * settings.lambda;
         }

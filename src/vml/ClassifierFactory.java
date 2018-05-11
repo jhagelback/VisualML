@@ -159,7 +159,8 @@ public class ClassifierFactory
             if (exists(e, "LearningRate")) settings.learningrate = getDouble(e, "LearningRate");
             if (exists(e, "StopThreshold")) settings.stop_threshold = getDouble(e, "StopThreshold");
             if (exists(e, "RegularizationStrength")) settings.lambda = getDouble(e, "RegularizationStrength");
-            if (exists(e, "UseRegularization")) settings.use_regularization = getBoolean(e, "UseRegularization");
+            if (exists(e, "Momentum")) settings.momentum = getDouble(e, "Momentum");
+            if (exists(e, "LearningRateDecay")) settings.learningrate_decay = getDouble(e, "LearningRateDecay");
             if (exists(e, "Normalization")) 
             {
                 settings.use_normalization = true;
@@ -314,13 +315,14 @@ public class ClassifierFactory
             if (exists(e, "LearningRate")) settings.learningrate = getDouble(e, "LearningRate");
             if (exists(e, "StopThreshold")) settings.stop_threshold = getDouble(e, "StopThreshold");
             if (exists(e, "RegularizationStrength")) settings.lambda = getDouble(e, "RegularizationStrength");
-            if (exists(e, "UseRegularization")) settings.use_regularization = getBoolean(e, "UseRegularization");
             if (exists(e, "Normalization")) 
             {
                 settings.use_normalization = true;
                 settings.normalization_bounds = getNormalization(e, "Normalization");
             }
-            if (exists(e, "UseMomentum")) settings.use_momentum = getBoolean(e, "UseMomentum");
+            if (exists(e, "Momentum")) settings.momentum = getDouble(e, "Momentum");
+            if (exists(e, "Dropout")) settings.dropout = getDouble(e, "Dropout");
+            if (exists(e, "LearningRateDecay")) settings.learningrate_decay = getDouble(e, "LearningRateDecay");
             if (exists(e, "BatchSize")) settings.batch_size = getInt(e, "BatchSize");
             if (exists(e, "HiddenLayers"))
             {

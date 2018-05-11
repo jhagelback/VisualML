@@ -157,10 +157,24 @@ public class NN extends Classifier
                 y = batch.label_vector();
                 
                 forward();
-                loss += backward();
+                
+                //Dropout
+                if (settings.dropout > 0.0)
+                {
+                    for (HiddenLayer h : hidden)
+                    {
+                        h.dropout();
+                    }
+                }
+                
+                backward();
             }
             
-            loss /= no_batches;
+            //Calculate loss
+            forward();
+            //We only need to take loss from output layer into consideration, since
+            //loss on hidden layers are purely based on regularization
+            loss = out.backward(y);
         }
         else
         {
@@ -169,12 +183,35 @@ public class NN extends Classifier
             y = data.label_vector();
             
             forward();
-            loss = backward();
+            
+            //Dropout
+            if (settings.dropout > 0.0)
+            {
+                for (HiddenLayer h : hidden)
+                {
+                    h.dropout();
+                }
+            }
+            
+            backward();
+            
+            //Calculate loss
+            forward();
+            //We only need to take loss from output layer into consideration, since
+            //loss on hidden layers are purely based on regularization
+            loss = out.backward(y);
+        }
+        
+        //Learning rate decay
+        if (settings.learningrate_decay > 0)
+        {
+            settings.learningrate -= settings.learningrate_decay;
+            if (settings.learningrate < 0.0) settings.learningrate = 0.0;
         }
         
         return loss;
     }
-    
+        
     /**
      * Classifies an instance in the dataset.
      * 

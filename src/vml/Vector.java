@@ -172,6 +172,20 @@ public class Vector
     }
     
     /**
+     * Adds a scaled vector to this vector.
+     * 
+     * @param v2 The other vector
+     * @param scale The scale
+     */
+    public void add(Vector v2, double scale)
+    {
+        for (int i = 0; i < v.length; i++)
+        {
+            v[i] += v2.v[i] * scale;
+        }
+    }
+    
+    /**
      * Returns the length of the vector.
      * 
      * @return Length

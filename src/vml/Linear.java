@@ -85,7 +85,7 @@ public class Linear extends Classifier
         //Initializes weights and biases
         init();
         
-        o.appendText("Linear Softmax classifier");
+        o.appendText("Linear Softmax regression classifier");
         o.appendText("Training data: " + data.getName());
         if (test != null)
         {
@@ -157,12 +157,17 @@ public class Linear extends Classifier
                 activation();
                 //Calculate loss and evaluate gradients
                 //double loss = grad_svm();
-                loss += grad_softmax();
+                grad_softmax();
+                
                 //Update weights
                 updateWeights();
             }
             
-            loss /= no_batches;
+            //Calculate loss
+            activation();
+            //We only need to take loss from output layer into consideration, since
+            //loss on hidden layers are purely based on regularization
+            loss = calc_loss();
         }
         else
         {
@@ -174,9 +179,23 @@ public class Linear extends Classifier
             activation();
             //Calculate loss and evaluate gradients
             //double loss = grad_svm();
-            loss = grad_softmax();
+            grad_softmax();
+            
             //Update weights
             updateWeights();
+            
+            //Calculate loss
+            activation();
+            //We only need to take loss from output layer into consideration, since
+            //loss on hidden layers are purely based on regularization
+            loss = calc_loss();
+        }
+        
+        //Learning rate decay
+        if (settings.learningrate_decay > 0)
+        {
+            settings.learningrate -= settings.learningrate_decay;
+            if (settings.learningrate < 0.0) settings.learningrate = 0.0;
         }
         
         return loss;
@@ -248,17 +267,63 @@ public class Linear extends Classifier
         //Regularization loss
         loss += RW;
         
+        //Momentum
+        Matrix oldDW = null;
+        Vector oldDB = null;
+        if (dW != null && settings.momentum > 0.0)
+        {
+            oldDW = dW.copy();
+            oldDB = dB.copy();
+        }
+        
         //Gradients
         Matrix dscores = logprobs.calc_dscores(y);
         dW = Matrix.mul_transpose(dscores, X);
         dB = dscores.sum_rows();
         
+        //Momentum
+        if (oldDW != null && settings.momentum > 0.0)
+        {
+            dW.add(oldDW, settings.momentum);
+            dB.add(oldDB, settings.momentum);
+        }
+        
         //Add regularization to gradients
         //The weight matrix scaled by Lambda*0.5 is added
-        if (settings.use_regularization)
+        if (settings.lambda > 0)
         {
             dW.add(w, settings.lambda * 0.5);
         }
+        
+        return loss;
+    }
+    
+    /**
+     * Calculates data loss using Softmax.
+     * 
+     * @return Current data loss
+     */
+    public double calc_loss()
+    {
+        //Init some variables
+        int num_train = X.columns();
+        double loss = 0;
+        
+        //Calculate exponentials
+        //Matrix logprobs = scores.exp();
+        
+        //To avoid numerical instability
+        Matrix logprobs = scores.shift_columns();
+        logprobs.exp();
+        
+        //Normalize
+        logprobs.normalize();
+        
+        //Calculate cross-entropy loss vector
+        Vector loss_vec = logprobs.calc_loss(y);
+        
+        //Average loss
+        loss = loss_vec.sum() / num_train;
         
         return loss;
     }
@@ -348,7 +413,7 @@ public class Linear extends Classifier
         //Regularization
         RW = 0;
         
-        if (settings.use_regularization)
+        if (settings.lambda > 0)
         {
             RW = w.L2_norm() * settings.lambda;
         }

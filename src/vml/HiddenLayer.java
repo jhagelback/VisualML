@@ -27,6 +27,8 @@ public class HiddenLayer
     private double RW;
     //Configuration settings
     private NNSettings settings;
+    //Randomizer
+    private Random rnd;
     
     /**
      * Constructor.
@@ -44,6 +46,7 @@ public class HiddenLayer
             w = Matrix.randomNormal(noOutputs, noInputs, rnd);
             //Init bias vector to 0's
             b = Vector.zeros(noOutputs);
+            this.rnd = rnd;
         }
         
         //Settings
@@ -80,6 +83,24 @@ public class HiddenLayer
     }
     
     /**
+     * Applies dropout to this layer. Dropout is a regularization where
+     * we zero-out random units during the training phase.
+     */
+    public void dropout()
+    {
+        for (int r = 0; r < scores.rows(); r++)
+        {
+            if (rnd.nextDouble() < settings.dropout)
+            {
+                for (int c = 0; c < scores.columns(); c++)
+                {
+                    scores.v[r][c] = 0;
+                }
+            }
+        }
+    }
+    
+    /**
      * Performs the backwards pass.
      * 
      * @param w2 Weights for next layer
@@ -112,23 +133,27 @@ public class HiddenLayer
         
         //Momentum
         Matrix oldDW = null;
-        if (dW != null && settings.use_momentum)
+        Vector oldDB = null;
+        if (dW != null && settings.momentum > 0.0)
         {
             oldDW = dW.copy();
+            oldDB = dB.copy();
         }
         
         //And finally the gradients
         dW = Matrix.mul_transpose(dhidden, X);
         dB = dhidden.sum_rows();
         
-        if (oldDW != null && settings.use_momentum)
+        //Momentum
+        if (oldDW != null && settings.momentum > 0.0)
         {
-            dW.add(oldDW, 0.1);
+            dW.add(oldDW, settings.momentum);
+            dB.add(oldDB, settings.momentum);
         }
         
         //Add regularization to gradients
         //The weight matrix scaled by Lambda*0.5 is added
-        if (settings.use_regularization)
+        if (settings.lambda > 0)
         {
             dW.add(w, settings.lambda * 0.5);
         }
@@ -153,7 +178,7 @@ public class HiddenLayer
         //Regularization
         RW = 0;
         
-        if (settings.use_regularization)
+        if (settings.lambda > 0)
         {
             RW = w.L2_norm() * settings.lambda;
         }
