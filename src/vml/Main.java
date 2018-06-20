@@ -27,7 +27,7 @@ public class Main extends Application
     /**
      * Application version.
      */
-    public static String version = "4.1";
+    public static String version = "4.2";
     
     //Panel to render stuff on
     private VizCanvas p;
@@ -47,8 +47,8 @@ public class Main extends Application
     private Label label_loss;
     //Accuracy label
     private Label label_acc;
-    //Run visualization button
-    private Button bt2;
+    //Run and Stop visualization buttons
+    private Button bt1,bt2;
     //Experiments dropdown
     private ComboBox dd;
     //Evaluation checkboxes
@@ -83,7 +83,7 @@ public class Main extends Application
         label_acc.setPrefWidth(120);
         
         //Init buttons
-        Button bt1 = new Button();
+        bt1 = new Button();
         bt1.setOnAction((ActionEvent e) -> {
             //Error check
             if (c == null) return;
@@ -114,6 +114,13 @@ public class Main extends Application
                     {
                         iterate();
                         sleep(100);
+                        
+                        //Check if training is finished
+                        if (c.training_done())
+                        {
+                            running = false;
+                            return;
+                        }
                     }
                 };
                 //Start thread
@@ -256,6 +263,12 @@ public class Main extends Application
                     label_it.setText("Iteration: " + iteration);
                     label_loss.setText("Loss: " + df3.format(loss));
                     label_acc.setText("Accuracy: " + df1.format(acc) + "%");
+                }
+                if (!running)
+                {
+                    bt2.setText("Start");
+                    bt1.setDisable(false);
+                    rt.setDisable(false);
                 }
             }
         }.start();
