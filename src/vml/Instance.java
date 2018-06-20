@@ -8,8 +8,8 @@ package vml;
  */
 public class Instance 
 {
-    //Attributes vector
-    protected Vector x;
+    //Attributes tensor
+    protected Tensor1D x;
     //Label (class value)
     protected int label;
     
@@ -21,7 +21,7 @@ public class Instance
      */
     public Instance(double[] attr, int label)
     {
-        x = new Vector(attr);
+        x = new Tensor1D(attr);
         this.label = label;
     }
     

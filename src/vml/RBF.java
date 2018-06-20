@@ -123,11 +123,11 @@ public class RBF
     /**
      * (Gaussian) Radial Basis Function
      * 
-     * @param v1 Vector 1
-     * @param v2 Vector 2
+     * @param v1 Tensor1D 1
+     * @param v2 Tensor1D 2
      * @return Calculated RB value
      */
-    public double RBF(Vector v1, Vector v2)
+    public double RBF(Tensor1D v1, Tensor1D v2)
     {
         double sq_dist = 0;
         //Find squared distance between v1 and v2

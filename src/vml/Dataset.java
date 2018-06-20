@@ -257,6 +257,7 @@ public class Dataset
      */
     public void normalizeAttributes(int min_value, int max_value)
     {
+        //TODO: Feature-wise normalization where we subtract the mean and divide with std
         //Calculate range and shift
         int range = Math.abs(max_value - min_value);
         int shift = min_value;
@@ -264,7 +265,7 @@ public class Dataset
         //Iterate over all training instances
         for (Instance inst : data)
         {
-            //Create new scaled attributed vector
+            //Create new scaled attributed 1D-tensor
             double[] nv = new double[inst.x.size()];
             for (int i = 0; i < nv.length; i++)
             {
@@ -272,8 +273,8 @@ public class Dataset
                 nv[i] *= range;
                 nv[i] += shift;
             }
-            //Set new instance vector
-            inst.x = new Vector(nv);
+            //Set new instance 1D-tensor
+            inst.x = new Tensor1D(nv);
         }
     }
     
@@ -298,14 +299,14 @@ public class Dataset
     }
     
     /**
-     * Creates an input matrix for this dataset.
+     * Creates an input tensor for this dataset.
      * 
-     * @return Input matrix
+     * @return Input tensor
      */
-    public Matrix input_matrix()
+    public Tensor2D input_tensor()
     {
-        //Create instances matrix
-        Matrix X = Matrix.zeros(noInputs(), size());
+        //Create instances tensor
+        Tensor2D X = Tensor2D.zeros(noInputs(), size());
         for (int r = 0; r < size(); r++)
         {
             Instance inst = data.get(r);
@@ -319,14 +320,14 @@ public class Dataset
     }
     
     /**
-     * Creates a label vector for this dataset.
+     * Creates a label tensor for this dataset.
      * 
-     * @return Label vector
+     * @return Label tensor
      */
-    public Vector label_vector()
+    public Tensor1D label_tensor()
     {
-        //Create label (correct class) vector
-        Vector y = Vector.zeros(size());
+        //Create label (correct class) tensor
+        Tensor1D y = Tensor1D.zeros(size());
         for (int r = 0; r < size(); r++)
         {
             Instance inst = data.get(r);

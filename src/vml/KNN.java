@@ -17,7 +17,7 @@ public class KNN extends Classifier
     private class KInstance implements Comparable
     {
         //Attributes
-        Vector x;
+        Tensor1D x;
         //Label
         int label;
         //Distance
@@ -29,7 +29,7 @@ public class KNN extends Classifier
          * @param x Attributes
          * @param label Label
          */
-        public KInstance(Vector x, int label)
+        public KInstance(Tensor1D x, int label)
         {
             this.x = x;
             this.label = label;
@@ -113,6 +113,8 @@ public class KNN extends Classifier
             }
         }
         
+        training_done = true;
+        
         return 0;
     }
     
@@ -145,13 +147,13 @@ public class KNN extends Classifier
         if (settings.distance_measure == KNNSettings.L1)
         {
             d.stream().parallel().forEach((ki) -> {
-                ki.dist = Vector.L1_dist(inst.x, ki.x);
+                ki.dist = Tensor1D.L1_dist(inst.x, ki.x);
             });
         }
         if (settings.distance_measure == KNNSettings.L2)
         {
             d.stream().parallel().forEach((ki) -> {
-                ki.dist = Vector.L2_dist(inst.x, ki.x);
+                ki.dist = Tensor1D.L2_dist(inst.x, ki.x);
             });
         }
         
@@ -160,8 +162,8 @@ public class KNN extends Classifier
         
         //Create result array with number of
         //occurences for each label, plus distances
-        Vector res = Vector.zeros(noCategories);
-        Vector dist = Vector.zeros(noCategories);
+        Tensor1D res = Tensor1D.zeros(noCategories);
+        Tensor1D dist = Tensor1D.zeros(noCategories);
         for (int j = 0; j < settings.K; j++)
         {
             int pred_y = d.get(j).label;

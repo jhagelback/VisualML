@@ -10,17 +10,17 @@ package vml;
 public class PCA 
 {
     /** Input data */
-    private Matrix data;
+    private Tensor2D data;
     
     /**
      * Initialises a new PCA for a dataset.
      * 
      * @param data The dataset
      */
-    public PCA(Matrix data)
+    public PCA(Tensor2D data)
     {
         //Transpose the data since we have instances as columns instead of rows
-        this.data = Matrix.transpose(data);
+        this.data = Tensor2D.transpose(data);
     }
     
     /**
@@ -29,17 +29,17 @@ public class PCA
      * @param columns Number of columns to keep
      * @return Reduced dataset
      */
-    public Matrix analyze(int columns)
+    public Tensor2D analyze(int columns)
     {
         //Calculate M^TM
-        Matrix mTm = Matrix.transpose_mul(data, data);
+        Tensor2D mTm = Tensor2D.transpose_mul(data, data);
         //Calculate Eigenpairs
         EigenDecomp ed = new EigenDecomp(mTm);
         ed.decomp();
         //Transform the dataset
-        Matrix ME = Matrix.mul(data, ed.E);
+        Tensor2D ME = Tensor2D.mul(data, ed.E);
         //Reduce the size of dataset by removing columns
-        Matrix red = Matrix.submatrix(ME, data.rows(), columns);
+        Tensor2D red = Tensor2D.sub(ME, data.rows(), columns);
         return red;
     }
 }

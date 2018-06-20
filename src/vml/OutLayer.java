@@ -10,21 +10,21 @@ import java.util.Random;
  */
 public class OutLayer
 {
-    //Weights matrix
-    protected Matrix w;
-    //Bias vector
-    protected Vector b;
+    //Weights tensor
+    protected Tensor2D w;
+    //Bias tensor
+    protected Tensor1D b;
     //Gradients for gradient descent optimization
-    private Matrix dW;
-    private Vector dB;
+    private Tensor2D dW;
+    private Tensor1D dB;
     //Training dataset
-    private Matrix X;
-    //Class values vector
-    private Vector y;
-    //Scores matrix = X*W+b
-    protected Matrix scores;
-    //Softmax gradients matrix
-    protected Matrix dscores;
+    private Tensor2D X;
+    //Class values tensor
+    private Tensor1D y;
+    //Scores tensor = X*W+b
+    protected Tensor2D scores;
+    //Softmax gradients tensor
+    protected Tensor2D dscores;
     //L2 regularization
     private double RW;
     //Configuration settings
@@ -42,10 +42,10 @@ public class OutLayer
     {
         if (rnd != null)
         {
-            //Init weight matrix
-            w = Matrix.randomNormal(noCategories, noInputs, rnd);
-            //Init bias vector to 0's
-            b = Vector.zeros(noCategories);
+            //Init weight tensor
+            w = Tensor2D.randomNormal(noCategories, noInputs, rnd);
+            //Init bias tensor to 0's
+            b = Tensor1D.zeros(noCategories);
         }
         
         //Settings
@@ -68,23 +68,23 @@ public class OutLayer
     /**
      * Performs the forward pass (activation).
      * 
-     * @param X Input data matrix
+     * @param X Input data tensor
      */
-    public void forward(Matrix X)
+    public void forward(Tensor2D X)
     {
         this.X = X;
         
         //Activation
-        scores = Matrix.activation(w, X, b);        
+        scores = Tensor2D.activation(w, X, b);        
     }
     
     /**
      * Performs the backwards pass.
      * 
-     * @param y Labels vector
+     * @param y Labels tensor
      * @return Current loss
      */
-    public double backward(Vector y)
+    public double backward(Tensor1D y)
     {
         //Input data
         this.y = y;
@@ -122,17 +122,17 @@ public class OutLayer
         double loss = 0;
         
         //Calculate exponentials
-        //Matrix logprobs = scores.exp();
+        //Tensor2D logprobs = scores.exp();
         
         //To avoid numerical instability
-        Matrix logprobs = scores.shift_columns();
+        Tensor2D logprobs = scores.shift_columns();
         logprobs.exp();
         
         //Normalize
         logprobs.normalize();
         
-        //Calculate cross-entropy loss vector
-        Vector loss_vec = logprobs.calc_loss(y);
+        //Calculate cross-entropy loss tensor
+        Tensor1D loss_vec = logprobs.calc_loss(y);
         
         //Average loss
         loss = loss_vec.sum() / num_train;
@@ -140,8 +140,8 @@ public class OutLayer
         loss += RW;
         
         //Momentum
-        Matrix oldDW = null;
-        Vector oldDB = null;
+        Tensor2D oldDW = null;
+        Tensor1D oldDB = null;
         if (dW != null && settings.momentum > 0.0)
         {
             oldDW = dW.copy();
@@ -150,7 +150,7 @@ public class OutLayer
         
         //Gradients
         dscores = logprobs.calc_dscores(y);
-        dW = Matrix.mul_transpose(dscores, X);
+        dW = Tensor2D.mul_transpose(dscores, X);
         dB = dscores.sum_rows();
         
         //Momentum
@@ -161,7 +161,7 @@ public class OutLayer
         }
         
         //Add regularization to gradients
-        //The weight matrix scaled by Lambda*0.5 is added
+        //The weight tensor scaled by Lambda*0.5 is added
         if (settings.lambda > 0)
         {
             dW.add(w, settings.lambda * 0.5);
@@ -182,17 +182,17 @@ public class OutLayer
         double loss = 0;
         
         //Calculate exponentials
-        //Matrix logprobs = scores.exp();
+        //Tensor2D logprobs = scores.exp();
         
         //To avoid numerical instability
-        Matrix logprobs = scores.shift_columns();
+        Tensor2D logprobs = scores.shift_columns();
         logprobs.exp();
         
         //Normalize
         logprobs.normalize();
         
-        //Calculate cross-entropy loss vector
-        Vector loss_vec = logprobs.calc_loss(y);
+        //Calculate cross-entropy loss tensor
+        Tensor1D loss_vec = logprobs.calc_loss(y);
         
         //Average loss
         loss = loss_vec.sum() / num_train;
@@ -201,7 +201,7 @@ public class OutLayer
     }
     
     /**
-     * Updates the weights matrix.
+     * Updates the weights and bias tensors.
      */
     public void updateWeights()
     {

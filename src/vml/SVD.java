@@ -10,17 +10,17 @@ package vml;
 public class SVD 
 {
     /** Input data */
-    private Matrix data;
+    private Tensor2D data;
     
     /**
      * Initialises a new SVD for a dataset.
      * 
      * @param data The dataset
      */
-    public SVD(Matrix data)
+    public SVD(Tensor2D data)
     {
         //Transpose the data since we have instances as columns instead of rows
-        this.data = Matrix.transpose(data);
+        this.data = Tensor2D.transpose(data);
     }
     
     /**
@@ -28,12 +28,12 @@ public class SVD
      * 
      * @return Reduced dataset
      */
-    public Matrix analyze()
+    public Tensor2D analyze()
     {
         //Calculate M^TM
-        Matrix mTm = Matrix.transpose_mul(data, data);
+        Tensor2D mTm = Tensor2D.transpose_mul(data, data);
         //Calculate MM^M
-        Matrix mmT = Matrix.mul_transpose(data, data);
+        Tensor2D mmT = Tensor2D.mul_transpose(data, data);
         //Calculate Eigenpairs
         EigenDecomp edV = new EigenDecomp(mTm);
         edV.decomp();
@@ -41,11 +41,11 @@ public class SVD
         edU.decomp();
         
         //Create U and V
-        Matrix U = edU.E;
-        Matrix V = Matrix.transpose(edV.E);
+        Tensor2D U = edU.E;
+        Tensor2D V = Tensor2D.transpose(edV.E);
         //Create Sigma matrix (diagonal is square root of eigenvalues)
-        Vector EV = edV.EV;
-        Matrix S = Matrix.zeros(EV.size(), EV.size());
+        Tensor1D EV = edV.EV;
+        Tensor2D S = Tensor2D.zeros(EV.size(), EV.size());
         for (int i = 0; i < EV.size(); i++)
         {
             S.v[i][i] = Math.sqrt(Math.abs(EV.v[i]));
@@ -54,17 +54,17 @@ public class SVD
         //Find number of concepts to remove
         int c = reduce_concepts(S);
         //Remove concepts
-        U = Matrix.submatrix(U, U.rows(), c);
-        V = Matrix.submatrix(V, c, V.columns());
-        S = Matrix.submatrix(S, c, c);
+        U = Tensor2D.sub(U, U.rows(), c);
+        V = Tensor2D.sub(V, c, V.columns());
+        S = Tensor2D.sub(S, c, c);
         
         //Orignal data matrix can be reconstructed
         //(not needed for the transform)
-        //Matrix B = Matrix.mul(U, S);
-        //B = Matrix.mul(B, V);
+        //Tensor2D B = Tensor2D.mul(U, S);
+        //B = Tensor2D.mul(B, V);
         
         //Reduce dimensionality
-        Matrix T = Matrix.mul(U, S);
+        Tensor2D T = Tensor2D.mul(U, S);
         
         return T;
     }
@@ -76,7 +76,7 @@ public class SVD
      * @param S Sigma matrix
      * @return Number of columns to keep
      */
-    private int reduce_concepts(Matrix S)
+    private int reduce_concepts(Tensor2D S)
     {
         //First, calculate absolute sum
         double sum = 0;

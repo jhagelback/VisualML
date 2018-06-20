@@ -17,21 +17,21 @@ import java.text.DecimalFormat;
 public class Metrics 
 {
     // Confusion matrix
-    private Matrix cm;
+    private Tensor2D cm;
     // Correctly classified instances
     private int correct;
     // Accuracy
     private double accuracy;
     // Precision, Recall and F-score matrix
-    private Matrix pr;
+    private Tensor2D pr;
     // The test dataset
     private Dataset data;
     
-    // Matrix index for Precision value
+    // Tensor2D index for Precision value
     private final int precision_i = 0;
-    // Matrix index for Recall value
+    // Tensor2D index for Recall value
     private final int recall_i = 1;
-    // Matrix index for F-score value
+    // Tensor2D index for F-score value
     private final int f_i = 2;
     
     // Output formatting
@@ -48,7 +48,7 @@ public class Metrics
         accuracy = 0;
         this.data = data;
         
-        cm = Matrix.zeros(data.noCategories(), data.noCategories());
+        cm = Tensor2D.zeros(data.noCategories(), data.noCategories());
     }
     
     /**
@@ -70,9 +70,9 @@ public class Metrics
      */
     private void compute_cm(Classifier cl)
     {
-        //Calculate accuracy and Confusion Matrix
+        //Calculate accuracy and Confusion Tensor2D
         correct = 0;
-        cm = Matrix.zeros(data.noCategories(), data.noCategories());
+        cm = Tensor2D.zeros(data.noCategories(), data.noCategories());
         for (int i = 0; i < data.size(); i++)
         {
             //Accuracy
@@ -81,7 +81,7 @@ public class Metrics
             {
                 correct++;
             }
-            //Confusion Matrix
+            //Confusion Tensor2D
             cm.v[data.get(i).label][pred_class]++;
         }       
     }
@@ -91,8 +91,8 @@ public class Metrics
      */
     private void calc_metrics()
     {
-        // Matrix to hold values
-        pr = Matrix.zeros(cm.rows() + 1, 3);
+        // Tensor2D to hold values
+        pr = Tensor2D.zeros(cm.rows() + 1, 3);
         for (int r = 0; r < cm.rows(); r++)
         {
             //Calculate scores

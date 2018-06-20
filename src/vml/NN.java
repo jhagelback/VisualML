@@ -12,15 +12,17 @@ import java.util.Random;
 public class NN extends Classifier
 {
     //Training dataset
-    private Matrix X;
-    //Class values vector
-    private Vector y;
+    private Tensor2D X;
+    //Class values tensor
+    private Tensor1D y;
     //Hidden layers
     private HiddenLayer[] hidden;
     //Output layer
     private OutLayer out;
     //Configuration settings
     private NNSettings settings;
+    //Current iteration
+    private int current_iter = 1;
     
     //For output
     private DecimalFormat df = new DecimalFormat("0.0000"); 
@@ -82,9 +84,9 @@ public class NN extends Classifier
     public void activation(Dataset test)
     {
         //To avoid errors when using the GUI, we need to keep a reference to the training data
-        Matrix train = X;
+        Tensor2D train = X;
         
-        X = test.input_matrix();
+        X = test.input_tensor();
         forward();
         
         //Put back the training data
@@ -153,8 +155,8 @@ public class NN extends Classifier
             for (int i = 0; i < no_batches; i++)
             {
                 Dataset batch = getNextBatch();
-                X = batch.input_matrix();
-                y = batch.label_vector();
+                X = batch.input_tensor();
+                y = batch.label_tensor();
                 
                 forward();
                 
@@ -179,8 +181,8 @@ public class NN extends Classifier
         else
         {
             //Train whole dataset
-            X = data.input_matrix();
-            y = data.label_vector();
+            X = data.input_tensor();
+            y = data.label_tensor();
             
             forward();
             
@@ -209,6 +211,12 @@ public class NN extends Classifier
             if (settings.learningrate < 0.0) settings.learningrate = 0.0;
         }
         
+        current_iter++;
+        if (current_iter >= settings.epochs)
+        {
+            training_done = true;
+        }
+        
         return loss;
     }
         
@@ -233,6 +241,9 @@ public class NN extends Classifier
     @Override
     public void train(Logger o)
     {
+        training_done = false;
+        current_iter = 1;
+        
         //Initalises layers
         init();
         
@@ -254,27 +265,28 @@ public class NN extends Classifier
         
         o.appendText("  Iteration  Loss");
         
-        for (int i = 1; i <= settings.epochs; i++)
+        while (!training_done)
         {
             //Training iteration
             loss = iterate();
             
             //Output result
-            if (i % out_step == 0 || i == settings.epochs || i == 1) 
+            if (current_iter % out_step == 0 || current_iter == settings.epochs || current_iter == 1) 
             {
-                String str = "  " + Logger.format_spaces(i + ":", 9);
+                String str = "  " + Logger.format_spaces(current_iter + ":", 9);
                 str += "  " + df.format(loss);
                 o.appendText(str);
             }
             
             //Check stopping criterion
-            if (i > 2)
+            if (current_iter > 2)
             {
                 double diff = loss - p_loss;
                 if (diff <= settings.stop_threshold && diff >= 0)
                 {
                     //i = settings.epochs;
-                    o.appendText("  Stop threshold reached at iteration " + i);
+                    training_done = true;
+                    o.appendText("  Stop threshold reached at iteration " + current_iter);
                     break;
                 }
                 p_loss = loss;

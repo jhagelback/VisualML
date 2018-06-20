@@ -19,7 +19,7 @@ public class DimensionalityReduction
     /** Number of columns to keep in the dataset */
     private int columns;
     /** Reduced dataset */
-    private Matrix red;
+    private Tensor2D red;
     /** Type of dr: PCA or SVD */
     private String type;
     
@@ -102,7 +102,7 @@ public class DimensionalityReduction
     public void reducePCA()
     {
         System.out.print("Reducing data with PCA ... ");
-        PCA pca = new PCA(data.input_matrix());
+        PCA pca = new PCA(data.input_tensor());
         red = pca.analyze(columns);
         System.out.println("done");
     }
@@ -113,7 +113,7 @@ public class DimensionalityReduction
     public void reduceSVD()
     {
         System.out.print("Reducing data with SVD ... ");
-        SVD svd = new SVD(data.input_matrix());
+        SVD svd = new SVD(data.input_tensor());
         red = svd.analyze();
         System.out.println("done");
     }
@@ -126,8 +126,8 @@ public class DimensionalityReduction
         //Output filename
         String out_filename = filename.replaceAll(".csv", "_" + type.toLowerCase() + ".csv");
         System.out.print("Saving reduced dataset to '" + out_filename + "' ... ");
-        //Labels vector
-        Vector y = data.label_vector();
+        //Labels tensor
+        Tensor1D y = data.label_tensor();
         
         //Create reduced data file
         try (BufferedWriter out = new BufferedWriter(new FileWriter(out_filename))) 

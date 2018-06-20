@@ -175,7 +175,7 @@ public class Matrix
      * @param c Column number
      * @return The column as vector
      */
-    public Vector getColumn(int c)
+    public Tensor1D getColumn(int c)
     {
         double[] nv = new double[rows()];
         
@@ -184,7 +184,7 @@ public class Matrix
             nv[r] = v[r][c];
         }
         
-        return new Vector(nv);
+        return new Tensor1D(nv);
     }
     
     /**
@@ -209,7 +209,7 @@ public class Matrix
      * @return Activation vector
      * @throws ArithmeticException If unable to calculate the activation vector 
      */
-    public static Vector activation(Matrix w, Vector x, Vector b) throws ArithmeticException
+    public static Tensor1D activation(Matrix w, Tensor1D x, Tensor1D b) throws ArithmeticException
     {
         //Error checks
         if (w.columns() != x.size())
@@ -234,7 +234,7 @@ public class Matrix
             nv[r] += b.get(r);
         });
         
-        return new Vector(nv);
+        return new Tensor1D(nv);
     }
     
     /**
@@ -247,7 +247,7 @@ public class Matrix
      * @return Activation vector
      * @throws ArithmeticException If unable to calculate the activation vector 
      */
-    public static Matrix activation(Matrix w, Matrix x, Vector b) throws ArithmeticException
+    public static Matrix activation(Matrix w, Matrix x, Tensor1D b) throws ArithmeticException
     {
         //Error checks
         if (w.columns() != x.rows())
@@ -384,7 +384,7 @@ public class Matrix
      * @return Result vector
      * @throws ArithmeticException If unable to calculate the product
      */
-    public static Vector mul(Matrix w, Vector x) throws ArithmeticException
+    public static Tensor1D mul(Matrix w, Tensor1D x) throws ArithmeticException
     {
         //Error checks
         if (w.columns() != x.size())
@@ -403,7 +403,7 @@ public class Matrix
             }
         });
         
-        return new Vector(nv);
+        return new Tensor1D(nv);
     }
     
     /**
@@ -414,7 +414,7 @@ public class Matrix
      * @return Result vector
      * @throws ArithmeticException If unable to calculate the product
      */
-    public static Vector transpose_mul(Vector x, Matrix w) throws ArithmeticException
+    public static Tensor1D transpose_mul(Tensor1D x, Matrix w) throws ArithmeticException
     {
         //Error checks
         if (w.rows() != x.size())
@@ -433,7 +433,7 @@ public class Matrix
             }
         });
         
-        return new Vector(nv);
+        return new Tensor1D(nv);
     }
     
     /**
@@ -530,7 +530,7 @@ public class Matrix
      * 
      * @return Dscores matrix
      */
-    public Matrix calc_dscores(Vector y)
+    public Matrix calc_dscores(Tensor1D y)
     {
         IntStream.range(0, columns()).parallel().forEach(c -> {
             //Find correct label for this training example
@@ -553,7 +553,7 @@ public class Matrix
      * @param y Correct class labels
      * @return Loss vector
      */
-    public Vector calc_loss(Vector y)
+    public Tensor1D calc_loss(Tensor1D y)
     {
         //Loss vector values
         double[] L = new double[y.size()];
@@ -567,7 +567,7 @@ public class Matrix
             L[c] = Li;
         }
         
-        return new Vector(L);
+        return new Tensor1D(L);
     }
     
     /**
@@ -625,7 +625,7 @@ public class Matrix
      * 
      * @return The vector
      */
-    public Vector sum_rows()
+    public Tensor1D sum_rows()
     {
         //Loss vector values
         double[] sum = new double[rows()];
@@ -638,7 +638,7 @@ public class Matrix
             }
         }
         
-        return new Vector(sum);
+        return new Tensor1D(sum);
     }
     
     /**
@@ -758,7 +758,7 @@ public class Matrix
      * @param x The column vector
      * @param c Column to insert at
      */
-    public void insert(Vector x, int c) throws ArithmeticException
+    public void insert(Tensor1D x, int c) throws ArithmeticException
     {
         //Error check
         if (rows() != x.size())
@@ -796,7 +796,7 @@ public class Matrix
      * @param r Row number to append to
      * @param scale Constant to scale the vector
      */
-    public void addToRow(Vector rv, int r, double scale)
+    public void addToRow(Tensor1D rv, int r, double scale)
     {
         for (int c = 0; c < rv.size(); c++)
         {

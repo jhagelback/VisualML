@@ -81,6 +81,8 @@ public class Kernel extends Classifier
             }
         }
         
+        training_done = true;
+        
         return 0;
     }
     
@@ -109,7 +111,7 @@ public class Kernel extends Classifier
         Instance inst = tdata.get(i);
         
         //Votes for the Max-vote strategy to choose between categories
-        Vector votes = Vector.zeros(data.noCategories());
+        Tensor1D votes = Tensor1D.zeros(data.noCategories());
         
         //Iterate over all kernels and classify the instance
         for (int k = 0; k < kernels.size(); k++)

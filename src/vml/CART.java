@@ -39,7 +39,7 @@ public class CART extends Classifier
         // Label (for leaf nodes)
         protected int label = -1;
         // Class distribution (for leaf nodes)
-        protected Vector labels;
+        protected Tensor1D labels;
  
         /**
          * Creates a new node.
@@ -70,7 +70,7 @@ public class CART extends Classifier
          */
         public void calc_label()
         {
-            labels = Vector.zeros(data.noCategories());
+            labels = Tensor1D.zeros(data.noCategories());
             for (Instance i : data.data)
             {
                 labels.v[i.label]++;
@@ -79,13 +79,13 @@ public class CART extends Classifier
         }
         
         /**
-         * Returns the class probabilities vector.
+         * Returns the class probabilities 1D-tensor.
          * 
-         * @return Class probabilities vector
+         * @return Class probabilities 1D-tensor
          */
-        public Vector getClassProbabilities()
+        public Tensor1D getClassProbabilities()
         {
-            Vector p = Vector.zeros(labels.size());
+            Tensor1D p = Tensor1D.zeros(labels.size());
             double sum = labels.sum();
             for (int i = 0; i < p.size(); i++)
             {
@@ -152,7 +152,7 @@ public class CART extends Classifier
     public double iterate()
     {
         build_tree(settings.max_depth, settings.min_size, data);
-        
+        training_done = true;
         return 0;
     }
     
@@ -177,11 +177,13 @@ public class CART extends Classifier
     @Override
     public int classify(int i)
     {
+        if (root == null) return 0;
+        
         Node t = classify(root, tdata.get(i));
         return t.label;
     }
     
-    public Vector classifyProbability(int i)
+    public Tensor1D classifyProbability(int i)
     {
         Node t = classify(root, tdata.get(i));
         return t.getClassProbabilities();

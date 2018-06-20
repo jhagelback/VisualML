@@ -10,19 +10,19 @@ import java.util.Random;
  */
 public class HiddenLayer
 {
-    //Weights matrix
-    protected Matrix w;
-    //Bias vector
-    protected Vector b;
+    //Weights tensor
+    protected Tensor2D w;
+    //Bias tensor
+    protected Tensor1D b;
     //Gradients for gradient descent optimization
-    private Matrix dW;
-    private Vector dB;
+    private Tensor2D dW;
+    private Tensor1D dB;
     //Training dataset
-    private Matrix X;
-    //Scores matrix = X*W
-    protected Matrix scores;
-    //ReLU gradients matrix
-    protected Matrix dhidden;
+    private Tensor2D X;
+    //Scores tensor = X*W
+    protected Tensor2D scores;
+    //ReLU gradients tensor
+    protected Tensor2D dhidden;
     //L2 regularization
     private double RW;
     //Configuration settings
@@ -42,10 +42,10 @@ public class HiddenLayer
     {
         if (rnd != null)
         {
-            //Init weight matrix
-            w = Matrix.randomNormal(noOutputs, noInputs, rnd);
-            //Init bias vector to 0's
-            b = Vector.zeros(noOutputs);
+            //Init weight tensor
+            w = Tensor2D.randomNormal(noOutputs, noInputs, rnd);
+            //Init bias tensor to 0's
+            b = Tensor1D.zeros(noOutputs);
             this.rnd = rnd;
         }
         
@@ -69,14 +69,14 @@ public class HiddenLayer
     /**
      * Performs the forward pass (activation).
      * 
-     * @param X Input data matrix
+     * @param X Input data tensor
      */
-    public void forward(Matrix X)
+    public void forward(Tensor2D X)
     {
         this.X = X;
         
         //Activation
-        scores = Matrix.activation(w, X, b);
+        scores = Tensor2D.activation(w, X, b);
         
         //ReLU activation
         scores.max(0);
@@ -107,7 +107,7 @@ public class HiddenLayer
      * @param dscores Gradients for next layer
      * @return Current regularization loss
      */
-    public double backward(Matrix w2, Matrix dscores)
+    public double backward(Tensor2D w2, Tensor2D dscores)
     {
         //Evaluate gradients
         grad_relu(w2, dscores);
@@ -121,19 +121,19 @@ public class HiddenLayer
      * @param w2 Weights for next layer
      * @param dscores Gradients for next layer
      */
-    public void grad_relu(Matrix w2, Matrix dscores)
+    public void grad_relu(Tensor2D w2, Tensor2D dscores)
     {
         //Re-calculate regularization
         calc_regularization();
         
         //Backprop into hidden layer
-        dhidden = Matrix.transpose_mul(w2, dscores);
+        dhidden = Tensor2D.transpose_mul(w2, dscores);
         //Backprop the ReLU non-linearity (set dhidden to 0 if activation is 0
         dhidden.backprop_relu(scores);
         
         //Momentum
-        Matrix oldDW = null;
-        Vector oldDB = null;
+        Tensor2D oldDW = null;
+        Tensor1D oldDB = null;
         if (dW != null && settings.momentum > 0.0)
         {
             oldDW = dW.copy();
@@ -141,7 +141,7 @@ public class HiddenLayer
         }
         
         //And finally the gradients
-        dW = Matrix.mul_transpose(dhidden, X);
+        dW = Tensor2D.mul_transpose(dhidden, X);
         dB = dhidden.sum_rows();
         
         //Momentum
@@ -152,7 +152,7 @@ public class HiddenLayer
         }
         
         //Add regularization to gradients
-        //The weight matrix scaled by Lambda*0.5 is added
+        //The weight tensor scaled by Lambda*0.5 is added
         if (settings.lambda > 0)
         {
             dW.add(w, settings.lambda * 0.5);
@@ -160,7 +160,7 @@ public class HiddenLayer
     }
     
     /**
-     * Updates the weights matrix.
+     * Updates the weights and bias tensors.
      */
     public void updateWeights()
     {

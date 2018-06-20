@@ -11,16 +11,16 @@ import java.util.ArrayList;
 public class EigenDecomp 
 {
     /** The dataset matrix */
-    private Matrix data;
+    private Tensor2D data;
     /** Eigenvectors */
-    protected Matrix E;
+    protected Tensor2D E;
     /** Eigenvalues */
-    protected Vector EV;
+    protected Tensor1D EV;
     /** Used in Power Iteration */
-    private Matrix new_M;
+    private Tensor2D new_M;
     
     /** Temporary placeholder for eigenvectors */
-    private ArrayList<Vector> e_list;
+    private ArrayList<Tensor1D> e_list;
     /** Temporary placeholder for eigenvalues */
     private ArrayList<Double> ev_list;
     
@@ -30,7 +30,7 @@ public class EigenDecomp
      * 
      * @param data The input data
      */
-    public EigenDecomp(Matrix data)
+    public EigenDecomp(Tensor2D data)
     {
         this.data = data;
         
@@ -51,8 +51,8 @@ public class EigenDecomp
         while(next()) {}
         
         //Placeholders for Eigenvectors and Eigenvalues
-        E = Matrix.zeros(data.rows(), e_list.size());
-        EV = Vector.zeros(e_list.size());
+        E = Tensor2D.zeros(data.rows(), e_list.size());
+        EV = Tensor1D.zeros(e_list.size());
         //Copy to placeholders
         for (int i = 0; i < e_list.size(); i++)
         {
@@ -78,7 +78,7 @@ public class EigenDecomp
     {
         //Calculate the product between the Eigenvectors matrix
         //and its transpose
-        Matrix I = Matrix.transpose_mul(E, E);
+        Tensor2D I = Tensor2D.transpose_mul(E, E);
         
         //Check values
         for (int r = 0; r < I.rows(); r++)
@@ -108,7 +108,7 @@ public class EigenDecomp
     {
         //Create a random x vector to decrease the chance that the vector
         //is orthogonal to the eigenvector (the result will then be incorrect.
-        Vector x = Vector.random_norm(new_M.rows());
+        Tensor1D x = Tensor1D.random_norm(new_M.rows());
 
         //When to stop iteration
         double diff = 1.0;
@@ -119,7 +119,7 @@ public class EigenDecomp
         while (diff > 0.000005 && it <= 100)
         {
             //Multiply M with x0
-            Vector new_x = Matrix.mul(new_M, x);
+            Tensor1D new_x = Tensor2D.mul(new_M, x);
             //Calculate Frobenius norm
             double new_n = new_x.frobenius_norm();    
             //Divide x with the norm
@@ -143,7 +143,7 @@ public class EigenDecomp
         }
         
         //Calculate Eigenvalue
-        Vector v = Matrix.transpose_mul(x, new_M);
+        Tensor1D v = Tensor2D.transpose_mul(x, new_M);
         double ev = v.dot(x);
         //Stop if eigenvalue is 0
         if (Math.abs(ev) <= 0.0001) return false;
@@ -153,7 +153,7 @@ public class EigenDecomp
         ev_list.add(ev);
         
         //Create new M for next eigenpair
-        Matrix xxT = Vector.mul(x, x);
+        Tensor2D xxT = Tensor1D.mul(x, x);
         xxT.multiply(ev);
         new_M.subtract(xxT);
         

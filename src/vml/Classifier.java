@@ -29,9 +29,11 @@ public abstract class Classifier
     //Number of attributes in dataset
     protected int noInputs;
     //Confusion matrix
-    protected Matrix cm;
+    protected Tensor2D cm;
     //Iterable training phase
     protected boolean iterable = false;
+    //Finished training
+    protected boolean training_done = false;
     
     /**
      * Get next batch for batch training
@@ -98,6 +100,16 @@ public abstract class Classifier
     public boolean iterable_training()
     {
         return iterable;
+    }
+    
+    /**
+     * Checks if the training phase for this classifier is finished.
+     * 
+     * @return If training is finished
+     */
+    public boolean training_done()
+    {
+        return training_done;
     }
     
     /**

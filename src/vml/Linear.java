@@ -11,25 +11,28 @@ import java.util.Random;
  */
 public class Linear extends Classifier
 {
-    //Weights matrix
-    protected Matrix w;
-    //Bias vector
-    protected Vector b;
+    //Weights tensor
+    protected Tensor2D w;
+    //Bias tensor
+    protected Tensor1D b;
     //Gradients for gradient descent optimization
-    private Matrix dW;
-    private Vector dB;
+    private Tensor2D dW;
+    private Tensor1D dB;
     //Training dataset
-    private Matrix X;
-    //Class values vector
-    private Vector y;
-    //Scores matrix = X*W+b
-    private Matrix scores;
+    private Tensor2D X;
+    //Class values tensor
+    private Tensor1D y;
+    //Scores tensor = X*W+b
+    private Tensor2D scores;
     //L2 regularization
     private double RW;
     //Configuration settings
     private LSettings settings;
     //Delta for SVM loss calculations
     private double delta = 1.0;
+    //Current iteration
+    private int current_iter = 1;
+    
     
     //For output
     private DecimalFormat df = new DecimalFormat("0.0000"); 
@@ -68,10 +71,10 @@ public class Linear extends Classifier
     private void init()
     {
         Random rnd = new java.util.Random(seed);
-        //Init weight matrix
-        w = Matrix.randomNormal(noCategories, noInputs, rnd);
-        //Init bias vector to 0's
-        b = Vector.zeros(noCategories);
+        //Init weight tensor
+        w = Tensor2D.randomNormal(noCategories, noInputs, rnd);
+        //Init bias tensor to 0's
+        b = Tensor1D.zeros(noCategories);
     }
     
     /**
@@ -82,6 +85,9 @@ public class Linear extends Classifier
     @Override
     public void train(Logger o)
     {
+        training_done = false;
+        current_iter = 1;
+        
         //Initializes weights and biases
         init();
         
@@ -103,27 +109,28 @@ public class Linear extends Classifier
         
         o.appendText("  Iteration  Loss");
         
-        for (int i = 1; i <= settings.epochs; i++)
+        while (!training_done)
         {
             //Training iteration
             loss = iterate();
             
             //Output result
-            if (i % out_step == 0 || i == settings.epochs || i == 1) 
+            if (current_iter % out_step == 0 || current_iter == settings.epochs || current_iter == 1) 
             {
-                String str = "  " + Logger.format_spaces(i + ":", 9);
+                String str = "  " + Logger.format_spaces(current_iter + ":", 9);
                 str += "  " + df.format(loss);
                 o.appendText(str);
             }
             
             //Check stopping criterion
-            if (i > 2)
+            if (current_iter > 2)
             {
                 double diff = loss - p_loss;
                 if (diff <= settings.stop_threshold && diff >= 0)
                 {
                     //i = settings.epochs;
-                    o.appendText("  Stop threshold reached at iteration " + i);
+                    o.appendText("  Stop threshold reached at iteration " + current_iter);
+                    training_done = true;
                     break;
                 }
                 p_loss = loss;
@@ -150,8 +157,8 @@ public class Linear extends Classifier
             for (int i = 0; i < no_batches; i++)
             {
                 Dataset batch = getNextBatch();
-                X = batch.input_matrix();
-                y = batch.label_vector();
+                X = batch.input_tensor();
+                y = batch.label_tensor();
                 
                 //Forward pass (activation)
                 activation();
@@ -172,8 +179,8 @@ public class Linear extends Classifier
         else
         {
             //Train whole dataset
-            X = data.input_matrix();
-            y = data.label_vector();
+            X = data.input_tensor();
+            y = data.label_tensor();
             
             //Forward pass (activation)
             activation();
@@ -198,6 +205,12 @@ public class Linear extends Classifier
             if (settings.learningrate < 0.0) settings.learningrate = 0.0;
         }
         
+        current_iter++;
+        if (current_iter >= settings.epochs)
+        {
+            training_done = true;
+        }
+        
         return loss;
     }
         
@@ -210,7 +223,7 @@ public class Linear extends Classifier
     public void activation(Dataset test)
     {
         //Activation
-        scores = Matrix.activation(w, test.input_matrix(), b);
+        scores = Tensor2D.activation(w, test.input_tensor(), b);
     }
     
     /**
@@ -219,7 +232,7 @@ public class Linear extends Classifier
     private void activation()
     {
         //Activation
-        scores = Matrix.activation(w, X, b);
+        scores = Tensor2D.activation(w, X, b);
     }
     
     /**
@@ -250,17 +263,17 @@ public class Linear extends Classifier
         double loss = 0;
         
         //Calculate exponentials
-        //Matrix logprobs = scores.exp();
+        //Tensor2D logprobs = scores.exp();
         
         //To avoid numerical instability
-        Matrix logprobs = scores.shift_columns();
+        Tensor2D logprobs = scores.shift_columns();
         logprobs.exp();
         
         //Normalize
         logprobs.normalize();
         
-        //Calculate cross-entropy loss vector
-        Vector loss_vec = logprobs.calc_loss(y);
+        //Calculate cross-entropy loss 1D-tensor
+        Tensor1D loss_vec = logprobs.calc_loss(y);
         
         //Average loss
         loss = loss_vec.sum() / num_train;
@@ -268,8 +281,8 @@ public class Linear extends Classifier
         loss += RW;
         
         //Momentum
-        Matrix oldDW = null;
-        Vector oldDB = null;
+        Tensor2D oldDW = null;
+        Tensor1D oldDB = null;
         if (dW != null && settings.momentum > 0.0)
         {
             oldDW = dW.copy();
@@ -277,8 +290,8 @@ public class Linear extends Classifier
         }
         
         //Gradients
-        Matrix dscores = logprobs.calc_dscores(y);
-        dW = Matrix.mul_transpose(dscores, X);
+        Tensor2D dscores = logprobs.calc_dscores(y);
+        dW = Tensor2D.mul_transpose(dscores, X);
         dB = dscores.sum_rows();
         
         //Momentum
@@ -289,7 +302,7 @@ public class Linear extends Classifier
         }
         
         //Add regularization to gradients
-        //The weight matrix scaled by Lambda*0.5 is added
+        //The weight tensor scaled by Lambda*0.5 is added
         if (settings.lambda > 0)
         {
             dW.add(w, settings.lambda * 0.5);
@@ -310,17 +323,17 @@ public class Linear extends Classifier
         double loss = 0;
         
         //Calculate exponentials
-        //Matrix logprobs = scores.exp();
+        //Tensor2D logprobs = scores.exp();
         
         //To avoid numerical instability
-        Matrix logprobs = scores.shift_columns();
+        Tensor2D logprobs = scores.shift_columns();
         logprobs.exp();
         
         //Normalize
         logprobs.normalize();
         
-        //Calculate cross-entropy loss vector
-        Vector loss_vec = logprobs.calc_loss(y);
+        //Calculate cross-entropy loss 1D-tensor
+        Tensor1D loss_vec = logprobs.calc_loss(y);
         
         //Average loss
         loss = loss_vec.sum() / num_train;
@@ -338,9 +351,9 @@ public class Linear extends Classifier
         //Re-calculate regularization
         calc_regularization();
         
-        //Gradients matrix
-        dW = Matrix.zeros(w.rows(), w.columns());
-        dB = Vector.zeros(w.rows());
+        //Gradients tensor
+        dW = Tensor2D.zeros(w.rows(), w.columns());
+        dB = Tensor1D.zeros(w.rows());
         
         //Init some variables
         int num_classes = w.rows();
@@ -350,9 +363,9 @@ public class Linear extends Classifier
         //Iterate over all training examples
         for (int i = 0; i < num_train; i++)
         {
-            //Get vectors
-            Vector score = scores.getColumn(i);
-            Vector xi = X.getColumn(i);
+            //Get tensors
+            Tensor1D score = scores.getColumn(i);
+            Tensor1D xi = X.getColumn(i);
              
             //Correct label (class value)
             int corr_index = (int)y.get(i);
@@ -368,11 +381,11 @@ public class Linear extends Classifier
                     double margin = score.get(j) - correct_class_score + delta;
                     if (margin > 0)
                     {
-                        //Update gradients matrix
+                        //Update gradients tensor
                         loss += margin;
                         dW.addToRow(xi, j, 1.0);
                         dW.addToRow(xi, corr_index, -1.0);
-                        //Update bias vector
+                        //Update bias tensor
                         dB.add(j, 1);
                         dB.add(corr_index, -1);
                     }
@@ -388,14 +401,14 @@ public class Linear extends Classifier
         loss = loss / num_train + RW;
         
         //Add regularization to gradients
-        //The weight matrix scaled by Lambda*0.5 is added
+        //The weight tensor scaled by Lambda*0.5 is added
         dW.add(w, settings.lambda * 0.5);
         
         return loss;
     }
     
     /**
-     * Updates the weights matrix.
+     * Updates the weights and bias tensors.
      */
     private void updateWeights()
     {
