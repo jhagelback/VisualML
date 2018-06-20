@@ -17,6 +17,8 @@ public class RandomForest extends Classifier
     private ArrayList<CART> forest;
     //Randomizer
     private Random rnd;
+    //Dummy logger
+    private Logger l;
     
     /**
      * Creates a classifier.
@@ -27,6 +29,9 @@ public class RandomForest extends Classifier
      */
     public RandomForest(Dataset data, Dataset test, RFSettings settings)
     {
+        //Iterable training phase
+        iterable = true;
+        
         //Set dataset
         this.data = data;
         this.test = test;
@@ -36,6 +41,9 @@ public class RandomForest extends Classifier
         
         //Settings
         this.settings = settings;
+        
+        //Initalize forest
+        initForest();
     }
     
     /**
@@ -53,7 +61,13 @@ public class RandomForest extends Classifier
             o.appendText("Test data: " + test.getName());
         }
         
-        iterate();
+        //Parallell training
+        forest.stream().parallel().forEach((c) -> 
+        {
+            c.train(l);
+        });
+        
+        training_done = true;
     }
     
     /**
@@ -64,7 +78,25 @@ public class RandomForest extends Classifier
     @Override
     public double iterate()
     {
-        initForest();
+        int c_tree = -1;
+        
+        for (int i = 0; i < forest.size(); i++)
+        {
+            if (!forest.get(i).training_done())
+            {
+                c_tree = i;
+                break;
+            }
+        }
+        
+        //Check if we're already done
+        if (c_tree == -1) 
+        {
+            training_done = true;
+            return 0;
+        }
+        
+        forest.get(c_tree).train(l);
         
         return 0;
     }
@@ -78,8 +110,7 @@ public class RandomForest extends Classifier
         rnd = new Random(seed);
         forest = new ArrayList<>();
         
-        //Disable output for training the trees
-        Logger l = Logger.getConsoleLogger();
+        l = Logger.getConsoleLogger();
         l.disable();
         
         //Init trees
@@ -90,12 +121,6 @@ public class RandomForest extends Classifier
             c.enableForestRandomizer(seed + i);
             forest.add(c);
         }
-        
-        //Parallell training
-        forest.stream().parallel().forEach((c) -> 
-        {
-            c.train(l);
-        });
     }
     
     /**
@@ -142,11 +167,14 @@ public class RandomForest extends Classifier
     public int classify(int i)
     {
         //Hard voting
-        Vector pred = Vector.zeros(data.noCategories());
+        Tensor1D pred = Tensor1D.zeros(data.noCategories());
         for (int c = 0; c < forest.size(); c++)
         {
-            int pred_label = forest.get(c).classify(i);
-            pred.v[pred_label]++;
+            if (forest.get(c).training_done())
+            {
+                int pred_label = forest.get(c).classify(i);
+                pred.v[pred_label]++;
+            }
         }
         
         return pred.argmax();
