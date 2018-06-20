@@ -8,7 +8,7 @@
         The following parameters are available:
         
         <ExperimentId>l_demo</ExperimentId>         Experiment id (in the experiments.xml file)
-        <Speed>1</Speed>                            Speed (training iterations per step in the visualization). Only used for iterable training phase classifiers (Linear and NN).
+        <Speed>1</Speed>                            Speed (training iterations per step in the visualization). Only used for iterable training phase classifiers (Linear, NN and RF).
         <Name>Demo</Name>                           Name of the visualization task
         <Menu>Linear</Menu>                         Menu to add the task to
     -->
@@ -252,36 +252,43 @@
     -->
     <Task>
         <ExperimentId>rf_demo</ExperimentId>
+        <Speed>1</Speed>
         <Name>Demo</Name>
         <Menu>Random Forest</Menu>
     </Task>
     <Task>
         <ExperimentId>rf_spiral</ExperimentId>
+        <Speed>1</Speed>
         <Name>Spiral</Name>
         <Menu>Random Forest</Menu>
     </Task>
     <Task>
         <ExperimentId>rf_circle</ExperimentId>
+        <Speed>1</Speed>
         <Name>Circle</Name>
         <Menu>Random Forest</Menu>
     </Task>
     <Task>
         <ExperimentId>rf_iris_2d</ExperimentId>
+        <Speed>1</Speed>
         <Name>Iris 2D</Name>
         <Menu>Random Forest</Menu>
     </Task>
     <Task>
         <ExperimentId>rf_iris_pca</ExperimentId>
+        <Speed>1</Speed>
         <Name>Iris PCA</Name>
         <Menu>Random Forest</Menu>
     </Task>
     <Task>
         <ExperimentId>rf_flame</ExperimentId>
+        <Speed>1</Speed>
         <Name>Flame</Name>
         <Menu>Random Forest</Menu>
     </Task>
     <Task>
         <ExperimentId>rf_moons</ExperimentId>
+        <Speed>1</Speed>
         <Name>Moons</Name>
         <Menu>Random Forest</Menu>
     </Task>
