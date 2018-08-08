@@ -16,7 +16,6 @@ import javafx.stage.WindowEvent;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-
 /**
  * Main class for the VisualML application.
  * 
@@ -27,7 +26,7 @@ public class Main extends Application
     /**
      * Application version.
      */
-    public static String version = "4.2";
+    public static String version = "4.3";
     
     //Panel to render stuff on
     private VizCanvas p;
