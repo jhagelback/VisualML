@@ -612,9 +612,17 @@ public class ClassifierFactory
             if (e.getElementsByTagName(node).getLength() == 1)
             {
                 String str = e.getElementsByTagName(node).item(0).getTextContent();
-                String[] t = str.split(":");
-                bounds[0] = Integer.parseInt(t[0]);
-                bounds[1] = Integer.parseInt(t[1]);
+                if (str.equals("norm"))
+                {
+                    bounds[0] = 0;
+                    bounds[1] = 0;
+                }
+                else
+                {
+                    String[] t = str.split(":");
+                    bounds[0] = Integer.parseInt(t[0]);
+                    bounds[1] = Integer.parseInt(t[1]);
+                }
             }
         }
         catch (Exception ex)

@@ -257,8 +257,44 @@ public class Dataset
      */
     public void normalizeAttributes(int min_value, int max_value)
     {
-        //TODO: Feature-wise normalization where we subtract the mean and divide with std
-        //Calculate range and shift
+        //Feature-wise normalization where we subtract the mean and divide with std
+        if (min_value == 0 && max_value == 0)
+        {
+            //Iterate over all attribuers
+            for (int i = 0; i < data.get(0).x.size(); i++)
+            {
+                double mean = 0.0;
+                double std = 0.0;
+
+                //Step 1: Calculate mean
+                for (Instance inst : data)
+                {
+                    mean += inst.x.v[i];
+                }
+                mean /= (double)data.size();
+                
+                //Step 2: Calculate variance
+                for (Instance inst : data)
+                {
+                    std += Math.pow(inst.x.v[i] - mean, 2);
+                }
+                
+                //Step 3: Calculate standard deviation
+                std = Math.sqrt(std);
+                
+                //Step 4: Calculate normalized attribute values
+                for (Instance inst : data)
+                {
+                    double n_val = (inst.x.v[i] - mean) / std;
+                    //Set new attribute value
+                    inst.x.v[i] = n_val;
+                }
+            }
+            
+            return;
+        }
+        
+        //Normalize with scale and shift
         int range = Math.abs(max_value - min_value);
         int shift = min_value;
         
