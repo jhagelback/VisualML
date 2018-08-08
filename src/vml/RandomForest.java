@@ -54,6 +54,9 @@ public class RandomForest extends Classifier
     @Override
     public void train(Logger o)
     {
+        forest.clear();
+        initForest();
+        
         o.appendText("Random Forest Classifier");
         o.appendText("Training data: " + data.getName());
         if (test != null)
