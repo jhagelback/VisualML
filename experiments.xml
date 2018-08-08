@@ -12,7 +12,7 @@
         <LearningRate>1.0</LearningRate>                        Learning rate (default is 1.0)
         <StopThreshold>0.000005</StopThreshold>                 Loss threshold for when to stop training (default is 0.000005)
         <RegularizationStrength>0.01</RegularizationStrength>   Sets regularization strength (default is 0.01)
-        <Normalization>0:1</Normalization>                      Lower and upper bound for normalized values
+        <Normalization>0:1</Normalization>                      Lower and upper bound for normalized values, or 'norm' for feature-wize normalization
         <BatchSize>100</BatchSize>                              Size of batches for batch training. If not set, batch training isn't used
         <ShuffleData>true</ShuffleData>                         Sets if dataset shall be shuffle (default is true)
     -->
@@ -166,7 +166,7 @@
         <Dropout>0.2</Dropout>                                  Sets dropout rate (default is 0.0)
         <LearningRateDecay>0.0</LearningRateDecay>              Sets learning rate decay per epoch (default is 0.0)
         <HiddenLayers>16</HiddenLayers>                         Number of units in the hidden layer (default is 16)
-        <Normalization>0:1</Normalization>                      Lower and upper bound for normalized values
+        <Normalization>0:1</Normalization>                      Lower and upper bound for normalized values, or 'norm' for feature-wize normalization
         <BatchSize>100</BatchSize>                              Size of mini batches for batch training. If not set, full batch training is used
         <ShuffleData>true</ShuffleData>                         Sets if dataset shall be shuffle (default is true)
     -->
@@ -345,7 +345,7 @@
         <Dropout>0.2</Dropout>                                  Sets dropout rate (default is 0.0)
         <LearningRateDecay>0.0</LearningRateDecay>              Sets learning rate decay per epoch (default is 0.0)
         <HiddenLayers>16,8</HiddenLayers>                       Number of units in the hidden layers (default is 16)
-        <Normalization>0:1</Normalization>                      Lower and upper bound for normalized values
+        <Normalization>0:1</Normalization>                      Lower and upper bound for normalized values, or 'norm' for feature-wize normalization
         <BatchSize>100</BatchSize>                              Size of batches for batch training. If not set, batch training isn't used
         <ShuffleData>true</ShuffleData>                         Sets if dataset shall be shuffle (default is true)
     -->
@@ -516,7 +516,7 @@
         <TestData></TestData>                                   Path (or empty if no test data is used)
         <K>3</K>                                                Integer (default is 3)
         <DistanceMeasure>L2</DistanceMeasure>                   L1 or L2 (default is L2)
-        <Normalization>0:1</Normalization>                      Lower and upper bound for normalized values
+        <Normalization>0:1</Normalization>                      Lower and upper bound for normalized values, or 'norm' for feature-wize normalization
         <ShuffleData>true</ShuffleData>                         Sets if dataset shall be shuffle (default is true)
     -->
     <Experiment id="knn_demo">
@@ -622,7 +622,7 @@
         <TrainingData>data/demo.csv</TrainingData>              Path
         <TestData></TestData>                                   Path (or empty if no test data is used)
         <Gamma>1.0</Gamma>                                      Gamma value for RBF kernel (decimal value, default is 3)
-        <Normalization>0:1</Normalization>                      Lower and upper bound for normalized values
+        <Normalization>0:1</Normalization>                      Lower and upper bound for normalized values, or 'norm' for feature-wize normalization
         <ShuffleData>true</ShuffleData>                         Sets if dataset shall be shuffle (default is true)
     -->
     <Experiment id="rbf_demo">
